@@ -1,10 +1,11 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+﻿import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, X, ChevronDown, ChevronUp, Shield, LogOut, Upload, Plus, Trash2, Pencil, Users, KeyRound, AlertTriangle, Clock, CheckCircle2, XCircle, Plane, BedDouble, Ticket, FileText, Globe2, Type, Award, Flame, Package, ArrowRight, Tag, MapPin, CalendarDays, DollarSign, RotateCcw } from 'lucide-react';
 import { useContentConfig } from '../hooks/useContentConfig';
 import type { TrendingPackage } from '../types';
 import { useToast } from '../components/ui/ToastProvider';
 import { useDialog } from '../components/ui/DialogProvider';
+import { SurroundingsManager } from './SurroundingsManager';
 
 const MASTER_AUTH_KEY = 'emais_master_auth';
 
@@ -35,7 +36,7 @@ const CURRENCIES = [
 
 const TAG_OPTIONS = ['NOVO LOTE', 'QUASE ESGOTADO', 'VIP', 'DESTAQUE', 'EXCLUSIVO', 'ÚLTIMAS VAGAS', 'PREMIUM'];
 
-const IS = { background: '#050505', border: '1px solid #333333', borderRadius: 7, color: '#e8edf2', fontSize: 13, padding: '8px 10px', outline: 'none', width: '100%', boxSizing: 'border-box' as const };
+const IS = { background: '#00152c', border: '1px solid #004080', borderRadius: 7, color: '#e8edf2', fontSize: 13, padding: '8px 10px', outline: 'none', width: '100%', boxSizing: 'border-box' as const };
 
 /* ── Login ── */
 function MasterLogin({ onLogin }: { onLogin: () => void }) {
@@ -74,11 +75,11 @@ function MasterLogin({ onLogin }: { onLogin: () => void }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <form onSubmit={handleSubmit} style={{ background: '#0a0a0a', border: '1px solid #333333', borderRadius: 16, padding: '40px 36px', width: 360, display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0 24px 64px rgba(0,0,0,.8)', animation: shake ? 'shake .4s ease' : 'none' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#00152c', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <form onSubmit={handleSubmit} style={{ background: '#001a36', border: '1px solid #004080', borderRadius: 16, padding: '40px 36px', width: 360, display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0 24px 64px rgba(0,17,36,.8)', animation: shake ? 'shake .4s ease' : 'none' }}>
         <div style={{ textAlign: 'center', marginBottom: 8 }}>
           <div style={{ width: 52, height: 52, background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-            <Shield size={26} color="#000" />
+            <Shield size={26} color="#001124" />
           </div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: '#e8edf2', margin: 0 }}>Admin Mestre</h1>
           <p style={{ fontSize: 13, color: '#737373', marginTop: 6 }}>Painel de Aprovação — Zago</p>
@@ -86,19 +87,19 @@ function MasterLogin({ onLogin }: { onLogin: () => void }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={{ fontSize: 11, color: '#737373', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Usuário</label>
           <input type="text" value={username} onChange={e => { setUsername(e.target.value); setError(''); }} placeholder="Usuário" autoFocus autoComplete="username"
-            style={{ background: '#050505', border: `1px solid ${error ? '#7a1a1a' : '#333333'}`, borderRadius: 8, color: '#e8edf2', fontSize: 14, padding: '11px 14px', outline: 'none' }}
-            onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = error ? '#7a1a1a' : '#333333'}
+            style={{ background: '#00152c', border: `1px solid ${error ? '#7a1a1a' : '#004080'}`, borderRadius: 8, color: '#e8edf2', fontSize: 14, padding: '11px 14px', outline: 'none' }}
+            onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = error ? '#7a1a1a' : '#004080'}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={{ fontSize: 11, color: '#737373', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Senha</label>
           <input type="password" value={pw} onChange={e => { setPw(e.target.value); setError(''); }} placeholder="••••••••" autoComplete="current-password"
-            style={{ background: '#050505', border: `1px solid ${error ? '#7a1a1a' : '#333333'}`, borderRadius: 8, color: '#e8edf2', fontSize: 14, padding: '11px 14px', outline: 'none' }}
-            onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = error ? '#7a1a1a' : '#333333'}
+            style={{ background: '#00152c', border: `1px solid ${error ? '#7a1a1a' : '#004080'}`, borderRadius: 8, color: '#e8edf2', fontSize: 14, padding: '11px 14px', outline: 'none' }}
+            onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = error ? '#7a1a1a' : '#004080'}
           />
           {error && <span style={{ fontSize: 11, color: '#f87171' }}>{error}</span>}
         </div>
-        <button type="submit" disabled={loading} style={{ background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#000', border: 'none', borderRadius: 8, padding: '12px', fontSize: 14, fontWeight: 700, cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+        <button type="submit" disabled={loading} style={{ background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#001124', border: 'none', borderRadius: 8, padding: '12px', fontSize: 14, fontWeight: 700, cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.7 : 1 }}>
           {loading ? 'Verificando…' : 'Entrar'}
         </button>
       </form>
@@ -108,15 +109,24 @@ function MasterLogin({ onLogin }: { onLogin: () => void }) {
 }
 
 /* ── Helpers ── */
-function MField({ label, icon, value, onChange, textarea = false, rows = 2 }: { label: string; icon?: React.ReactNode; value: string; onChange: (v: string) => void; textarea?: boolean; rows?: number }) {
+function MField({ label, icon, value, onChange, textarea = false, rows = 2, type = 'text', placeholder, step }: { label: string; icon?: React.ReactNode; value: string; onChange: (v: string) => void; textarea?: boolean; rows?: number; type?: string; placeholder?: string; step?: string }) {
   const focus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#F78A2D'; };
-  const blur =  (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#333333'; };
+  const blur =  (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#004080'; };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>{icon}{label}</label>
       {textarea
-        ? <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows} style={{ ...IS, resize: 'vertical' }} onFocus={focus} onBlur={blur} />
-        : <input value={value} onChange={e => onChange(e.target.value)} style={IS} onFocus={focus} onBlur={blur} />
+        ? <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows} placeholder={placeholder} style={{ ...IS, resize: 'vertical' }} onFocus={focus} onBlur={blur} />
+        : <input 
+            type={type} step={step} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} 
+            style={{ ...IS, cursor: type === 'date' ? 'pointer' : 'text' }} 
+            onFocus={focus} onBlur={blur} 
+            onClick={e => {
+              if (type === 'date' && 'showPicker' in e.target) {
+                try { (e.target as HTMLInputElement).showPicker(); } catch (err) {}
+              }
+            }}
+          />
       }
     </div>
   );
@@ -136,12 +146,12 @@ function ImageUploadField({ label, labelIcon, value, onChange }: { label: string
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>{labelIcon}{label}</label>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-        {value && <img src={value} alt="" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }} />}
+        {value && <img src={value.split(';')[0].trim()} alt="" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }} />}
         <div style={{ flex: 1, display: 'flex', gap: 6 }}>
           <input value={value} onChange={e => onChange(e.target.value)} placeholder="https://..." style={{ ...IS, flex: 1 }}
-            onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'} />
+            onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'} />
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
-          <button type="button" onClick={() => fileRef.current?.click()} title="Upload" style={{ padding: '8px 10px', background: '#111111', border: '1px solid #333333', borderRadius: 7, color: '#F78A2D', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+          <button type="button" onClick={() => fileRef.current?.click()} title="Upload" style={{ padding: '8px 10px', background: '#002042', border: '1px solid #004080', borderRadius: 7, color: '#F78A2D', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <Upload size={14} />
           </button>
         </div>
@@ -166,7 +176,7 @@ function AuditTrail({ pkg }: { pkg: TrendingPackage }) {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 4 }}>
       {rows.map(r => (
-        <span key={r.label} style={{ fontSize: 10, background: '#050505', border: `1px solid ${r.color}33`, borderRadius: 6, padding: '3px 8px', color: r.color, display: 'flex', gap: 4, alignItems: 'center' }}>
+        <span key={r.label} style={{ fontSize: 10, background: '#00152c', border: `1px solid ${r.color}33`, borderRadius: 6, padding: '3px 8px', color: r.color, display: 'flex', gap: 4, alignItems: 'center' }}>
           <span style={{ opacity: 0.7 }}>{r.label}:</span>
           <strong>{r.user}</strong>
           {r.at && <span style={{ opacity: 0.5 }}>· {fmtDate(r.at)}</span>}
@@ -202,14 +212,14 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
   const handleSaveOnly    = () => { onUpdate({ ...local, updatedBy: masterUser, updatedAt: now() }); toast('Salvo sem aprovar.', 'info'); };
 
   const statusColor = pkg.status === 'approved' ? '#4ade80' : pkg.status === 'rejected' ? '#f87171' : '#E67A1F';
-  const statusBg    = pkg.status === 'approved' ? '#0d3320' : pkg.status === 'rejected' ? '#3a0d0d' : '#1a1a1a';
+  const statusBg    = pkg.status === 'approved' ? '#0d3320' : pkg.status === 'rejected' ? '#3a0d0d' : '#002a5c';
   const statusLabel = pkg.status === 'approved' ? '✅ Aprovado' : pkg.status === 'rejected' ? '❌ Rejeitado' : '🟡 Pendente';
 
   return (
-    <div style={{ background: '#111111', border: `1px solid ${pkg.status === 'pending' || !pkg.status ? '#333333' : pkg.status === 'approved' ? '#1a5c38' : '#7a1a1a'}`, borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ background: '#002042', border: `1px solid ${pkg.status === 'pending' || !pkg.status ? '#004080' : pkg.status === 'approved' ? '#1a5c38' : '#7a1a1a'}`, borderRadius: 12, overflow: 'hidden' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer' }} onClick={() => setOpen(o => !o)}>
-        {pkg.img ? <img src={pkg.img} alt={pkg.title} style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} /> : <div style={{ width: 52, height: 52, background: '#1a1a1a', borderRadius: 8, flexShrink: 0 }} />}
+        {pkg.img ? <img src={pkg.img.split(';')[0].trim()} alt={pkg.title} style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} /> : <div style={{ width: 52, height: 52, background: '#002a5c', borderRadius: 8, flexShrink: 0 }} />}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 14, fontWeight: 700, color: '#e8edf2' }}>{pkg.title || 'Sem título'}</span>
@@ -220,7 +230,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {pkg.status !== 'approved' && (
-            <button onClick={e => { e.stopPropagation(); onApprove(); }} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', background: '#0d3320', color: '#4ade80', border: '1px solid #1a5c38', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+            <button onClick={e => { e.stopPropagation(); handleSaveApprove(); }} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', background: '#0d3320', color: '#4ade80', border: '1px solid #1a5c38', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
               <Check size={13} /> Aprovar
             </button>
           )}
@@ -238,7 +248,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
 
       {/* Expanded edit form */}
       {open && (
-        <div style={{ padding: '16px', borderTop: '1px solid #333333', display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ padding: '16px', borderTop: '1px solid #004080', display: 'flex', flexDirection: 'column', gap: 14 }}>
           <p style={{ fontSize: 11, color: '#737373', margin: 0 }}>{pkg.status === 'approved' ? 'Edite os campos e salve. O pacote continuará aprovado.' : 'Edite todos os campos necessários antes de aprovar:'}</p>
 
           {/* Images */}
@@ -251,20 +261,47 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
             <MField label="Título"  icon={<Tag size={11} />}         value={local.title} onChange={v => set({ title: v })} />
             <MField label="Local"    icon={<MapPin size={11} />}      value={local.loc}   onChange={v => set({ loc: v })} />
-            <MField label="Data"     icon={<CalendarDays size={11} />} value={local.date}  onChange={v => set({ date: v })} />
+
           </div>
 
           {/* Row 2: preço / moeda */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <MField label="Preço" icon={<DollarSign size={11} />} value={local.price} onChange={v => set({ price: v })} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+            <MField label="V. INDIVIDUAL TOTAL" icon={<DollarSign size={11} />} value={local.price} onChange={v => set({ price: v })} />
+            <MField label="V. DUPLO TOTAL" icon={<DollarSign size={11} />} value={local.priceDouble || ''} onChange={v => set({ priceDouble: v })} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}><Globe2 size={11} /> Moeda</label>
               <select value={local.currency || 'BRL'} onChange={e => set({ currency: e.target.value })}
                 style={{ ...IS, cursor: 'pointer' }}
-                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'}>
+                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'}>
                 {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
               </select>
             </div>
+          </div>
+
+          {/* Row 2.1: Estadia Mínima e Validade */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+            <MField type="number" label="Noites Mínimas" icon={<Calendar size={11} />} value={local.minNights || ''} onChange={v => set({ minNights: v })} placeholder="Ex: 4" />
+            <MField type="date" label="Válido a partir de" icon={<Calendar size={11} />} value={local.validFrom || ''} onChange={v => set({ validFrom: v })} />
+            <MField type="date" label="Válido até" icon={<Calendar size={11} />} value={local.validTo || ''} onChange={v => set({ validTo: v })} />
+          </div>
+
+          {/* Row 2.2: Valores Personalizados (Overrides) */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <MField label="Valor Diária (Opcional)" icon={<DollarSign size={11} />} value={local.dailyRateOverride || ''} onChange={v => set({ dailyRateOverride: v })} 
+              placeholder={(() => {
+                if (!local.price || !local.minNights) return 'Auto-calculado';
+                const t = parseFloat(local.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
+                const n = parseInt(local.minNights);
+                if (isNaN(t) || isNaN(n) || n === 0) return 'Auto-calculado';
+                return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(t / n);
+              })()} />
+            <MField label="V. Duplo Por Pessoa (Opcional)" icon={<DollarSign size={11} />} value={local.doublePerPersonOverride || ''} onChange={v => set({ doublePerPersonOverride: v })} 
+              placeholder={(() => {
+                if (!local.priceDouble) return 'Auto-calculado';
+                const t = parseFloat(local.priceDouble.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
+                if (isNaN(t)) return 'Auto-calculado';
+                return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(t / 2);
+              })()} />
           </div>
 
           {/* Row 3: tag / sigla / categoria / em alta */}
@@ -273,7 +310,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
               <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}><Award size={11} /> Tag do Card</label>
               <select value={local.tag} onChange={e => set({ tag: e.target.value })}
                 style={{ ...IS, cursor: 'pointer' }}
-                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'}>
+                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'}>
                 {TAG_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
@@ -282,7 +319,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
               <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}><Package size={11} /> Categoria</label>
               <select value={local.category || ''} onChange={e => set({ category: e.target.value })}
                 style={{ ...IS, cursor: 'pointer' }}
-                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'}>
+                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'}>
                 <option value="">Selecione uma categoria</option>
                 {['Futebol', 'Futebol Americano', 'F1 / Automobilismo', 'UFC / MMA', 'Tênis', 'Basquete', 'WWE / Wrestling', 'Multiesportivo', 'Outros'].map(c => (
                   <option key={c} value={c}>{c}</option>
@@ -302,7 +339,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
                   width: 44, height: 24, borderRadius: 12, border: 'none',
                   cursor: local.isTrending || trendingCount < MAX_TRENDING ? 'pointer' : 'not-allowed',
                   position: 'relative', transition: 'background .2s',
-                  background: local.isTrending ? '#F78A2D' : '#1a1a1a',
+                  background: local.isTrending ? '#F78A2D' : '#002a5c',
                   opacity: !local.isTrending && trendingCount >= MAX_TRENDING ? 0.5 : 1,
                 }}>
                 <span style={{ position: 'absolute', top: 3, width: 18, height: 18, borderRadius: '50%', background: '#fff', transition: 'left .2s', left: local.isTrending ? 23 : 3 }} />
@@ -315,25 +352,50 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
           </div>
 
           {/* Descrição */}
-          <MField label="Descrição" icon={<FileText size={11} />} value={local.description ?? ''} onChange={v => set({ description: v })} textarea rows={3} />
+          <MField label="Frase de Chamada - Hero Section (1ª dobra)" icon={<FileText size={11} />} value={local.description ?? ''} onChange={v => set({ description: v })} textarea rows={3} />
 
-          {/* Detalhes */}
-          <MField label="Detalhes do Voo"        icon={<Plane size={11} />} value={local.flightDetails ?? ''} onChange={v => set({ flightDetails: v })} textarea />
-          <MField label="Detalhes da Hospedagem" icon={<BedDouble size={11} />} value={local.hotelDetails ?? ''}  onChange={v => set({ hotelDetails: v })} textarea />
-          <MField label="Detalhes dos Ingressos" icon={<Ticket size={11} />} value={local.ticketDetails ?? ''} onChange={v => set({ ticketDetails: v })} textarea />
+
+          {/* Comodidades do Hotel */}
+          <div style={{ padding: '8px 0', borderTop: '1px solid #003366', marginTop: 8 }}>
+            <p style={{ fontSize: 11, color: '#F78A2D', margin: '0 0 10px', fontWeight: 600 }}>CARDS DE ITENS INCLUSOS</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <MField label="☕ Café da Manhã" value={local.breakfast || ''} onChange={v => set({ breakfast: v })} />
+              <MField label="🚗 Deslocamento" value={local.distanceCenterNorte || ''} onChange={v => set({ distanceCenterNorte: v })} />
+              <MField label="🏢 Salas para Treinamento" value={local.trainingRooms || ''} onChange={v => set({ trainingRooms: v })} />
+              <MField label="🅿️ Estacionamento" value={local.parking || ''} onChange={v => set({ parking: v })} />
+            </div>
+            <div style={{ marginTop: 10 }}>
+              <MField label="📄 SOBRE O HOTEL" value={local.hotelDescription || ''} onChange={v => set({ hotelDescription: v })} textarea rows={3} />
+            </div>
+            {/* Ocultado a pedido:
+            <div style={{ marginTop: 10 }}>
+              <MField label="🛏️ TÍTULO DA ACOMODAÇÃO" value={local.accommodationsTitle || ''} onChange={v => set({ accommodationsTitle: v })} />
+              <div style={{ marginTop: 10 }}>
+                <MField label="📝 DESCRIÇÃO DA ACOMODAÇÃO" value={local.accommodationsDescription || ''} onChange={v => set({ accommodationsDescription: v })} textarea rows={3} />
+              </div>
+            </div>
+            */}
+            <div style={{ marginTop: 10 }}>
+              <MField label="📍 Endereço ou URL do Local (Mapa)" value={local.mapAddress || ''} onChange={v => set({ mapAddress: v })} textarea rows={2} />
+            </div>
+            <div style={{ marginTop: 16 }}>
+              <p style={{ fontSize: 11, color: '#F78A2D', margin: '0 0 10px', fontWeight: 600 }}>PROXIMIDADES DO HOTEL (Locais Próximos)</p>
+              <SurroundingsManager address={local.mapAddress || ''} value={local.surroundingsData || ''} onUpdate={v => set({ surroundingsData: v })} />
+            </div>
+          </div>
 
           {/* Actions */}
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', paddingTop: 4 }}>
             {pkg.status === 'approved' ? (
-              <button onClick={handleSaveApprove} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#000', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={handleSaveApprove} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#001124', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                 <Check size={14} /> Salvar Edições
               </button>
             ) : (
               <>
-                <button onClick={handleSaveOnly} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: '#111111', color: '#e8edf2', border: '1px solid #333333', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                <button onClick={handleSaveOnly} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: '#002042', color: '#e8edf2', border: '1px solid #004080', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
                   Salvar sem Aprovar
                 </button>
-                <button onClick={handleSaveApprove} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#000', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                <button onClick={handleSaveApprove} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#001124', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                   <Check size={14} /> Salvar e Aprovar
                 </button>
               </>
@@ -342,7 +404,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
               <X size={14} /> Rejeitar
             </button>
           </div>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-start', paddingTop: 8, borderTop: '1px solid #333333', marginTop: 4 }}>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-start', paddingTop: 8, borderTop: '1px solid #004080', marginTop: 4 }}>
             <button onClick={async () => { if (await showConfirm('Mover este pacote para a lixeira?', { type: 'danger', confirmText: 'Excluir', title: 'Excluir Pacote' })) { onRemove(); toast('Pacote movido para a lixeira.', 'warning'); } }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', background: '#2a0a0a', color: '#f87171', border: '1px solid #3a1a1a', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
               <Trash2 size={14} /> Excluir Pacote
             </button>
@@ -448,9 +510,9 @@ function UsersTab() {
     return '👤 Admin';
   };
   const roleBg    = (r: string) => {
-    if (r === 'master') return { background: '#1a1a1a', color: '#F78A2D', border: '1px solid #F78A2D' };
-    if (r === 'marketing') return { background: '#1a1a1a', color: '#3b82f6', border: '1px solid #3b82f6' };
-    return { background: '#1a1a1a', color: '#737373', border: '1px solid #333333' };
+    if (r === 'master') return { background: '#002a5c', color: '#F78A2D', border: '1px solid #F78A2D' };
+    if (r === 'marketing') return { background: '#002a5c', color: '#3b82f6', border: '1px solid #3b82f6' };
+    return { background: '#002a5c', color: '#737373', border: '1px solid #004080' };
   };
 
   const inputSt: React.CSSProperties = { ...IS, width: '100%' };
@@ -464,31 +526,31 @@ function UsersTab() {
           <p style={{ fontSize: 12, color: '#737373', margin: '4px 0 0' }}>Gerencie quem tem acesso aos painéis Admin e Master.</p>
         </div>
         <button onClick={() => { setShowAdd(a => !a); setNewErr(''); }}
-          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#000', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#001124', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
           <Plus size={14} /> Novo Usuário
         </button>
       </div>
 
       {/* Add User Form */}
       {showAdd && (
-        <form onSubmit={handleAdd} style={{ background: '#0a0a0a', border: '1px solid #F78A2D', borderRadius: 12, padding: '20px 20px 16px' }}>
+        <form onSubmit={handleAdd} style={{ background: '#001a36', border: '1px solid #F78A2D', borderRadius: 12, padding: '20px 20px 16px' }}>
           <p style={{ fontSize: 12, fontWeight: 700, color: '#F78A2D', margin: '0 0 14px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>➕ Novo Usuário</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase' }}>Usuário</label>
               <input value={newUser.username} onChange={e => setNewUser(p => ({ ...p, username: e.target.value }))} placeholder="ex: joao" style={inputSt}
-                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'} />
+                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <label style={{ fontSize: 10, color: '#4a7fa8', fontWeight: 600, textTransform: 'uppercase' }}>Senha</label>
               <input type="password" value={newUser.password} onChange={e => setNewUser(p => ({ ...p, password: e.target.value }))} placeholder="••••••••" style={inputSt}
-                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'} />
+                onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'} />
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 14 }}>
             <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase' }}>Tipo de Acesso</label>
             <select value={newUser.role} onChange={e => setNewUser(p => ({ ...p, role: e.target.value as 'admin' | 'master' }))} style={{ ...inputSt, cursor: 'pointer' }}
-              onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'}>
+              onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'}>
               <option value="admin">👤 Admin — gerencia conteúdo do site</option>
               <option value="marketing">📈 Marketing — Landing Pages e Integrações</option>
               <option value="master">🔑 Master — aprova pacotes e gerencia usuários</option>
@@ -496,8 +558,8 @@ function UsersTab() {
           </div>
           {newErr && <p style={{ fontSize: 11, color: '#f87171', margin: '0 0 10px' }}>{newErr}</p>}
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-            <button type="button" onClick={() => setShowAdd(false)} style={{ padding: '8px 14px', background: 'transparent', color: '#737373', border: '1px solid #333333', borderRadius: 8, fontSize: 12, cursor: 'pointer' }}>Cancelar</button>
-            <button type="submit" disabled={newLoading} style={{ padding: '8px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#000', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+            <button type="button" onClick={() => setShowAdd(false)} style={{ padding: '8px 14px', background: 'transparent', color: '#737373', border: '1px solid #004080', borderRadius: 8, fontSize: 12, cursor: 'pointer' }}>Cancelar</button>
+            <button type="submit" disabled={newLoading} style={{ padding: '8px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#001124', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
               {newLoading ? 'Criando…' : 'Criar Usuário'}
             </button>
           </div>
@@ -512,8 +574,8 @@ function UsersTab() {
         <div key={u.id}>
           {/* Row */}
           {editId !== u.id ? (
-            <div style={{ background: '#0a0a0a', border: '1px solid #333333', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ background: '#001a36', border: '1px solid #004080', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#002a5c', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 {u.role === 'master' ? <KeyRound size={16} color="#F78A2D" /> : u.role === 'marketing' ? <Award size={16} color="#3b82f6" /> : <Users size={16} color="#737373" />}
               </div>
               <div style={{ flex: 1 }}>
@@ -522,7 +584,7 @@ function UsersTab() {
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
                 <button onClick={() => startEdit(u)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#111111', color: '#F78A2D', border: '1px solid #333333', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#002042', color: '#F78A2D', border: '1px solid #004080', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                   <Pencil size={12} /> Editar
                 </button>
                 <button onClick={() => handleDelete(u)}
@@ -533,24 +595,24 @@ function UsersTab() {
             </div>
           ) : (
             /* Edit Form */
-            <form onSubmit={handleEdit} style={{ background: '#0a0a0a', border: '1px solid #F78A2D', borderRadius: 12, padding: '16px 20px' }}>
+            <form onSubmit={handleEdit} style={{ background: '#001a36', border: '1px solid #F78A2D', borderRadius: 12, padding: '16px 20px' }}>
               <p style={{ fontSize: 11, fontWeight: 700, color: '#F78A2D', margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>✏️ Editando: {u.username}</p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase' }}>Novo Usuário</label>
                   <input value={editForm.username} onChange={e => setEditForm(p => ({ ...p, username: e.target.value }))} style={inputSt}
-                    onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'} />
+                    onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: 10, color: '#4a7fa8', fontWeight: 600, textTransform: 'uppercase' }}>Nova Senha <span style={{ color: '#4a7fa8', fontWeight: 400 }}>(deixe vazio pra manter)</span></label>
                   <input type="password" value={editForm.password} onChange={e => setEditForm(p => ({ ...p, password: e.target.value }))} placeholder="••••••••" style={inputSt}
-                    onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'} />
+                    onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'} />
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 14 }}>
                 <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase' }}>Tipo de Acesso</label>
                 <select value={editForm.role} onChange={e => setEditForm(p => ({ ...p, role: e.target.value as 'admin' | 'master' }))} style={{ ...inputSt, cursor: 'pointer' }}
-                  onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#333333'}>
+                  onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'}>
                   <option value="admin">👤 Admin — gerencia conteúdo do site</option>
                   <option value="marketing">📈 Marketing — Landing Pages e Integrações</option>
                   <option value="master">🔑 Master — aprova pacotes e gerencia usuários</option>
@@ -558,8 +620,8 @@ function UsersTab() {
               </div>
               {editErr && <p style={{ fontSize: 11, color: '#f87171', margin: '0 0 10px' }}>{editErr}</p>}
               <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                <button type="button" onClick={() => setEditId(null)} style={{ padding: '8px 14px', background: 'transparent', color: '#737373', border: '1px solid #333333', borderRadius: 8, fontSize: 12, cursor: 'pointer' }}>Cancelar</button>
-                <button type="submit" disabled={editLoading} style={{ padding: '8px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#000', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                <button type="button" onClick={() => setEditId(null)} style={{ padding: '8px 14px', background: 'transparent', color: '#737373', border: '1px solid #004080', borderRadius: 8, fontSize: 12, cursor: 'pointer' }}>Cancelar</button>
+                <button type="submit" disabled={editLoading} style={{ padding: '8px 18px', background: 'linear-gradient(135deg, #F78A2D, #d45f1a)', color: '#001124', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                   {editLoading ? 'Salvando…' : 'Salvar Alterações'}
                 </button>
               </div>
@@ -569,7 +631,7 @@ function UsersTab() {
       ))}
 
       {!loading && users.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '40px 20px', color: '#737373', fontSize: 14, background: '#0a0a0a', borderRadius: 12, border: '1px dashed #333333' }}>
+        <div style={{ textAlign: 'center', padding: '40px 20px', color: '#737373', fontSize: 14, background: '#001a36', borderRadius: 12, border: '1px dashed #004080' }}>
           Nenhum usuário encontrado.
         </div>
       )}
@@ -640,15 +702,15 @@ export default function MasterAdmin() {
   const curPkgs = section === 'pending' ? pendingPkgs : section === 'approved' ? approvedPkgs : section === 'rejected' ? rejectedPkgs : [];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#050505', color: '#e8edf2', fontFamily: 'Inter, system-ui, sans-serif', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#00152c', color: '#e8edf2', fontFamily: 'Inter, system-ui, sans-serif', alignItems: 'flex-start' }}>
       {/* Sidebar */}
-      <aside style={{ width: 220, background: '#0a0a0a', borderRight: '1px solid #333333', display: 'flex', flexDirection: 'column', padding: '24px 16px', gap: 8, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 8px 24px', fontSize: 15, fontWeight: 700, color: '#F78A2D', borderBottom: '1px solid #333333', marginBottom: 16 }}>
+      <aside style={{ width: 220, background: '#001a36', borderRight: '1px solid #004080', display: 'flex', flexDirection: 'column', padding: '24px 16px', gap: 8, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 8px 24px', fontSize: 15, fontWeight: 700, color: '#F78A2D', borderBottom: '1px solid #004080', marginBottom: 16 }}>
           <Shield size={18} /> Admin Mestre
         </div>
 
         {totalPending > 0 && (
-          <div style={{ background: '#1a1a1a', border: '1px solid #F78A2D', borderRadius: 8, padding: '10px 12px', fontSize: 12, color: '#F78A2D', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ background: '#002a5c', border: '1px solid #F78A2D', borderRadius: 8, padding: '10px 12px', fontSize: 12, color: '#F78A2D', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
             <AlertTriangle size={13} /> <strong>{totalPending} item{totalPending > 1 ? 's' : ''}</strong> aguardando aprovação
           </div>
         )}
@@ -657,21 +719,21 @@ export default function MasterAdmin() {
           <button key={s.id} onClick={() => setSection(s.id)} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '10px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 13, fontWeight: 600,
-            background: section === s.id ? '#1a1a1a' : 'transparent',
+            background: section === s.id ? '#002a5c' : 'transparent',
             color: section === s.id ? '#F78A2D' : '#737373',
           }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>{s.icon} {s.label}</span>
-            {s.count > 0 && <span style={{ fontSize: 11, background: '#1a1a1a', color: '#F78A2D', padding: '1px 7px', borderRadius: 10, fontWeight: 700, border: '1px solid #F78A2D' }}>{s.count}</span>}
+            {s.count > 0 && <span style={{ fontSize: 11, background: '#002a5c', color: '#F78A2D', padding: '1px 7px', borderRadius: 10, fontWeight: 700, border: '1px solid #F78A2D' }}>{s.count}</span>}
           </button>
         ))}
 
-        <div style={{ borderTop: '1px solid #333333', margin: '8px 0' }} />
+        <div style={{ borderTop: '1px solid #004080', margin: '8px 0' }} />
 
         {/* Users section */}
         <button onClick={() => setSection('users')} style={{
           display: 'flex', alignItems: 'center', gap: 8,
           padding: '10px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 13, fontWeight: 600,
-          background: section === 'users' ? '#1a1a1a' : 'transparent',
+          background: section === 'users' ? '#002a5c' : 'transparent',
           color: section === 'users' ? '#F78A2D' : '#737373',
         }}>
           <Users size={14} /> Usuários
@@ -681,7 +743,7 @@ export default function MasterAdmin() {
         <button onClick={() => setSection('trash')} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '10px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 13, fontWeight: 600,
-          background: section === 'trash' ? '#1a1a1a' : 'transparent',
+          background: section === 'trash' ? '#002a5c' : 'transparent',
           color: section === 'trash' ? '#F78A2D' : '#737373',
         }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}><Trash2 size={14} /> Lixeira</span>
@@ -689,10 +751,10 @@ export default function MasterAdmin() {
         </button>
 
         <div style={{ flex: 1 }} />
-        <button onClick={() => navigate('/admin')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, border: '1px solid #333333', cursor: 'pointer', background: 'transparent', color: '#737373', fontSize: 12, marginBottom: 4 }}>
+        <button onClick={() => navigate('/admin')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, border: '1px solid #004080', cursor: 'pointer', background: 'transparent', color: '#737373', fontSize: 12, marginBottom: 4 }}>
           <ArrowRight size={13} /> Admin Vendedores
         </button>
-        <button onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, border: '1px solid #333333', cursor: 'pointer', background: 'transparent', color: '#737373', fontSize: 12 }}>
+        <button onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, border: '1px solid #004080', cursor: 'pointer', background: 'transparent', color: '#737373', fontSize: 12 }}>
           <LogOut size={14} /> Sair
         </button>
       </aside>
@@ -714,8 +776,8 @@ export default function MasterAdmin() {
                   <AlertTriangle size={13} /> Pacotes na lixeira não aparecem no site. Restaure para reativá-los.
                 </div>
                 {deletedPkgs.map(({ p: pkg, i: realIdx }) => (
-                  <div key={realIdx} style={{ background: '#111111', border: '1px solid #3a1a1a', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', opacity: 0.8 }}>
-                    {pkg.img ? <img src={pkg.img} alt={pkg.title} style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} /> : <div style={{ width: 52, height: 52, background: '#1a1a1a', borderRadius: 8, flexShrink: 0 }} />}
+                  <div key={realIdx} style={{ background: '#002042', border: '1px solid #3a1a1a', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', opacity: 0.8 }}>
+                    {pkg.img ? <img src={pkg.img.split(';')[0].trim()} alt={pkg.title} style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} /> : <div style={{ width: 52, height: 52, background: '#002a5c', borderRadius: 8, flexShrink: 0 }} />}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, color: '#e8edf2' }}>{pkg.title || 'Sem título'}</div>
                       <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>
@@ -790,3 +852,5 @@ export default function MasterAdmin() {
     </div>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import Reveal from './Reveal';
+﻿import Reveal from './Reveal';
 import { useImageConfig } from '../hooks/useImageConfig';
 import type { ImageKey } from '../imageConfig';
 
@@ -34,7 +34,7 @@ function MarqueeCol({ items, direction, offset, getImage }: {
   function renderSlot(item: ColItem, keyPrefix: string) {
     const src = getImage(item.key);
     if (src) {
-      return <img key={`${keyPrefix}-${item.key}`} src={src} alt={item.alt} className={`w-full ${item.h} object-cover rounded-xl shadow-xl shadow-black/80`} />;
+      return <img key={`${keyPrefix}-${item.key}`} src={src} alt={item.alt} className={`w-full ${item.h} object-cover rounded-xl shadow-xl shadow-[#001124]/80`} />;
     }
     return <div key={`${keyPrefix}-${item.key}`} className={`w-full ${item.h} rounded-xl bg-white/5 border border-white/5`} />;
   }
@@ -95,3 +95,4 @@ export default function HeroSection() {
     </section>
   );
 }
+

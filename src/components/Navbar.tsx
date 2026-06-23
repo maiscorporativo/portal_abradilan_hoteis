@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
@@ -50,7 +50,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl lg:hidden pt-24 px-6 flex flex-col">
+        <div className="fixed inset-0 z-40 bg-[#001124]/95 backdrop-blur-xl lg:hidden pt-24 px-6 flex flex-col">
           <div className="flex flex-col gap-6 text-xl font-medium text-center text-white">
             <a href="/" className="hover:text-gold" onClick={scrollTo('trending')}>Mais Vendidos</a>
             <a href="/" className="hover:text-gold" onClick={scrollTo('events')}>Pacotes</a>
@@ -60,3 +60,4 @@ export default function Navbar() {
     </>
   );
 }
+

@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
+﻿/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { AlertTriangle, Info, CheckCircle2, XCircle, Flame } from 'lucide-react';
@@ -25,11 +25,11 @@ interface DialogContextType {
 const DialogContext = createContext<DialogContextType | undefined>(undefined);
 
 const THEME: Record<DialogType, { bg: string; border: string; iconColor: string; btnBg: string; btnHover: string }> = {
-  info:    { bg: '#111111', border: '#333333', iconColor: '#e43c44', btnBg: '#222222', btnHover: '#333333' },
+  info:    { bg: '#002042', border: '#004080', iconColor: '#e43c44', btnBg: '#003366', btnHover: '#004080' },
   success: { bg: '#0a1a10', border: '#11331a', iconColor: '#4ade80', btnBg: '#1a5c38', btnHover: '#1e7a48' },
   warning: { bg: '#1a1400', border: '#4d3300', iconColor: '#E67A1F', btnBg: '#7a4a00', btnHover: '#9a5a00' },
   error:   { bg: '#1a0505', border: '#441111', iconColor: '#e43c44', btnBg: '#441111', btnHover: '#661a1a' },
-  confirm: { bg: '#111111', border: '#333333', iconColor: '#e43c44', btnBg: '#222222', btnHover: '#333333' },
+  confirm: { bg: '#002042', border: '#004080', iconColor: '#e43c44', btnBg: '#003366', btnHover: '#004080' },
   danger:  { bg: '#1a0505', border: '#441111', iconColor: '#e43c44', btnBg: '#441111', btnHover: '#661a1a' },
 };
 
@@ -132,7 +132,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           style={{
             position: 'fixed', inset: 0, zIndex: 999999,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(0,0,0,0.65)',
+            background: 'rgba(0,17,36,0.65)',
             backdropFilter: 'blur(6px)',
             animation: closing ? '_dialog_overlay_out 0.18s ease forwards' : '_dialog_overlay_in 0.2s ease both',
             fontFamily: 'Inter, system-ui, sans-serif',
@@ -141,12 +141,12 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: '#0a0a0a',
+              background: '#001a36',
               border: `1px solid ${theme.border}`,
               borderRadius: 20,
               padding: '32px 28px 24px',
               width: 'min(400px, calc(100vw - 40px))',
-              boxShadow: `0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px ${theme.border}44, inset 0 1px 0 rgba(255,255,255,0.04)`,
+              boxShadow: `0 24px 80px rgba(0,17,36,0.7), 0 0 0 1px ${theme.border}44, inset 0 1px 0 rgba(255,255,255,0.04)`,
               animation: closing ? '_dialog_out 0.18s ease forwards' : '_dialog_in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
             }}
@@ -188,14 +188,14 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                   onClick={() => close(false)}
                   style={{
                     flex: 1, padding: '12px 16px',
-                    background: '#111111',
+                    background: '#002042',
                     border: '1px solid #262626',
                     borderRadius: 12, fontSize: 13, fontWeight: 600,
                     color: '#8899aa', cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = '#262626'; e.currentTarget.style.color = '#e5e5e5'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#8899aa'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#002042'; e.currentTarget.style.color = '#8899aa'; }}
                 >
                   {cancelText}
                 </button>
@@ -212,7 +212,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                       : `linear-gradient(135deg, ${theme.iconColor}, ${theme.iconColor}cc)`,
                   border: 'none',
                   borderRadius: 12, fontSize: 13, fontWeight: 700,
-                  color: type === 'success' || type === 'info' || type === 'confirm' ? '#000' : '#fff',
+                  color: type === 'success' || type === 'info' || type === 'confirm' ? '#001124' : '#fff',
                   cursor: 'pointer',
                   transition: 'all 0.15s',
                   boxShadow: `0 4px 16px ${theme.iconColor}30`,
@@ -235,3 +235,5 @@ export function useDialog() {
   if (!ctx) throw new Error('useDialog must be used within a DialogProvider');
   return ctx;
 }
+
+

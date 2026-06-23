@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+﻿import { Check } from 'lucide-react';
 import Reveal from './Reveal';
 import { useImageConfig } from '../hooks/useImageConfig';
 import type { ImageKey } from '../imageConfig';
@@ -113,7 +113,7 @@ export default function PlatinumAccess() {
                   ).map((item) => {
                     const src = getImage(item.key);
                     return (
-                      <div key={item._dup ? `${item.key}-dup` : item.key} className="rounded-xl overflow-hidden shrink-0 aspect-[4/3] w-full bg-black/20">
+                      <div key={item._dup ? `${item.key}-dup` : item.key} className="rounded-xl overflow-hidden shrink-0 aspect-[4/3] w-full bg-[#001124]/20">
                         {src
                           ? <img src={src} alt={item.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           : <div className="w-full h-full flex items-center justify-center text-white/20 text-xs">sem imagem</div>
@@ -133,7 +133,7 @@ export default function PlatinumAccess() {
                   ).map((item) => {
                     const src = getImage(item.key);
                     return (
-                      <div key={item._dup ? `${item.key}-dup` : item.key} className="rounded-xl overflow-hidden shrink-0 aspect-[4/3] w-full bg-black/20">
+                      <div key={item._dup ? `${item.key}-dup` : item.key} className="rounded-xl overflow-hidden shrink-0 aspect-[4/3] w-full bg-[#001124]/20">
                         {src
                           ? <img src={src} alt={item.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           : <div className="w-full h-full flex items-center justify-center text-white/20 text-xs">sem imagem</div>
@@ -152,3 +152,4 @@ export default function PlatinumAccess() {
     </section>
   );
 }
+

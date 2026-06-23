@@ -21,6 +21,7 @@ export interface TrendingPackage {
   loc: string;
   date: string;
   price: string;
+  priceDouble?: string;
   currency?: string;
   img: string;
   badge: string;
@@ -58,12 +59,31 @@ export interface TrendingPackage {
   highlights?: string; // Semicolon separated features/highlights
   sectionBackground?: string;
   sportType?: string; // Ex: 'automobilismo', 'futebol', 'tenis', etc.
-  /* ── New GP Experience LP Sections ── */
+  /* ── New Pricing & Stays Sections ── */
+  minNights?: string;
+  validFrom?: string;
+  validTo?: string;
+  dailyRateOverride?: string;
+  doublePerPersonOverride?: string;
+  /* ── New Hotel LP Sections ── */
+  heroSubtitle?: string; // Frase destaque no hero
+  breakfast?: string; // Café da manhã
+  distanceCenterNorte?: string; // Distância de carro Center Norte
+  trainingRooms?: string; // Salas para treinamento
+  parking?: string; // Estacionamento
+  mapAddress?: string; // Endereço para o mapa
+  hotelDescription?: string; // Descrição sobre o hotel
+  accommodationsTitle?: string; // Título da seção de Acomodações
+  accommodationsDescription?: string; // Descrição da seção de Acomodações
+  accommodationsImages?: string; // Fotos das acomodações (separadas por ponto e vírgula)
+  /* ── Legacy GP Experience LP Sections ── */
   cardsData?: string; // JSON string para Cards de Experiência
   programacaoData?: string; // JSON string para dias e programação
   pacotesOptionsData?: string; // JSON string para opções de pacotes
   experienciaSection?: string; // JSON string ou texto da seção Experiência
-  partnershipSection?: string; // JSON string ou boolean para parceria
+  /* ── Map and Media Extensions ── */
+  surroundingsData?: string;
+  packageMediaPool?: string[]; // Banco de fotos do pacote
   /* ── Soft-delete ── */
   deletedAt?: string;
   deletedBy?: string;

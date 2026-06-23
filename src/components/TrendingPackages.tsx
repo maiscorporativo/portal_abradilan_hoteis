@@ -8,13 +8,22 @@ import { getCurrencySymbol, formatDisplayPrice } from '../utils/currency';
 
 
 
+const fixImgPath = (path: string | undefined) => {
+  if (!path) return '';
+  path = path.trim();
+  if (path.startsWith('//')) return `https:${path}`;
+  if (path.startsWith('http') || path.startsWith('/') || path.startsWith('data:')) return path;
+  if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\//.test(path)) return `https://${path}`;
+  return `/${path}`;
+};
+
 export default function TrendingPackages() {
   const navigate = useNavigate();
   const { packages: allPackages } = useContentConfig();
   
   const packagesWithIndex = allPackages
     .map((p, i) => ({ ...p, originalIndex: i }))
-    .filter(p => (!p.status || p.status === 'approved') && p.isTrending === true && !p.deletedAt)
+    .filter(p => !p.deletedAt)
     .slice(0, 8);
 
   const handleNavigate = (idx: number) => {
@@ -69,7 +78,7 @@ export default function TrendingPackages() {
                   <div className="absolute top-4 right-4 z-10 bg-gold text-black backdrop-blur text-[10px] font-bold px-2 py-1 rounded tracking-wider shadow-sm">
                     {pkg.tag}
                   </div>
-                  <img src={pkg.img} alt={`Pacote ${pkg.title} em ${pkg.loc}`} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img src={pkg.img?.split(';')[0]?.trim()} alt={`Pacote ${pkg.title} em ${pkg.loc}`} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 {/* Badge logo */}
                 <div className="absolute bottom-auto top-[calc(12rem-1.25rem)] left-4 w-12 h-12 bg-white rounded-md shadow-md flex items-center justify-center p-1.5 z-20">

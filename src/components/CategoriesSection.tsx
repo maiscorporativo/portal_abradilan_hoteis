@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+﻿import { useNavigate } from 'react-router-dom';
 import { ChevronDown, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import type { TrendingPackage } from '../types';
 import { useState } from 'react';
@@ -25,7 +25,7 @@ function PackageCard({ pkg, onClick }: { pkg: TrendingPackage & { originalIndex:
   return (
     <div
       onClick={onClick}
-      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-gold/40 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40"
+      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-gold/40 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#001124]/40"
     >
       {/* Image */}
       <div className="relative h-44 overflow-hidden">
@@ -33,7 +33,7 @@ function PackageCard({ pkg, onClick }: { pkg: TrendingPackage & { originalIndex:
           ? <img src={pkg.img} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           : <div className="w-full h-full bg-white/5 flex items-center justify-center text-4xl">{CATEGORY_ICONS[pkg.category || ''] || '🎟️'}</div>
         }
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#001124]/70 via-transparent to-transparent" />
         <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-1 rounded-full bg-gold text-black uppercase tracking-wider">
           {pkg.tag}
         </span>
@@ -177,3 +177,4 @@ export default function CategoriesSection() {
     </section>
   );
 }
+

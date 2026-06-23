@@ -1,4 +1,4 @@
-export const GLOBAL_MAUTIC_FORM = `
+﻿export const GLOBAL_MAUTIC_FORM = `
 <script type="text/javascript">
     /** This section is only needed once per page if manually copying **/
     if (typeof MauticSDKLoaded == 'undefined') {
@@ -30,7 +30,7 @@ export const GLOBAL_MAUTIC_FORM = `
     .mauticform-row.mauticform-required .mauticform-label:after { color: #e32; content: " *"; display: inline; }
     .mauticform-helpmessage { display: block; font-size: 0.9em; margin-bottom: 3px; color: #999; }
     .mauticform-errormsg { display: block; color: red; margin-top: 2px; }
-    .mauticform-selectbox, .mauticform-input, .mauticform-textarea { width: 100%; padding: 0.8em 1em; border: 1px solid #333; background: #111; color: #fff; border-radius: 8px; box-sizing: border-box; }
+    .mauticform-selectbox, .mauticform-input, .mauticform-textarea { width: 100%; padding: 0.8em 1em; border: 1px solid #004080; background: #002042; color: #fff; border-radius: 8px; box-sizing: border-box; }
     .mauticform-radiogrp-row { margin-bottom: 8px; color: #ccc; }
     .mauticform-button-wrapper .mauticform-button { display: inline-block; width: 100%; font-weight: 700; text-align: center; cursor: pointer; background: linear-gradient(135deg, #F78A2D, #d66f1c); color: #fff; border: none; padding: 14px 24px; font-size: 16px; border-radius: 12px; transition: transform 0.2s; }
     .mauticform-button-wrapper .mauticform-button:hover { transform: translateY(-2px); }
@@ -181,3 +181,4 @@ export const GLOBAL_MAUTIC_FORM = `
         </form>
 </div>
 `;
+

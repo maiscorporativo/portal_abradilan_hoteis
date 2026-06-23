@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
+﻿/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { CheckCircle2, AlertTriangle, Info, XCircle, X } from 'lucide-react';
@@ -76,7 +76,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 border: `1px solid ${c.border}`,
                 borderRadius: 12,
                 padding: '12px 16px',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
+                boxShadow: '0 8px 32px rgba(0,17,36,0.55)',
                 animation: '_toast_in 0.25s ease both',
                 pointerEvents: 'auto',
                 width: '100%',
@@ -109,3 +109,4 @@ export function useToast() {
   if (!ctx) throw new Error('useToast must be used within a ToastProvider');
   return ctx;
 }
+

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Plane, BedDouble, Ticket, X } from 'lucide-react';
 import type { TrendingPackage } from '../types';
@@ -16,7 +16,7 @@ function DetailRow({ icon, title, text }: { icon: React.ReactNode; title: string
         {icon}
       </div>
       <div style={{ minWidth: 0, flex: 1 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 700, color: '#111', margin: '0 0 4px', overflowWrap: 'break-word', wordBreak: 'break-word' }}>{title}</h4>
+        <h4 style={{ fontSize: 14, fontWeight: 700, color: '#002042', margin: '0 0 4px', overflowWrap: 'break-word', wordBreak: 'break-word' }}>{title}</h4>
         <p style={{ fontSize: 13, color: '#6b7280', margin: 0, lineHeight: 1.6, overflowWrap: 'break-word', wordBreak: 'break-word' }}>{text}</p>
       </div>
     </div>
@@ -76,7 +76,7 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0,0,0,0.65)',
+          background: 'rgba(0,17,36,0.65)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
         }}
@@ -87,11 +87,11 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
         style={{
           position: 'relative',
           background: '#fff',
-          color: '#111',
+          color: '#002042',
           width: '100%',
           maxWidth: 760,
           borderRadius: 20,
-          boxShadow: '0 32px 80px rgba(0,0,0,0.55)',
+          boxShadow: '0 32px 80px rgba(0,17,36,0.55)',
           overflowY: 'auto',
           overflowX: 'hidden',
           maxHeight: 'calc(100dvh - 32px)',
@@ -108,7 +108,7 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
           />
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)',
+            background: 'linear-gradient(to top, rgba(0,17,36,0.80) 0%, rgba(0,17,36,0.15) 50%, transparent 100%)',
           }} />
 
           {/* Close button */}
@@ -118,15 +118,15 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
             style={{
               position: 'absolute', top: 14, right: 14,
               width: 36, height: 36, borderRadius: '50%',
-              background: 'rgba(0,0,0,0.45)',
+              background: 'rgba(0,17,36,0.45)',
               border: 'none', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               backdropFilter: 'blur(4px)',
               transition: 'background 0.15s',
               color: '#fff',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.45)')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,17,36,0.7)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,17,36,0.45)')}
           >
             <X size={18} />
           </button>
@@ -135,7 +135,7 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
           <div style={{ position: 'absolute', bottom: 20, left: 24, right: 24 }}>
             <span style={{
               display: 'inline-block',
-              background: '#e43c44', color: '#000',
+              background: '#e43c44', color: '#001124',
               fontSize: 10, fontWeight: 800,
               padding: '3px 10px', borderRadius: 5,
               letterSpacing: '0.1em', textTransform: 'uppercase',
@@ -192,7 +192,7 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
               <p style={{ fontSize: 11, color: '#9ca3af', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 6px' }}>
                 Valor Estimado
               </p>
-              <div style={{ fontSize: 30, fontWeight: 800, color: '#111', margin: '0 0 4px', lineHeight: 1.1 }}>
+              <div style={{ fontSize: 30, fontWeight: 800, color: '#002042', margin: '0 0 4px', lineHeight: 1.1 }}>
                 {getCurrencySymbol(pkg.currency || 'BRL')} {formatDisplayPrice(pkg.price, pkg.currency || 'BRL')}
               </div>
               <span style={{ fontSize: 12, color: '#9ca3af' }}>por pessoa</span>
@@ -204,7 +204,7 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
                   rel="noopener noreferrer"
                   style={{
                     width: '100%', padding: '13px 0',
-                    background: '#e43c44', color: '#000',
+                    background: '#e43c44', color: '#001124',
                     fontWeight: 800, fontSize: 14,
                     border: 'none', borderRadius: 12,
                     cursor: 'pointer', transition: 'opacity 0.15s',
@@ -248,3 +248,5 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
 
   return createPortal(modal, document.body);
 }
+
+

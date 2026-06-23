@@ -1,4 +1,4 @@
-import { useState, useId, useEffect, useRef } from 'react';
+﻿import { useState, useId, useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useSelectedPackage } from '../hooks/useSelectedPackage';
 import { useContentConfig } from '../hooks/useContentConfig';
@@ -27,7 +27,7 @@ function FloatInput({
         onBlur={() => setFocused(false)}
         style={{
           width: '100%', boxSizing: 'border-box',
-          background: '#111111',
+          background: '#002042',
           border: `1.5px solid ${focused ? '#F78A2D' : 'rgba(255,255,255,0.1)'}`,
           borderRadius: 12,
           color: '#fff',
@@ -91,7 +91,7 @@ function PhoneInput({ value, onChange }: { value: string; onChange: (v: string) 
         style={{
           display: 'flex', alignItems: 'center',
           width: '100%', boxSizing: 'border-box',
-          background: '#111111',
+          background: '#002042',
           border: `1.5px solid ${focused ? '#F78A2D' : 'rgba(255,255,255,0.1)'}`,
           borderRadius: 12,
           padding: '22px 18px 8px',
@@ -298,7 +298,7 @@ function PackageSelect({ id, value, onChange }: { id: string; value: string; onC
           placeholder={open ? 'Buscar pacote...' : ' '}
           style={{
             width: '100%', boxSizing: 'border-box',
-            background: active ? '#1a1a1a' : '#111111',
+            background: active ? '#002a5c' : '#002042',
             border: `1.5px solid ${active ? '#F78A2D' : 'rgba(255,255,255,0.1)'}`,
             borderRadius: open ? '12px 12px 0 0' : 12,
             color: '#fff', fontSize: 15,
@@ -347,13 +347,13 @@ function PackageSelect({ id, value, onChange }: { id: string; value: string; onC
       {open && (
         <div style={{
           position: 'absolute', left: 0, right: 0,
-          background: '#0a0a0a',
+          background: '#001a36',
           border: '1.5px solid #F78A2D',
           borderTop: '1px solid rgba(223,254,0,0.2)',
           borderRadius: '0 0 14px 14px',
           zIndex: 500, overflowY: 'auto', overflowX: 'hidden',
           maxHeight: 260,
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+          boxShadow: '0 20px 50px rgba(0,17,36,0.6)',
         }}>
           {filtered.length === 0 ? (
             <div style={{ padding: '16px 18px', fontSize: 13, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
@@ -485,7 +485,7 @@ export default function ContactForm() {
     <section
       id="contato-form"
       style={{
-        background: 'linear-gradient(180deg, #000000 0%, #09090b 100%)',
+        background: 'linear-gradient(180deg, #001124 0%, #09090b 100%)',
         padding: '96px 24px',
         position: 'relative',
       }}
@@ -587,7 +587,7 @@ export default function ContactForm() {
               borderRadius: 24,
               padding: '40px 36px',
               backdropFilter: 'blur(12px)',
-              boxShadow: '0 32px 64px rgba(0,0,0,0.35)',
+              boxShadow: '0 32px 64px rgba(0,17,36,0.35)',
             }}
           >
             {status === 'success' ? (
@@ -659,7 +659,7 @@ export default function ContactForm() {
                     background: status === 'sending'
                       ? 'rgba(223,254,0,0.5)'
                       : 'linear-gradient(135deg, #F78A2D 0%, #E67A1F 100%)',
-                    color: '#000',
+                    color: '#001124',
                     fontWeight: 800, fontSize: 14,
                     letterSpacing: '0.08em', textTransform: 'uppercase',
                     border: 'none', borderRadius: 100,
@@ -688,3 +688,5 @@ export default function ContactForm() {
     </section>
   );
 }
+
+

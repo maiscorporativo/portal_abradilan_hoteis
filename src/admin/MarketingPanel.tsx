@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+﻿import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Shield, LogOut, Package, Video, Code, Link as LinkIcon, 
@@ -14,8 +14,8 @@ const MARKETING_AUTH_KEY = 'emais_marketing_auth';
 const MARKETING_TOKEN_KEY = 'emais_marketing_token';
 
 const IS = { 
-  background: '#050505', 
-  border: '1px solid #333333', 
+  background: '#00152c', 
+  border: '1px solid #004080', 
   borderRadius: 8, 
   color: '#e8edf2', 
   fontSize: 13, 
@@ -89,7 +89,7 @@ function ImageField({ value, onUpdate, label = 'Imagem' }: { value: string; onUp
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, background: '#0a0a0a', padding: 12, borderRadius: 10, border: '1px solid #1a1a1a' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, background: '#001a36', padding: 12, borderRadius: 10, border: '1px solid #002a5c' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontSize: 10, color: '#737373', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
         <div style={{ display: 'flex', gap: 6 }}>
@@ -112,12 +112,12 @@ function ImageField({ value, onUpdate, label = 'Imagem' }: { value: string; onUp
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         {value ? (
-          <div style={{ position: 'relative', width: 60, height: 60, borderRadius: 8, overflow: 'hidden', border: '1px solid #333', flexShrink: 0 }}>
+          <div style={{ position: 'relative', width: 60, height: 60, borderRadius: 8, overflow: 'hidden', border: '1px solid #004080', flexShrink: 0 }}>
             <img src={value} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         ) : (
-          <div style={{ width: 60, height: 60, borderRadius: 8, background: '#111', border: '1px dashed #222', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <ImageIcon size={20} color="#222" />
+          <div style={{ width: 60, height: 60, borderRadius: 8, background: '#002042', border: '1px dashed #003366', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <ImageIcon size={20} color="#003366" />
           </div>
         )}
         <input 
@@ -126,7 +126,7 @@ function ImageField({ value, onUpdate, label = 'Imagem' }: { value: string; onUp
           placeholder="https://... ou caminho do arquivo" 
           style={{ 
             ...IS, padding: '8px 10px', fontSize: 12, flex: 1, 
-            background: '#050505', border: '1px solid #1a1a1a' 
+            background: '#00152c', border: '1px solid #002a5c' 
           }} 
         />
       </div>
@@ -214,8 +214,8 @@ function MarketingLogin({ onLogin }: { onLogin: () => void }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <form onSubmit={handleSubmit} style={{ background: '#0a0a0a', border: '1px solid #333333', borderRadius: 16, padding: '40px 32px', width: 360, display: 'flex', flexDirection: 'column', gap: 20, boxShadow: '0 24px 64px rgba(0,0,0,.8)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#00152c', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <form onSubmit={handleSubmit} style={{ background: '#001a36', border: '1px solid #004080', borderRadius: 16, padding: '40px 32px', width: 360, display: 'flex', flexDirection: 'column', gap: 20, boxShadow: '0 24px 64px rgba(0,17,36,.8)' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ width: 56, height: 56, background: 'linear-gradient(135deg, #3b82f6, #2563eb)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: '0 8px 16px rgba(59, 130, 246, 0.2)' }}>
             <Activity size={28} color="#fff" />
@@ -247,8 +247,8 @@ function MarketingLogin({ onLogin }: { onLogin: () => void }) {
 /* ── UI Helpers ── */
 function Section({ title, icon: Icon, children, color = '#3b82f6' }: { title: string; icon: any; children: React.ReactNode; color?: string }) {
   return (
-    <div style={{ background: '#0a0a0a', border: '1px solid #222', borderRadius: 16, padding: '24px 32px', marginBottom: 32, boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24, borderBottom: '1px solid #1a1a1a', paddingBottom: 18 }}>
+    <div style={{ background: '#001a36', border: '1px solid #003366', borderRadius: 16, padding: '24px 32px', marginBottom: 32, boxShadow: '0 4px 20px rgba(0,17,36,0.2)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24, borderBottom: '1px solid #002a5c', paddingBottom: 18 }}>
         <div style={{ width: 42, height: 42, background: `${color}15`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${color}33` }}>
           <Icon size={20} color={color} />
         </div>
@@ -264,7 +264,7 @@ function Section({ title, icon: Icon, children, color = '#3b82f6' }: { title: st
 
 function SubSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginTop: 24, padding: 20, background: '#111', borderRadius: 12, border: '1px solid #1a1a1a' }}>
+    <div style={{ marginTop: 24, padding: 20, background: '#002042', borderRadius: 12, border: '1px solid #002a5c' }}>
       <h4 style={{ fontSize: 11, fontWeight: 800, color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
         <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#3b82f6' }}></div>
         {title}
@@ -306,7 +306,7 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
         .admin-input:focus { border-color: #3b82f6 !important; background: #0c0c0c !important; }
       `}</style>
       
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32, background: '#0a0a0a', padding: '20px 32px', borderRadius: 16, border: '1px solid #222' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32, background: '#001a36', padding: '20px 32px', borderRadius: 16, border: '1px solid #003366' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ width: 48, height: 48, background: '#3b82f6', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(59,130,246,0.3)' }}>
             <Activity size={24} color="#fff" />
@@ -315,13 +315,13 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
             <h2 style={{ fontSize: 22, fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.02em' }}>{pkg.title}</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
               <span style={{ fontSize: 11, color: '#737373', display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={12} /> Criado em {pkg.createdAt?.split('T')[0] || 'N/A'}</span>
-              <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#333' }}></span>
+              <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#004080' }}></span>
               <span style={{ fontSize: 11, color: '#3b82f6', fontWeight: 700 }}>PAINEL DE MARKETING</span>
             </div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={onCancel} style={{ padding: '10px 20px', background: 'transparent', border: '1px solid #333', color: '#737373', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}>Descartar</button>
+          <button onClick={onCancel} style={{ padding: '10px 20px', background: 'transparent', border: '1px solid #004080', color: '#737373', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}>Descartar</button>
           <button onClick={handleSave} disabled={saving} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 28px', background: 'linear-gradient(135deg, #3b82f6, #2563eb)', color: '#fff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 15px rgba(37,99,235,0.3)' }}>
             {saving ? 'Gravando...' : <><Save size={16} /> Salvar Alterações</>}
           </button>
@@ -333,33 +333,27 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
         <div>
           <Section title="Estratégia Visual & Hero" icon={Video} color="#3b82f6">
             <div style={{ display: 'grid', gap: 20 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 150px 1fr', gap: 16 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
                 <div style={fieldStyle}>
-                  <label style={labelStyle}>Template Esporte</label>
-                  <select 
-                    value={local.sportType || 'automobilismo'} 
-                    onChange={e => setLocal({...local, sportType: e.target.value})}
+                  <label style={labelStyle}>Frase Destaque Hero (Subtítulo)</label>
+                  <input 
+                    value={local.heroSubtitle || ''} 
+                    onChange={e => setLocal({...local, heroSubtitle: e.target.value})}
+                    placeholder="Ex: A melhor experiência em hospedagem premium"
                     style={IS}
                     className="admin-input"
-                  >
-                    <option value="automobilismo">🏎️ Automobilismo</option>
-                    <option value="futebol">⚽ Futebol</option>
-                    <option value="tenis">🎾 Tênis</option>
-                    <option value="basquete">🏀 Basquete</option>
-                    <option value="lutas">🥊 Lutas (UFC/Boxe)</option>
-                    <option value="geral">🏆 Geral</option>
-                  </select>
+                  />
                 </div>
                 <div style={fieldStyle}>
                   <label style={labelStyle}>Destaque Hero</label>
                   <select 
-                    value={local.heroType || 'video'} 
+                    value={local.heroType || 'image'} 
                     onChange={e => setLocal({...local, heroType: e.target.value as any})}
                     style={IS}
                     className="admin-input"
                   >
-                    <option value="video">🎞️ Vídeo</option>
                     <option value="image">🖼️ Imagem</option>
+                    <option value="video">🎞️ Vídeo</option>
                   </select>
                 </div>
                 <ImageField 
@@ -377,86 +371,105 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
                 />
               </div>
 
+            </div>
+          </Section>
+
+          <Section title="CARDS DE ITENS INCLUSOS" icon={Star} color="#f59e0b">
+            <div style={{ display: 'grid', gap: 16 }}>
               <div style={fieldStyle}>
-                <label style={labelStyle}>Diferenciais & Benefícios (Cards)</label>
+                <label style={labelStyle}>☕ Café da Manhã</label>
+                <input 
+                  value={local.breakfast || ''} 
+                  onChange={e => setLocal({...local, breakfast: e.target.value})} 
+                  placeholder="Ex: Incluso no pacote, Buffet Continental" 
+                  style={IS} 
+                  className="admin-input"
+                />
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>🚗 Deslocamento</label>
+                <input 
+                  value={local.distanceCenterNorte || ''} 
+                  onChange={e => setLocal({...local, distanceCenterNorte: e.target.value})} 
+                  placeholder="Ex: 5 km ou 15 minutos até o Center Norte" 
+                  style={IS} 
+                  className="admin-input"
+                />
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>🏢 Salas para Treinamento</label>
+                <input 
+                  value={local.trainingRooms || ''} 
+                  onChange={e => setLocal({...local, trainingRooms: e.target.value})} 
+                  placeholder="Ex: Disponível no local, Várias salas equipadas" 
+                  style={IS} 
+                  className="admin-input"
+                />
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>🅿️ Estacionamento</label>
+                <input 
+                  value={local.parking || ''} 
+                  onChange={e => setLocal({...local, parking: e.target.value})} 
+                  placeholder="Ex: Incluso no pacote, Valet Parking" 
+                  style={IS} 
+                  className="admin-input"
+                />
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>📄 SOBRE O HOTEL</label>
                 <textarea 
-                  value={local.highlights || ''} 
-                  onChange={e => setLocal({...local, highlights: e.target.value})} 
-                  placeholder="Acesso ao Paddock; Translado VIP; Hotel 5 Estrelas..." 
+                  value={local.hotelDescription || ''} 
+                  onChange={e => setLocal({...local, hotelDescription: e.target.value})} 
+                  placeholder="Ex: O hotel oferece uma infraestrutura completa..." 
                   style={{ ...IS, height: 80 }} 
                   className="admin-input"
                 />
               </div>
+
+              {/* Ocultado a pedido:
+              <div style={fieldStyle}>
+                <label style={labelStyle}>🛏️ TÍTULO DA ACOMODAÇÃO</label>
+                <input 
+                  value={local.accommodationsTitle || ''} 
+                  onChange={e => setLocal({...local, accommodationsTitle: e.target.value})} 
+                  placeholder="Ex: Acomodações" 
+                  style={IS} 
+                  className="admin-input"
+                />
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>📝 DESCRIÇÃO DA ACOMODAÇÃO</label>
+                <textarea 
+                  value={local.accommodationsDescription || ''} 
+                  onChange={e => setLocal({...local, accommodationsDescription: e.target.value})} 
+                  placeholder="Ex: Quartos confortáveis..." 
+                  style={{ ...IS, height: 80 }} 
+                  className="admin-input"
+                />
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>Fotos das Acomodações</label>
+                <GalleryManager 
+                  value={local.accommodationsImages || ''} 
+                  onUpdate={(val) => setLocal({...local, accommodationsImages: val})} 
+                />
+              </div>
+              */}
             </div>
           </Section>
 
-          <Section title="Programação do Evento" icon={Calendar} color="#f59e0b">
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-              <button onClick={() => {
-                const p = (() => { try { return JSON.parse(local.programacaoData || '[]'); } catch { return []; } })();
-                p.push({ titulo_aba: '', titulo_dia: '', atividades: [] });
-                setLocal({...local, programacaoData: JSON.stringify(p)});
-              }} style={{ background: '#1a1a1a', border: '1px solid #333', color: '#fff', padding: '6px 14px', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Plus size={14} /> Adicionar Dia
-              </button>
+          <Section title="Localização (Mapa)" icon={Star} color="#ef4444">
+            <div style={fieldStyle}>
+              <label style={labelStyle}>Endereço ou URL do Local</label>
+              <textarea 
+                value={local.mapAddress || ''} 
+                onChange={e => setLocal({...local, mapAddress: e.target.value})} 
+                placeholder="Insira o endereço completo ou o link embed do Google Maps..." 
+                style={{ ...IS, height: 80 }} 
+                className="admin-input"
+              />
             </div>
-            
-            {(() => {
-              const prog = (() => { try { return JSON.parse(local.programacaoData || '[]'); } catch { return []; } })();
-              if(prog.length === 0) return <div style={{ textAlign: 'center', padding: '32px', color: '#444', fontSize: 13, background: '#080808', borderRadius: 12, border: '1px dashed #222' }}>Nenhuma programação definida.</div>;
-              return prog.map((day: any, i: number) => (
-                <div key={`prog-${i}`} style={{ background: '#111', padding: 20, borderRadius: 12, border: '1px solid #1a1a1a', marginBottom: 16 }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr auto', gap: 12, marginBottom: 16 }}>
-                    <div style={fieldStyle}>
-                      <label style={labelStyle}>Aba</label>
-                      <input placeholder="Ex: DIA 1" value={day.titulo_aba || day.dia || ''} onChange={e => {
-                        const newProg = [...prog]; newProg[i].titulo_aba=e.target.value;
-                        setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                      }} style={IS} className="admin-input" />
-                    </div>
-                    <div style={fieldStyle}>
-                      <label style={labelStyle}>Título do Dia</label>
-                      <input placeholder="Ex: Sábado, 24 de Maio - Treinos Livres" value={day.titulo_dia || day.data || ''} onChange={e => {
-                        const newProg = [...prog]; newProg[i].titulo_dia=e.target.value;
-                        setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                      }} style={IS} className="admin-input" />
-                    </div>
-                    <button title="Excluir Dia" onClick={() => {
-                      const newProg = [...prog]; newProg.splice(i, 1);
-                      setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                    }} style={{ marginTop: 22, background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 8, borderRadius: 8 }} className="hover-red"><Trash2 size={16} /></button>
-                  </div>
-                  
-                  <div style={{ paddingLeft: 16, borderLeft: '2px solid #222' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                      <span style={{ fontSize: 10, color: '#555', fontWeight: 800, textTransform: 'uppercase' }}>Atividades do Dia</span>
-                      <button onClick={() => {
-                        const newProg = [...prog]; 
-                        if(!newProg[i].atividades) newProg[i].atividades = [];
-                        newProg[i].atividades.push({ horario: '', descricao: '' });
-                        setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                      }} style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 10, fontWeight: 700 }}>+ Atividade</button>
-                    </div>
-                    {(day.atividades || []).map((ativ: any, j: number) => (
-                      <div key={`ativ-${j}`} style={{ display: 'grid', gridTemplateColumns: '90px 1fr auto', gap: 12, marginBottom: 8 }}>
-                        <input placeholder="08:00" value={ativ.horario || ''} onChange={e => {
-                          const newProg = [...prog]; newProg[i].atividades[j].horario=e.target.value;
-                          setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                        }} style={{ ...IS, padding: '8px 10px', fontSize: 12 }} className="admin-input" />
-                        <input placeholder="Descrição da atividade..." value={ativ.descricao || ''} onChange={e => {
-                          const newProg = [...prog]; newProg[i].atividades[j].descricao=e.target.value;
-                          setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                        }} style={{ ...IS, padding: '8px 10px', fontSize: 12 }} className="admin-input" />
-                        <button onClick={() => {
-                          const newProg = [...prog]; newProg[i].atividades.splice(j, 1);
-                          setLocal({...local, programacaoData: JSON.stringify(newProg)});
-                        }} style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer' }}><X size={14} /></button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ));
-            })()}
           </Section>
         </div>
 
@@ -472,7 +485,7 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
                 } catch {}
                 pacotesObj.opcoes_hospedagem.push({ nome: '', descricao_card: '', valor_individual: '', valor_duplo: '', moeda: 'USD', parcelas: '10', inclusos: [] });
                 setLocal({...local, pacotesOptionsData: JSON.stringify(pacotesObj)});
-              }} style={{ background: '#1a1a1a', border: '1px solid #333', color: '#fff', padding: '6px 14px', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+              }} style={{ background: '#002a5c', border: '1px solid #004080', color: '#fff', padding: '6px 14px', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Plus size={14} /> Novo Card de Hospedagem
               </button>
             </div>
@@ -489,35 +502,22 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
               return (
                 <div style={{ display: 'grid', gap: 20 }}>
                   {pacotesObj.opcoes_hospedagem.map((op: any, i: number) => (
-                    <div key={`op-${i}`} style={{ background: '#111', padding: 20, borderRadius: 12, border: '1px solid #1a1a1a' }}>
+                    <div key={`op-${i}`} style={{ background: '#002042', padding: 20, borderRadius: 12, border: '1px solid #002a5c' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                           <div style={{ width: 32, height: 32, background: '#10b9811a', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: '#10b981' }}>{i+1}</div>
-                          <input placeholder="Nome da Hospedagem (Ex: JW Marriott)" value={op.nome || ''} onChange={e => { const n={...pacotesObj}; n.opcoes_hospedagem[i].nome=e.target.value; updatePacotes(n); }} style={{ ...IS, width: 250, fontWeight: 700, border: 'none', background: 'transparent', padding: 0 }} />
+                          <input placeholder="COMODIDADES & SERVIÇOS" value={op.nome || ''} onChange={e => { const n={...pacotesObj}; n.opcoes_hospedagem[i].nome=e.target.value; updatePacotes(n); }} style={{ ...IS, width: 250, fontWeight: 700, border: 'none', background: 'transparent', padding: 0 }} />
                         </div>
                         <button onClick={() => { const n={...pacotesObj}; n.opcoes_hospedagem.splice(i, 1); updatePacotes(n); }} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={16} /></button>
                       </div>
 
                       <div style={{ display: 'grid', gap: 12 }}>
-                        <textarea placeholder="Pequena descrição para o card..." value={op.descricao_card || ''} onChange={e => { const n={...pacotesObj}; n.opcoes_hospedagem[i].descricao_card=e.target.value; updatePacotes(n); }} style={{ ...IS, height: 60 }} className="admin-input" />
                         
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-                          <div style={fieldStyle}>
-                            <label style={labelStyle}><DollarSign size={10} /> Valor Individual</label>
-                            <input placeholder="Ex: 1200" value={op.valor_individual || ''} onChange={e => { const n={...pacotesObj}; n.opcoes_hospedagem[i].valor_individual=e.target.value; updatePacotes(n); }} style={IS} className="admin-input" />
-                          </div>
-                          <div style={fieldStyle}>
-                            <label style={labelStyle}><DollarSign size={10} /> Valor Duplo</label>
-                            <input placeholder="Ex: 1500" value={op.valor_duplo || ''} onChange={e => { const n={...pacotesObj}; n.opcoes_hospedagem[i].valor_duplo=e.target.value; updatePacotes(n); }} style={IS} className="admin-input" />
-                          </div>
-                          <div style={fieldStyle}>
-                            <label style={labelStyle}><Tag size={10} /> Moeda</label>
-                            <input placeholder="Ex: USD" value={op.moeda || ''} onChange={e => { const n={...pacotesObj}; n.opcoes_hospedagem[i].moeda=e.target.value; updatePacotes(n); }} style={IS} className="admin-input" />
-                          </div>
-                        </div>
+
+                        
 
                         {/* Local Inclusions */}
-                        <div style={{ marginTop: 12, padding: 16, background: '#0a0a0a', borderRadius: 10, border: '1px solid #1a1a1a' }}>
+                        <div style={{ marginTop: 12, padding: 16, background: '#001a36', borderRadius: 10, border: '1px solid #002a5c' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                             <span style={{ fontSize: 10, color: '#555', fontWeight: 800, textTransform: 'uppercase' }}>Inclusos exclusivos deste card</span>
                             <button onClick={() => {
@@ -525,7 +525,7 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
                               if(!n.opcoes_hospedagem[i].inclusos) n.opcoes_hospedagem[i].inclusos = [];
                               n.opcoes_hospedagem[i].inclusos.push({ titulo: '', descricao: '' });
                               updatePacotes(n);
-                            }} style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', padding: '2px 8px', borderRadius: 4, cursor: 'pointer', fontSize: 10 }}>+ Item</button>
+                            }} style={{ background: 'transparent', border: '1px solid #004080', color: '#aaa', padding: '2px 8px', borderRadius: 4, cursor: 'pointer', fontSize: 10 }}>+ Item</button>
                           </div>
                           {(op.inclusos || []).map((inc: any, j: number) => (
                             <div key={`inc-local-${j}`} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 8, marginBottom: 8 }}>
@@ -560,7 +560,7 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
                       <button onClick={() => {
                         const n = { ...pacotesObj }; if(!n.inclusos) n.inclusos=[]; n.inclusos.push({ titulo: '', descricao: '' });
                         updatePacotes(n);
-                      }} style={{ background: '#1a1a1a', border: '1px solid #333', color: '#fff', padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 10, fontWeight: 700 }}>+ Adicionar Item Global</button>
+                      }} style={{ background: '#002a5c', border: '1px solid #004080', color: '#fff', padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 10, fontWeight: 700 }}>+ Adicionar Item Global</button>
                     </div>
                     {(pacotesObj.inclusos || []).map((inc: any, i: number) => (
                       <div key={`inc-global-${i}`} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: 12, marginBottom: 8, alignItems: 'start' }}>
@@ -664,8 +664,8 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
         </div>
       </div>
 
-      <div style={{ marginTop: 32, padding: '24px 32px', background: '#0a0a0a', borderRadius: 16, border: '1px solid #222', display: 'flex', justifyContent: 'flex-end', gap: 16 }}>
-        <button onClick={onCancel} style={{ padding: '12px 32px', background: 'transparent', color: '#737373', border: '1px solid #333333', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Descartar Alterações</button>
+      <div style={{ marginTop: 32, padding: '24px 32px', background: '#001a36', borderRadius: 16, border: '1px solid #003366', display: 'flex', justifyContent: 'flex-end', gap: 16 }}>
+        <button onClick={onCancel} style={{ padding: '12px 32px', background: 'transparent', color: '#737373', border: '1px solid #004080', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Descartar Alterações</button>
         <button onClick={handleSave} disabled={saving} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 48px', background: 'linear-gradient(135deg, #3b82f6, #2563eb)', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 15px rgba(37,99,235,0.3)' }}>
           {saving ? 'Gravando...' : <><Save size={18} /> Salvar Tudo</>}
         </button>
@@ -704,10 +704,10 @@ export default function MarketingPanel() {
   );
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#050505', color: '#e8edf2', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#00152c', color: '#e8edf2', fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Sidebar */}
-      <aside style={{ width: 260, background: '#0a0a0a', borderRight: '1px solid #222', display: 'flex', flexDirection: 'column', padding: '32px 20px', gap: 8, position: 'sticky', top: 0, height: '100vh' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 32, borderBottom: '1px solid #222', marginBottom: 24 }}>
+      <aside style={{ width: 260, background: '#001a36', borderRight: '1px solid #003366', display: 'flex', flexDirection: 'column', padding: '32px 20px', gap: 8, position: 'sticky', top: 0, height: '100vh' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 32, borderBottom: '1px solid #003366', marginBottom: 24 }}>
           <div style={{ width: 42, height: 42, background: 'linear-gradient(135deg, #3b82f6, #2563eb)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Activity size={20} color="#fff" />
           </div>
@@ -717,13 +717,13 @@ export default function MarketingPanel() {
           </div>
         </div>
 
-        <button style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', background: '#111', border: '1px solid #3b82f633', borderRadius: 10, color: '#3b82f6', fontSize: 14, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', background: '#002042', border: '1px solid #3b82f633', borderRadius: 10, color: '#3b82f6', fontSize: 14, fontWeight: 700, cursor: 'pointer', textAlign: 'left' }}>
           <Package size={18} /> Landing Pages
         </button>
         
         <div style={{ flex: 1 }} />
 
-        <div style={{ background: '#0d0d0d', borderRadius: 14, padding: 16, border: '1px solid #1a1a1a', marginBottom: 20 }}>
+        <div style={{ background: '#0d0d0d', borderRadius: 14, padding: 16, border: '1px solid #002a5c', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#3b82f61a', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>M</div>
             <div>
@@ -731,7 +731,7 @@ export default function MarketingPanel() {
               <div style={{ fontSize: 10, color: '#555' }}>marketing@gpexperience</div>
             </div>
           </div>
-          <button onClick={logout} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '8px', borderRadius: 8, border: '1px solid #222', background: 'transparent', color: '#737373', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+          <button onClick={logout} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '8px', borderRadius: 8, border: '1px solid #003366', background: 'transparent', color: '#737373', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
             <LogOut size={14} /> Sair do Painel
           </button>
         </div>
@@ -759,7 +759,7 @@ export default function MarketingPanel() {
                   placeholder="Buscar pacotes aprovados..." 
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  style={{ ...IS, paddingLeft: 42, background: '#0a0a0a', border: '1px solid #222' }} 
+                  style={{ ...IS, paddingLeft: 42, background: '#001a36', border: '1px solid #003366' }} 
                 />
               </div>
             </header>
@@ -768,12 +768,12 @@ export default function MarketingPanel() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
               {filtered.map((pkg) => (
-                <div key={pkg.originalIndex} style={{ background: '#0a0a0a', border: '1px solid #222', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color 0.2s' }}>
+                <div key={pkg.originalIndex} style={{ background: '#001a36', border: '1px solid #003366', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color 0.2s' }}>
                   <div style={{ position: 'relative', height: 140 }}>
                     {pkg.img ? (
                       <img src={pkg.img} alt={pkg.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <div style={{ width: '100%', height: '100%', background: '#111' }} />
+                      <div style={{ width: '100%', height: '100%', background: '#002042' }} />
                     )}
                     <div style={{ position: 'absolute', top: 12, right: 12, background: '#0d3320', color: '#4ade80', padding: '4px 10px', borderRadius: 8, fontSize: 10, fontWeight: 800 }}>APROVADO</div>
                   </div>
@@ -787,7 +787,7 @@ export default function MarketingPanel() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {pkg.mauticFormCode ? 
                         <span style={{ fontSize: 10, background: '#064e3b', color: '#34d399', padding: '2px 8px', borderRadius: 6, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}><CheckCircle2 size={10} /> Mautic OK</span> : 
-                        <span style={{ fontSize: 10, background: '#1a1a1a', color: '#555', padding: '2px 8px', borderRadius: 6, fontWeight: 700 }}>Sem Mautic</span>
+                        <span style={{ fontSize: 10, background: '#002a5c', color: '#555', padding: '2px 8px', borderRadius: 6, fontWeight: 700 }}>Sem Mautic</span>
                       }
                       {pkg.videoUrl ? 
                         <span style={{ fontSize: 10, background: '#1e3a8a', color: '#93c5fd', padding: '2px 8px', borderRadius: 6, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}><Play size={10} /> Vídeo Hero</span> : 
@@ -798,7 +798,7 @@ export default function MarketingPanel() {
                     <div style={{ marginTop: 'auto', paddingTop: 12, display: 'flex', gap: 8 }}>
                       <button 
                         onClick={() => setEditingIndex(pkg.originalIndex)}
-                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px', background: '#111', color: '#fff', border: '1px solid #333', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px', background: '#002042', color: '#fff', border: '1px solid #004080', borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
                       >
                         Configurar LP
                       </button>
@@ -806,7 +806,7 @@ export default function MarketingPanel() {
                         href={`/pacote/${pkg.originalIndex}`} 
                         target="_blank" 
                         rel="noreferrer"
-                        style={{ width: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0d0d0d', border: '1px solid #222', borderRadius: 10, color: '#737373', cursor: 'pointer' }}
+                        style={{ width: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0d0d0d', border: '1px solid #003366', borderRadius: 10, color: '#737373', cursor: 'pointer' }}
                         title="Ver Landing Page"
                       >
                         <ExternalLink size={16} />
@@ -818,8 +818,8 @@ export default function MarketingPanel() {
             </div>
 
             {filtered.length === 0 && !loadingContent && (
-              <div style={{ textAlign: 'center', padding: 80, background: '#0a0a0a', border: '1px dashed #222', borderRadius: 24, marginTop: 24 }}>
-                <Package size={40} color="#333" style={{ marginBottom: 16 }} />
+              <div style={{ textAlign: 'center', padding: 80, background: '#001a36', border: '1px dashed #003366', borderRadius: 24, marginTop: 24 }}>
+                <Package size={40} color="#004080" style={{ marginBottom: 16 }} />
                 <h3 style={{ color: '#fff', margin: 0 }}>Nenhum pacote disponível</h3>
                 <p style={{ color: '#737373', fontSize: 14, marginTop: 8 }}>Os pacotes precisam ser aprovados pelo Admin Mestre para aparecerem aqui.</p>
               </div>
@@ -830,3 +830,5 @@ export default function MarketingPanel() {
     </div>
   );
 }
+
+

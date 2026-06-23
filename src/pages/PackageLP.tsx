@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   CheckCircle2, Plane, BedDouble, Ticket,
   MapPin, Calendar, ChevronDown, Users,
-  MessageCircle, AlertTriangle, Zap, Trophy, Headset, ChevronRight
+  MessageCircle, AlertTriangle, Zap, Trophy, Headset, ChevronRight, Star,
+  Waves, Utensils, Snowflake, Briefcase, Wifi, PawPrint, Coffee, Car, Accessibility, Shirt, Key, Dumbbell, Bell, TrendingUp, Shield, Lock
 } from 'lucide-react';
 import { useContentConfig } from '../hooks/useContentConfig';
 import { GLOBAL_MAUTIC_FORM } from '../components/GlobalMauticForm';
@@ -29,9 +30,45 @@ const getYoutubeEmbedUrl = (url: string) => {
 // Helper to fix relative image paths
 const fixImgPath = (path: string | undefined) => {
   if (!path) return '';
+  path = path.trim();
+  if (path.startsWith('//')) return `https:${path}`;
   if (path.startsWith('http') || path.startsWith('/') || path.startsWith('data:')) return path;
+  if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\//.test(path)) return `https://${path}`;
   return `/${path}`;
 };
+
+function HeroSlider({ images, title }: { images: string[], title: string }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <>
+      {images.map((img, i) => (
+        <img
+          key={i}
+          src={fixImgPath(img)}
+          alt={title}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            position: 'absolute',
+            inset: 0,
+            opacity: i === index ? 1 : 0,
+            transition: 'opacity 1.5s ease-in-out'
+          }}
+        />
+      ))}
+    </>
+  );
+}
 
 const injectScript = (id: string, content: string, target: 'head' | 'body' = 'head') => {
   if (!content) return;
@@ -81,10 +118,10 @@ function Speedometer() {
       right: '30px',
       width: '120px',
       height: '120px',
-      background: 'radial-gradient(circle, #1a1a1a 0%, #050505 100%)',
+      background: 'radial-gradient(circle, #002a5c 0%, #00152c 100%)',
       borderRadius: '50%',
-      border: '2px solid #333',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(228,60,68,0.2)',
+      border: '2px solid #004080',
+      boxShadow: '0 10px 30px rgba(0,17,36,0.8), inset 0 0 20px rgba(228,60,68,0.2)',
       zIndex: 9999,
       display: 'flex',
       flexDirection: 'column',
@@ -131,7 +168,7 @@ function Speedometer() {
 
       {/* Speed text */}
       <div style={{ position: 'absolute', bottom: '15px', textAlign: 'center' }}>
-        <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff', lineHeight: '1' }}>{speed}</div>
+        <div style={{ fontSize: '24px', fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff', lineHeight: '1' }}>{speed}</div>
         <div style={{ fontSize: '10px', fontWeight: 800, color: '#F78A2D', letterSpacing: '1px' }}>KM/H</div>
       </div>
     </div>
@@ -190,7 +227,7 @@ function SportBall({ sport }: { sport: string }) {
             transform: isMobile
               ? 'rotate(0deg) translate(100px, 90px) scale(0.8)'
               : 'rotate(0deg) translate(320px, 270px) scale(0.8)',
-            filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.4))',
+            filter: 'drop-shadow(0 15px 35px rgba(0,17,36,0.4))',
             zIndex: -1
           }}
         />
@@ -207,7 +244,7 @@ function SportBall({ sport }: { sport: string }) {
             transform: isMobile
               ? 'translate(110px, 75px) scale(1.0)'
               : 'translate(300px, 200px) scale(1.2)',
-            filter: 'drop-shadow(0 15px 45px rgba(0,0,0,0.5))',
+            filter: 'drop-shadow(0 15px 45px rgba(0,17,36,0.5))',
             zIndex: -1
           }}
         />
@@ -224,7 +261,7 @@ function SportBall({ sport }: { sport: string }) {
             transform: isMobile
               ? 'translate(130px, 70px) scale(1.2)'
               : 'translate(400px, 170px) scale(1.5)',
-            filter: 'drop-shadow(0 15px 45px rgba(0,0,0,0.5))',
+            filter: 'drop-shadow(0 15px 45px rgba(0,17,36,0.5))',
             zIndex: -1
           }}
         />
@@ -241,7 +278,7 @@ function SportBall({ sport }: { sport: string }) {
             transform: isMobile
               ? 'translate(70px, 100px) scale(0.8)'
               : 'translate(240px, 320px) scale(0.5)',
-            filter: 'drop-shadow(0 15px 45px rgba(0,0,0,0.5))',
+            filter: 'drop-shadow(0 15px 45px rgba(0,17,36,0.5))',
             zIndex: -1
           }}
         />
@@ -258,7 +295,7 @@ function SportBall({ sport }: { sport: string }) {
             transform: isMobile
               ? 'translate(80px, 80px) scale(0.5)'
               : 'translate(300px, 270px) scale(0.8)',
-            filter: 'drop-shadow(0 15px 45px rgba(0,0,0,0.5))',
+            filter: 'drop-shadow(0 15px 45px rgba(0,17,36,0.5))',
             zIndex: -1
           }}
         />
@@ -282,7 +319,7 @@ function SportBall({ sport }: { sport: string }) {
             transform: isMobile
               ? `${sport === 'futebol' ? 'translate(80px, 35px)' : sport === 'tenis' ? 'translate(50px, 100px)' : sport === 'basquete' ? 'translate(65px, -65px)' : ''} rotate(${rotation}deg)`
               : `${sport === 'futebol' ? 'translate(180px, -10px)' : sport === 'tenis' ? 'translate(150px, 260px)' : sport === 'basquete' ? 'translate(160px, -230px)' : ''} rotate(${rotation}deg)`,
-            filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))'
+            filter: 'drop-shadow(0 10px 30px rgba(0,17,36,0.5))'
           }}
         />
       )}
@@ -292,6 +329,7 @@ function SportBall({ sport }: { sport: string }) {
 
 /* --- Package Navbar Component --- */
 function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boolean }) {
+  const navigate = useNavigate();
   const scrollTo = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     const el = document.getElementById(id);
@@ -301,12 +339,12 @@ function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boo
   return (
     <nav style={{
       width: '100%', position: 'fixed', top: 0, zIndex: 1000,
-      background: 'rgba(9, 9, 11, 0.8)', backdropFilter: 'blur(12px)',
+      background: 'rgba(0, 17, 36, 0.8)', backdropFilter: 'blur(12px)',
       borderBottom: '1px solid rgba(255,255,255,0.05)'
     }}>
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Logos */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 24, cursor: 'pointer' }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 24, cursor: 'pointer' }} onClick={() => navigate('/')}>
           <div style={{ fontSize: isMobile ? 18 : 24 }} className="font-black uppercase tracking-tighter text-white">
             HOSPEDAGEM <span className="text-gold">CONEXÃO FARMA 2027</span>
           </div>
@@ -314,16 +352,17 @@ function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boo
 
         {/* Links */}
         <div style={{ display: 'none', gap: 32, alignItems: 'center' }} className="md-flex">
-          <a href="#programacao" onClick={scrollTo('programacao')} style={{ fontSize: 13, fontWeight: 700, color: '#e8edf2', textDecoration: 'none', textTransform: 'uppercase' }} className="nav-link">Programação</a>
-          <a href="#pacotes" onClick={scrollTo('pacotes')} style={{ fontSize: 13, fontWeight: 700, color: '#e8edf2', textDecoration: 'none', textTransform: 'uppercase' }} className="nav-link">Pacote</a>
-          <a href="#experiencia" onClick={scrollTo('experiencia')} style={{ fontSize: 13, fontWeight: 700, color: '#e8edf2', textDecoration: 'none', textTransform: 'uppercase' }} className="nav-link">Experiência</a>
+          <a href="#comodidades" onClick={scrollTo('comodidades')} style={{ fontSize: 13, fontWeight: 700, color: '#e8edf2', textDecoration: 'none', textTransform: 'uppercase' }} className="nav-link">Comodidades & Serviços</a>
+          <a href="#localizacao" onClick={scrollTo('localizacao')} style={{ fontSize: 13, fontWeight: 700, color: '#e8edf2', textDecoration: 'none', textTransform: 'uppercase' }} className="nav-link">Localização</a>
         </div>
 
         {/* CTA */}
         <button onClick={onBook} style={{
-          background: '#F78A2D', color: '#000', border: 'none', borderRadius: 8, padding: isMobile ? '8px 12px' : '10px 20px', fontSize: isMobile ? 11 : 13, fontWeight: 800, cursor: 'pointer',
-          textTransform: 'uppercase', letterSpacing: '0.05em'
-        }}>
+          background: 'linear-gradient(135deg, rgba(247, 138, 45, 0.9), rgba(228, 60, 68, 0.9))', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, padding: isMobile ? '8px 12px' : '10px 20px', fontSize: isMobile ? 11 : 13, fontWeight: 800, cursor: 'pointer',
+          textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'all 0.3s', boxShadow: '0 4px 15px rgba(247, 138, 45, 0.2)'
+        }}
+        onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 20px rgba(247, 138, 45, 0.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
+        onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(247, 138, 45, 0.2)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}>
           Comprar Pacote
         </button>
       </div>
@@ -335,6 +374,313 @@ function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boo
   );
 }
 
+/* --- DYNAMIC GALLERIES --- */
+
+function GalleryOption2({ images, isMobile, themeColor }: { images: string[], isMobile: boolean, themeColor: string }) {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      setActive(prev => (prev + 1) % images.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  if (!images.length) return null;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* Big Wide Image */}
+      <div style={{ width: '100%', height: isMobile ? 300 : 500, borderRadius: 24, overflow: 'hidden', position: 'relative', border: '1px solid #003366' }}>
+        {images.map((img, i) => (
+          <img 
+            key={i} 
+            src={fixImgPath(img)} 
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: i === active ? 1 : 0, transition: 'opacity 0.6s ease-in-out' }} 
+            alt="Galeria Ampla" 
+          />
+        ))}
+      </div>
+      
+      {/* Strip Thumbnails */}
+      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 10, scrollbarWidth: 'none' }}>
+        {images.map((img, i) => (
+          <div 
+            key={i} 
+            onClick={() => setActive(i)}
+            style={{ flexShrink: 0, width: isMobile ? 100 : 160, height: isMobile ? 60 : 100, borderRadius: 12, overflow: 'hidden', cursor: 'pointer', border: active === i ? `2px solid ${themeColor}` : '2px solid transparent', transition: 'all 0.3s', opacity: active === i ? 1 : 0.5, transform: active === i ? 'scale(1.02)' : 'scale(1)' }}
+          >
+            <img src={fixImgPath(img)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={`Strip Thumb ${i}`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const getIconForAmenity = (title: string) => {
+  const t = title.toLowerCase();
+  if (t.includes('piscina') || t.includes('spa') || t.includes('hidromassagem')) return <Waves size={18} color="#10b981" />;
+  if (t.includes('restaurante') || t.includes('buffet') || t.includes('alimentação')) return <Utensils size={18} color="#10b981" />;
+  if (t.includes('ar condicionado') || t.includes('climatização')) return <Snowflake size={18} color="#10b981" />;
+  if (t.includes('reunião') || t.includes('eventos') || t.includes('business')) return <Briefcase size={18} color="#10b981" />;
+  if (t.includes('wi-fi') || t.includes('internet') || t.includes('conexão')) return <Wifi size={18} color="#10b981" />;
+  if (t.includes('animais') || t.includes('pet')) return <PawPrint size={18} color="#10b981" />;
+  if (t.includes('café') || t.includes('cafe')) return <Coffee size={18} color="#10b981" />;
+  if (t.includes('estacionamento') || t.includes('valet') || t.includes('manobrista')) return <Car size={18} color="#10b981" />;
+  if (t.includes('acessibilidade') || t.includes('cadeirantes')) return <Accessibility size={18} color="#10b981" />;
+  if (t.includes('lavanderia') || t.includes('roupa')) return <Shirt size={18} color="#10b981" />;
+  if (t.includes('check-in') || t.includes('check-out') || t.includes('recepção') || t.includes('instalações para')) return <Key size={18} color="#10b981" />;
+  if (t.includes('academia') || t.includes('fitness') || t.includes('ginástica')) return <Dumbbell size={18} color="#10b981" />;
+  return <CheckCircle2 size={18} color="#10b981" />;
+};
+
+function ComodidadesDetailSection({ pkg, opcoes, isMobile }: { pkg: any, opcoes: any[], isMobile: boolean }) {
+  if (!opcoes || opcoes.length === 0) return null;
+
+  const currencyCode = pkg.currency || "BRL";
+  const currencySymbols: Record<string, string> = {
+    BRL: 'R$', USD: '$', EUR: '€', GBP: '£', ARS: '$', CLP: '$', COP: '$', MXN: '$',
+    PYG: '₲', UYU: '$U', PEN: 'S/', BOB: 'Bs', VES: 'Bs.S', JPY: '¥', CNY: '¥', 
+    AUD: 'A$', CAD: 'C$', CHF: 'Fr', AED: 'د.إ', QAR: '﷼', SAR: '﷼', ZAR: 'R', 
+    INR: '₹', KRW: '₩', SGD: 'S$', HKD: 'HK$', NZD: 'NZ$', NOK: 'kr', SEK: 'kr', 
+    DKK: 'kr', PLN: 'zł'
+  };
+  const moeda = currencySymbols[currencyCode] || currencyCode;
+
+  const formatPriceVal = (val: string) => {
+    if (!val) return '';
+    const strVal = val.toString().trim();
+    if (strVal.includes(',') || strVal.includes('.')) {
+      return strVal;
+    }
+    const digits = strVal.replace(/\D/g, '');
+    if (!digits) return strVal;
+    const num = parseInt(digits, 10);
+    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+  };
+
+  const individual = formatPriceVal(pkg.price);
+  const duplo = formatPriceVal(pkg.priceDouble);
+
+  const renderOpcao = (op: any, index: number) => {
+    const nome = op.nome || "COMODIDADES & SERVIÇOS";
+    const inclusos = op.inclusos || [];
+
+    return (
+      <div key={index} style={{ marginBottom: index < opcoes.length - 1 ? 60 : 0 }}>
+        <h3 style={{ textAlign: 'center', fontSize: 'clamp(1.8rem, 3vw, 2.2rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 32px', color: '#fff', borderBottom: '1px solid #003366', paddingBottom: 24 }}>
+          <span style={{ color: '#F78A2D' }}>{nome}</span>
+        </h3>
+
+
+
+        <div>
+          {inclusos.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 16 }}>
+              {inclusos.map((inc: any, i: number) => (
+                <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div style={{ marginTop: 2, flexShrink: 0 }}>
+                    {getIconForAmenity(inc.titulo || '')}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#eee' }}>{inc.titulo}</div>
+                    {inc.descricao && <div style={{ fontSize: 13, color: '#888', marginTop: 4 }}>{inc.descricao}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24, marginTop: 40, marginBottom: 40, alignItems: 'stretch' }}>
+      
+      <div style={{ flex: 1, background: '#001a36', padding: isMobile ? '40px 20px' : '60px 40px', borderRadius: 32, border: '1px solid #003366', display: 'flex', flexDirection: 'column' }}>
+        {opcoes.map(renderOpcao)}
+      </div>
+
+      {(individual || duplo) && (
+        <div style={{ width: isMobile ? '100%' : '360px', flexShrink: 0, background: '#00152c', borderRadius: 32, padding: isMobile ? '40px 20px' : '40px', border: '1px solid #003366', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h4 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', margin: '0 0 32px', textAlign: 'center' }}>A partir de:</h4>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+            {individual && (
+              <div style={{ paddingBottom: duplo ? 32 : 0, borderBottom: duplo ? '1px solid #002a5c' : 'none', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: 13, color: '#aaa', marginBottom: 8, width: '100%', textAlign: 'center' }}>Valor Individual <span style={{fontSize: 10, opacity: 0.7}}>(Pacote)</span>:</div>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
+                  <span style={{ fontSize: 16, fontWeight: 600, color: '#F78A2D' }}>{moeda}</span>
+                  <span style={{ fontSize: 32, fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff' }}>{individual}</span>
+                </div>
+                {(() => {
+                  const nights = parseInt(pkg.minNights || '0');
+                  const fallback = nights > 0 ? (parseFloat(pkg.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')) / nights) : null;
+                  const finalDaily = pkg.dailyRateOverride || (fallback ? new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(fallback) : null);
+                  if (!finalDaily) return null;
+                  return <div style={{ fontSize: 12, color: '#888', marginBottom: 12 }}>equivale a <strong>{moeda} {finalDaily}</strong> / diária</div>;
+                })()}
+                <div style={{ display: 'inline-block', background: 'rgba(247, 138, 45, 0.1)', color: '#F78A2D', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>🔥 Alta Demanda</div>
+              </div>
+            )}
+            {duplo && (
+              <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: 13, color: '#aaa', marginBottom: 8, width: '100%', textAlign: 'center' }}>Valor Duplo <span style={{fontSize: 10, opacity: 0.7}}>(Pacote)</span>:</div>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
+                  <span style={{ fontSize: 16, fontWeight: 600, color: '#F78A2D' }}>{moeda}</span>
+                  <span style={{ fontSize: 32, fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff' }}>{duplo}</span>
+                </div>
+                {(() => {
+                  const fallback = parseFloat(pkg.priceDouble.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')) / 2;
+                  const finalPP = pkg.doublePerPersonOverride || (fallback ? new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(fallback) : null);
+                  if (!finalPP) return null;
+                  return <div style={{ fontSize: 12, color: '#888', marginBottom: 12 }}><strong>{moeda} {finalPP}</strong> / pessoa</div>;
+                })()}
+                <div style={{ display: 'inline-block', background: 'rgba(228, 60, 68, 0.1)', color: '#e43c44', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>⏰ Últimas Vagas</div>
+              </div>
+            )}
+
+            {(pkg.minNights || pkg.validFrom || pkg.validTo) && (
+              <div style={{ marginTop: 8, padding: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
+                  <AlertTriangle size={16} color="#F78A2D" />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#F78A2D', textTransform: 'uppercase' }}>Regras da Tarifa</span>
+                </div>
+                <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.5, textAlign: 'center' }}>
+                  {pkg.minNights && <div style={{ marginBottom: 4 }}>Estadia mínima de {pkg.minNights} {parseInt(pkg.minNights) === 1 ? 'noite' : 'noites'}.</div>}
+                  {(pkg.validFrom || pkg.validTo) && (
+                    <div>
+                      Válida {pkg.validFrom && `de ${pkg.validFrom.split('-').reverse().join('/')}`} {pkg.validTo && `até ${pkg.validTo.split('-').reverse().join('/')}`}.
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+function SurroundingsDisplaySection({ pkg, isMobile }: { pkg: any, isMobile: boolean }) {
+  if (!pkg.surroundingsData) return null;
+  let places = [];
+  try { places = JSON.parse(pkg.surroundingsData).filter((p: any) => p.selected); } catch(e) { return null; }
+  if (places.length === 0) return null;
+
+  const categories = Array.from(new Set(places.map((p: any) => p.category)));
+
+  const getCategoryIcon = (cat: string) => {
+    if (cat === 'Restaurantes e cafés') return <Utensils size={18} color="#F78A2D" />;
+    if (cat === 'Principais atrações') return <MapPin size={18} color="#F78A2D" />;
+    if (cat === 'Aeroportos mais próximos') return <Plane size={18} color="#F78A2D" />;
+    if (cat === 'Transporte público') return <Car size={18} color="#F78A2D" />;
+    return <Star size={18} color="#F78A2D" />;
+  };
+
+  return (
+    <div style={{ width: '100%', background: '#00152c', padding: isMobile ? '32px 20px' : '40px', borderRadius: 32, border: '1px solid #003366', marginTop: 40 }}>
+      <h3 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.2rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 32px', color: '#fff' }}>
+        Proximidades do <span style={{ color: '#F78A2D' }}>hotel</span>
+      </h3>
+      
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 40, flexWrap: 'wrap' }}>
+        {categories.map((cat, i) => (
+          <div key={i} style={{ flex: '1 1 300px' }}>
+            <h4 style={{ fontSize: 16, fontWeight: 800, color: '#eee', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+              {getCategoryIcon(cat as string)} {cat as string}
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {places.filter((p: any) => p.category === cat).map((p: any, j: number) => (
+                <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #002a5c', paddingBottom: 8 }}>
+                  <span style={{ fontSize: 14, color: '#aaa', paddingRight: 16 }}>{p.name}</span>
+                  <span style={{ fontSize: 13, color: '#fff', fontWeight: 600, flexShrink: 0 }}>{p.distance}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+function ScarcityToast() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  const [iconType, setIconType] = useState<'bell' | 'trending'>('bell');
+
+  const messages = [
+    { text: "Um pacote Duplo Premium acabou de ser reservado.", icon: 'bell' },
+    { text: "Alta demanda: Restam apenas 3 vagas neste hotel.", icon: 'trending' },
+    { text: "4 pacotes vendidos nas últimas 2 horas.", icon: 'trending' },
+    { text: "Um novo hóspede corporativo garantiu seu pacote.", icon: 'bell' },
+  ];
+
+  useEffect(() => {
+    const initialTimer = setTimeout(() => showRandomToast(), 5000);
+    const interval = setInterval(() => {
+      showRandomToast();
+    }, Math.floor(Math.random() * 15000) + 20000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const showRandomToast = () => {
+    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+    setMessage(randomMsg.text);
+    setIconType(randomMsg.icon as 'bell' | 'trending');
+    setIsVisible(true);
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 6000);
+  };
+
+  return (
+    <div style={{
+      position: 'fixed',
+      bottom: isVisible ? '30px' : '-100px',
+      right: '30px',
+      background: 'rgba(0, 17, 36, 0.95)',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(247, 138, 45, 0.3)',
+      padding: '16px 24px',
+      borderRadius: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '16px',
+      boxShadow: '0 15px 40px rgba(0,17,36,0.8), 0 0 20px rgba(247, 138, 45, 0.1)',
+      transition: 'bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s',
+      opacity: isVisible ? 1 : 0,
+      zIndex: 99999,
+      maxWidth: '350px'
+    }}>
+      <div style={{
+        background: 'rgba(247, 138, 45, 0.1)',
+        padding: '10px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        {iconType === 'trending' ? <TrendingUp size={20} color="#F78A2D" /> : <Bell size={20} color="#F78A2D" />}
+      </div>
+      <div>
+        <div style={{ fontSize: '12px', color: '#F78A2D', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Atualização ao Vivo</div>
+        <div style={{ fontSize: '14px', color: '#fff', lineHeight: '1.4', fontFamily: '"Outfit", sans-serif', fontWeight: 500 }}>{message}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function PackageLP() {
   const { id } = useParams();
@@ -346,8 +692,6 @@ export default function PackageLP() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState(0); // Para a seção de Programação
-  const [activePkgTab, setActivePkgTab] = useState(0); // Para a seção de Pacotes
-  const [pricingMode, setPricingMode] = useState<'individual' | 'duplo'>('duplo');
   const mauticContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -524,8 +868,8 @@ export default function PackageLP() {
   // --- END MAUTIC LOGIC ---
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#050505', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-      <div style={{ width: 48, height: 48, border: '4px solid #111', borderTopColor: '#F78A2D', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+    <div style={{ minHeight: '100vh', background: '#00152c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+      <div style={{ width: 48, height: 48, border: '4px solid #002042', borderTopColor: '#F78A2D', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
@@ -533,10 +877,10 @@ export default function PackageLP() {
   if (showSuccess) return <SuccessSection redirectUrl={pkg?.redirectUrl} />;
 
   if (notFound || !pkg) return (
-    <div style={{ minHeight: '100vh', background: '#050505', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff', padding: 20 }}>
+    <div style={{ minHeight: '100vh', background: '#00152c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff', padding: 20 }}>
       <AlertTriangle size={64} color="#F78A2D" style={{ marginBottom: 24 }} />
-      <h1 style={{ fontSize: 32, fontWeight: 900 }}>Pacote indisponível</h1>
-      <button onClick={() => navigate('/')} style={{ background: '#F78A2D', color: '#000', fontWeight: 800, padding: '12px 32px', borderRadius: 8, marginTop: 24, cursor: 'pointer', border: 'none' }}>Voltar para Home</button>
+      <h1 style={{ fontSize: 32, fontFamily: '"Outfit", sans-serif', fontWeight: 600 }}>Pacote indisponível</h1>
+      <button onClick={() => navigate('/')} style={{ background: '#F78A2D', color: '#001124', fontWeight: 800, padding: '12px 32px', borderRadius: 8, marginTop: 24, cursor: 'pointer', border: 'none' }}>Voltar para Home</button>
     </div>
   );
 
@@ -552,16 +896,20 @@ export default function PackageLP() {
     { dia: 'DOMINGO', data: '24 de maio', descricao: 'O grande dia da corrida. Acesso premium e hospitalidade.' }
   ]);
 
-  const pacotes = parseJSON(pkg.pacotesOptionsData, [
-    { tipo: 'Quarto Individual', preço: '450,00', info: 'Pacote Premium' },
-    { tipo: 'Quarto Duplo', preço: '790,00', info: 'Pacote VIP Exclusivo' }
-  ]);
+
 
   const cards = parseJSON(pkg.cardsData, [
     { titulo: 'Experiência Completa', descricao: 'Ingressos, hospedagem e transporte tudo em um único pacote cuidadosamente planejado.', icone: 'Zap' },
     { titulo: 'Acesso Exclusivo', descricao: 'Áreas VIP, encontros com pilotos e experiências que não estão disponíveis ao público.', icone: 'Trophy' },
     { titulo: 'Suporte 24/7', descricao: 'Nossa equipe está disponível antes, durante e após o evento para garantir sua satisfação.', icone: 'Headset' }
   ]);
+
+  let pacotesData: any[] = [];
+  try {
+    const parsed = JSON.parse(pkg.pacotesOptionsData || '{}');
+    if (parsed.opcoes_hospedagem && Array.isArray(parsed.opcoes_hospedagem)) pacotesData = parsed.opcoes_hospedagem;
+    else if (Array.isArray(parsed)) pacotesData = parsed;
+  } catch (e) { }
 
   const sport = pkg.sportType || 'automobilismo';
 
@@ -582,18 +930,18 @@ export default function PackageLP() {
   };
 
   return (
-    <div style={{ background: '#050505', color: '#fff', fontFamily: 'Montserrat, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: '#00152c', color: '#fff', fontFamily: 'Montserrat, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
+      <ScarcityToast />
       <PackageNavbar onBook={() => document.getElementById('conversion-section')?.scrollIntoView({ behavior: 'smooth' })} isMobile={isMobile} />
-      {/* {sport === 'automobilismo' && <Speedometer />} */}
-      {(sport === 'futebol' || sport === 'tenis' || sport === 'basquete' || sport === 'lutas' || sport === 'automobilismo') && <SportBall sport={sport} isMobile={isMobile} />}
 
       {/* --- HERO SECTION --- */}
-      <section style={{ position: 'relative', height: '100vh', minHeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+      {/* --- HERO SECTION --- */}
+      <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: 100, paddingBottom: 40 }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
           {pkg.heroType === 'image' || (!pkg.videoUrl && pkg.heroImage) ? (
-            <img src={fixImgPath(pkg.heroImage || pkg.img)} alt={pkg.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <HeroSlider images={(pkg.heroImage || pkg.img)?.split(';').map(s => s.trim()).filter(Boolean) || []} title={pkg.title} />
           ) : pkg.videoUrl ? (
-            <div style={{ width: '100%', height: '100%', position: 'relative', background: '#050505' }}>
+            <div style={{ width: '100%', height: '100%', position: 'relative', background: '#00152c' }}>
               <img src={fixImgPath(pkg.img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0, zIndex: -1, opacity: 0.5 }} />
               {pkg.videoUrl.includes('youtube.com') || pkg.videoUrl.includes('youtu.be') ? (
                 <iframe
@@ -608,301 +956,138 @@ export default function PackageLP() {
               )}
             </div>
           ) : (
-            <img src={fixImgPath(pkg.img)} alt={pkg.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <HeroSlider images={(pkg.heroImage || pkg.img)?.split(';').map(s => s.trim()).filter(Boolean) || []} title={pkg.title} />
           )}
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(5,5,5,1) 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,17,36,0.4) 0%, rgba(0,21,44,1) 100%)' }} />
         </div>
 
-        <div className="container animate-fade-in" style={{ maxWidth: 1000, margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 10 }}>
+        <div className="container animate-fade-in" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', maxWidth: 1000, margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 16 }}>
-            <span style={{ fontSize: 12, fontWeight: 900, color: theme.primary, letterSpacing: '0.15em' }}>{pkg.tag || theme.defaultTag}</span>
+            <span style={{ fontSize: 12, fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: theme.primary, letterSpacing: '0.15em' }}>{pkg.tag || theme.defaultTag}</span>
           </div>
-          <h1 style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)', fontWeight: 900, lineHeight: 1.1, margin: '0 0 24px', textShadow: '0 10px 40px rgba(0,0,0,0.5)' }}>
+          <h1 style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, lineHeight: 1.1, margin: '0 0 24px', textShadow: '0 10px 40px rgba(0,17,36,0.5)' }}>
             {pkg.title || theme.heroTitle}
           </h1>
-          <p style={{ fontSize: 'clamp(1.1rem, 2vw, 1.3rem)', lineHeight: 1.6, color: '#ccc', maxWidth: 650, margin: '0 auto 40px', fontWeight: 400 }}>
-            {pkg.description || 'Viva a emoção da corrida com um pacote completo: passagens aéreas, hospedagem e ingressos garantidos, além de experiências exclusivas que vão muito além da corrida.'}
+          <p style={{ fontSize: 'clamp(1.1rem, 2vw, 1.3rem)', lineHeight: 1.6, color: '#ccc', maxWidth: 650, margin: '0 auto', fontWeight: 400 }}>
+            {pkg.heroSubtitle || pkg.description || 'Uma experiência inesquecível com todo o conforto, segurança e serviços premium que você merece.'}
           </p>
-          <button
-            onClick={() => document.getElementById('pacotes')?.scrollIntoView({ behavior: 'smooth' })}
-            style={{ background: '#F78A2D', color: '#000', fontWeight: 800, fontSize: isMobile ? 14 : 15, padding: isMobile ? '14px 28px' : '16px 36px', borderRadius: 8, cursor: 'pointer', border: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'transform 0.2s' }}
-            onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
-            onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-          >
-            Explorar Pacotes <ChevronRight size={18} />
-          </button>
         </div>
-      </section>
 
-      {/* --- CARDS DE BENEFÍCIOS --- */}
-      <section style={{ padding: '0 20px', position: 'relative', zIndex: 20, marginTop: '-80px', marginBottom: '80px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
-          {cards.map((c: any, i: number) => (
-            <div key={i} style={{
-              background: '#0a0a0a', border: '1px solid #222', borderRadius: 16, padding: '32px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.5)', transition: 'border-color 0.3s',
-              cursor: 'default'
-            }}
-              onMouseOver={e => e.currentTarget.style.borderColor = '#4ade80'}
-              onMouseOut={e => e.currentTarget.style.borderColor = '#222'}
-            >
-              <div style={{ width: 48, height: 48, background: '#F78A2D', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24 }}>
-                {c.icone === 'Zap' ? <Zap size={24} color="#fff" /> : c.icone === 'Trophy' ? <Trophy size={24} color="#fff" /> : <Headset size={24} color="#fff" />}
+        <div style={{ width: '100%', padding: '0 20px', zIndex: 10, marginTop: 50 }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '24px 20px' }}>
+            {[
+              { titulo: 'Diárias', valor: pkg.price ? `A partir de R$ ${pkg.price}` : null, icone: <Ticket size={24} color="#F78A2D" /> },
+              { titulo: 'Café da Manhã', valor: pkg.breakfast, icone: <Coffee size={24} color="#F78A2D" /> },
+              { titulo: 'Deslocamento', valor: pkg.distanceCenterNorte, icone: <MapPin size={24} color="#F78A2D" /> },
+              { titulo: 'Salas', valor: pkg.trainingRooms, icone: <Briefcase size={24} color="#F78A2D" /> },
+              { titulo: 'Estacionamento', valor: pkg.parking, icone: <Car size={24} color="#F78A2D" /> }
+            ].filter(c => c.valor).map((c: any, i: number) => (
+              <div key={i} style={{ 
+                display: 'flex', alignItems: 'flex-start', gap: 12, textShadow: '0 2px 10px rgba(0,17,36,0.8)',
+                flex: '1 1 0', minWidth: 160, maxWidth: 220
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', filter: 'drop-shadow(0 2px 4px rgba(0,17,36,0.8))', marginTop: 2, flexShrink: 0 }}>
+                  {c.icone}
+                </div>
+                <div style={{ textAlign: 'left', flex: 1 }}>
+                  <h3 style={{ fontSize: 13, fontWeight: 800, margin: 0, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>{c.titulo}</h3>
+                  <p style={{ color: '#eee', margin: '4px 0 0 0', fontSize: 12, fontWeight: 500, lineHeight: 1.4 }}>{c.valor}</p>
+                </div>
               </div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 12px' }}>{c.titulo}</h3>
-              <p style={{ color: '#888', lineHeight: 1.6, margin: 0, fontSize: 14 }}>{c.descricao}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* --- PROGRAMAÇÃO --- */}
-      <section id="programacao" style={{
-        position: 'relative', padding: isMobile ? '60px 20px' : '100px 20px', background: '#050505', overflow: 'hidden'
-      }}>
-        {/* Local Background Video */}
-        {sport === 'automobilismo' ? (
-          <video
-            autoPlay muted loop playsInline
-            style={{
-              position: 'absolute', inset: 0, width: '100%', height: '100%',
-              objectFit: 'cover', opacity: 0.15, pointerEvents: 'none'
-            }}
-          >
-            <source src="/flag_quadriculada.mp4" type="video/mp4" />
-          </video>
-        ) : (
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, #111 0%, #050505 100%)', opacity: 0.5 }}></div>
-        )}
-
-        {/* Red speed gradient */}
-        <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '50%', background: `linear-gradient(to right, transparent, ${theme.accent})`, pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative', zIndex: 10 }}>
-          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 900, margin: '0 0 8px' }}>
-            Programação do <span style={{ color: '#F78A2D' }}>Fim de Semana</span>
-          </h2>
-          <p style={{ fontSize: 16, color: '#aaa', margin: '0 0 40px' }}>Dias de ação e emoção</p>
-
-          <div style={{ display: 'flex', gap: 12, marginBottom: 40, flexWrap: 'wrap' }}>
-            {programacao.map((p: any, i: number) => (
-              <button
-                key={i}
-                onClick={() => setActiveTab(i)}
-                style={{
-                  background: activeTab === i ? '#F78A2D' : 'transparent',
-                  color: activeTab === i ? '#000' : '#888',
-                  border: `1px solid ${activeTab === i ? '#F78A2D' : '#333'}`,
-                  borderRadius: 8, padding: '12px 24px', fontSize: 13, fontWeight: 800,
-                  cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em',
-                  transition: 'all 0.3s'
-                }}
-              >
-                {p.titulo_aba || p.dia}
-              </button>
             ))}
           </div>
-
-          <div style={{ background: '#0a0a0a', border: '1px solid #222', borderRadius: 16, padding: '40px', minHeight: 200 }}>
-            <h3 style={{ fontSize: 24, color: '#F78A2D', fontWeight: 800, margin: '0 0 24px' }}>{programacao[activeTab]?.titulo_dia || programacao[activeTab]?.data}</h3>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {(programacao[activeTab]?.atividades || []).length > 0 ? (
-                programacao[activeTab]?.atividades.map((ativ: any, i: number) => (
-                  <div key={i} style={{ display: 'flex', gap: 24, padding: '16px 24px', borderRadius: 12, border: '1px solid #222', background: '#111' }}>
-                    <div style={{ color: '#E67A1F', fontWeight: 800, minWidth: 100 }}>{ativ.horario}</div>
-                    <div style={{ color: '#fff' }}>{ativ.descricao}</div>
-                  </div>
-                ))
-              ) : (
-                <p style={{ fontSize: 18, color: '#ddd', lineHeight: 1.6, margin: 0 }}>{programacao[activeTab]?.descricao}</p>
-              )}
-            </div>
-          </div>
         </div>
-      </section>
 
-      {/* --- PACOTES --- */}
-      <section id="pacotes" style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#0a0a0b' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 60 }}>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 900, margin: '0 0 16px' }}>Pacotes de <span style={{ color: '#F78A2D' }}>Viagem Completos</span></h2>
-            <p style={{ fontSize: 16, color: '#aaa', maxWidth: 600, margin: '0 auto' }}>Voe com tudo incluído. Hospedagem, transporte e ingressos em um único pacote.</p>
-
-            {/* Pricing Toggle */}
-            <div style={{ marginTop: 40, display: 'inline-flex', background: '#111', padding: 6, borderRadius: 100, border: '1px solid #222' }}>
-              <button
-                onClick={() => setPricingMode('individual')}
-                style={{
-                  background: pricingMode === 'individual' ? '#F78A2D' : 'transparent',
-                  color: pricingMode === 'individual' ? '#000' : '#888',
-                  border: 'none', borderRadius: 100, padding: '10px 24px', fontSize: 13, fontWeight: 800, cursor: 'pointer', transition: 'all 0.3s'
-                }}
-              >
-                Quarto Individual
-              </button>
-              <button
-                onClick={() => setPricingMode('duplo')}
-                style={{
-                  background: pricingMode === 'duplo' ? '#F78A2D' : 'transparent',
-                  color: pricingMode === 'duplo' ? '#000' : '#888',
-                  border: 'none', borderRadius: 100, padding: '10px 24px', fontSize: 13, fontWeight: 800, cursor: 'pointer', transition: 'all 0.3s'
-                }}
-              >
-                Quarto Duplo
-              </button>
-            </div>
+        <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center', zIndex: 10, position: 'relative' }}>
+          <div 
+            onClick={() => window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' })}
+            style={{ 
+              width: 32, height: 50, border: '2px solid rgba(255, 255, 255, 0.4)', borderRadius: 20, 
+              display: 'flex', justifyContent: 'center', cursor: 'pointer', transition: 'border-color 0.3s'
+            }}
+            onMouseOver={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.8)'}
+            onMouseOut={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)'}
+          >
+            <div style={{
+              width: 4, height: 8, background: '#fff', borderRadius: 4, marginTop: 8,
+              animation: 'mouseScroll 1.5s infinite cubic-bezier(0.15, 0.41, 0.69, 0.94)'
+            }} />
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            {(() => {
-              const data = pacotes && !Array.isArray(pacotes) ? pacotes : { opcoes_hospedagem: Array.isArray(pacotes) ? pacotes : [], inclusos: [] };
-              const options = data.opcoes_hospedagem || [];
-
-              if (options.length === 0) {
-                return <div style={{ gridColumn: '1/-1', textAlign: 'center', color: '#555', padding: 40 }}>Nenhum pacote configurado.</div>;
-              }
-
-              return options.map((op: any, i: number) => {
-                const price = pricingMode === 'individual' ? op.valor_individual : op.valor_duplo;
-                const parcelas = op.parcelas || '10';
-                const showInclusos = (op.inclusos && op.inclusos.length > 0) ? op.inclusos : (data.inclusos || []);
-
-                return (
-                  <div key={i} style={{
-                    background: '#050505', border: '1px solid #222', borderRadius: 24, padding: '40px',
-                    display: 'flex', flexDirection: 'column', transition: 'transform 0.3s, border-color 0.3s',
-                    position: 'relative', overflow: 'hidden'
-                  }}
-                    className="package-card-hover"
-                  >
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 4, background: i === 0 ? '#F78A2D' : '#E67A1F' }} />
-
-                    <h3 style={{ fontSize: 24, fontWeight: 900, margin: '0 0 8px', color: '#fff' }}>{op.nome || op.tipo}</h3>
-                    <p style={{ color: '#888', fontSize: 14, lineHeight: 1.5, marginBottom: 24 }}>{op.descricao_card || 'Experiência completa com todo o conforto e exclusividade.'}</p>
-
-                    <div style={{ borderTop: '1px solid #222', borderBottom: '1px solid #222', margin: '0 0 32px', padding: '24px 0' }}>
-                      <div style={{ fontSize: 13, color: '#666', fontWeight: 800, textTransform: 'uppercase', marginBottom: 8 }}>{parcelas}x de</div>
-                      <div style={{ fontSize: isMobile ? 28 : 40, fontWeight: 900, color: i === 0 ? '#F78A2D' : '#E67A1F', display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: isMobile ? 16 : 20 }}>{op.moeda || 'USD'}</span>
-                        <span style={{ fontSize: isMobile ? 32 : 48 }}>{price || op.valor_parcela || op.preço || '---'}</span>
-                      </div>
-                      <div style={{ fontSize: 11, color: '#555', marginTop: 8 }}>por pessoa em quarto {pricingMode}</div>
-                    </div>
-
-                    <div style={{ flex: 1, marginBottom: 32 }}>
-                      <div style={{ fontSize: 12, fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>O que está incluso:</div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                        {showInclusos.slice(0, 5).map((inc: any, j: number) => (
-                          <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                            <CheckCircle2 size={16} color={i === 0 ? '#F78A2D' : '#E67A1F'} style={{ marginTop: 2, flexShrink: 0 }} />
-                            <div>
-                              <div style={{ fontSize: 14, fontWeight: 700, color: '#eee' }}>{inc.titulo}</div>
-                              {inc.descricao && <div style={{ fontSize: 12, color: '#777', marginTop: 2 }}>{inc.descricao}</div>}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => document.getElementById('conversion-section')?.scrollIntoView({ behavior: 'smooth' })}
-                      style={{
-                        background: i === 0 ? '#F78A2D' : '#111',
-                        color: i === 0 ? '#000' : '#fff', border: i === 0 ? 'none' : '1px solid #333',
-                        borderRadius: 12, padding: '16px', fontSize: 14, fontWeight: 800,
-                        cursor: 'pointer', transition: 'all 0.2s', textTransform: 'uppercase'
-                      }}
-                      onMouseOver={e => {
-                        if (i !== 0) e.currentTarget.style.borderColor = '#E67A1F';
-                      }}
-                      onMouseOut={e => {
-                        if (i !== 0) e.currentTarget.style.borderColor = '#333';
-                      }}
-                    >
-                      Solicitar Cotação
-                    </button>
-                  </div>
-                );
-              });
-            })()}
-          </div>
-
           <style>{`
-            .package-card-hover:hover { transform: translateY(-10px); border-color: rgba(228,60,68,0.4) !important; }
+            @keyframes mouseScroll {
+              0% { opacity: 1; transform: translateY(0); }
+              100% { opacity: 0; transform: translateY(16px); }
+            }
           `}</style>
-
-          {pacotes && !Array.isArray(pacotes) && pacotes.datas && (
-            <div style={{ marginTop: 60, padding: '40px', background: '#111', borderRadius: 24, border: '1px solid #222', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 32, textAlign: 'center' }}>
-              <div>
-                <div style={{ color: '#F78A2D', marginBottom: 12 }}><Calendar size={32} style={{ margin: '0 auto' }} /></div>
-                <div style={{ fontSize: 12, color: '#666', fontWeight: 800, textTransform: 'uppercase', marginBottom: 4 }}>Partida</div>
-                <div style={{ fontSize: 18, fontWeight: 800 }}>{pacotes.datas.partida}</div>
-              </div>
-              <div>
-                <div style={{ color: '#F78A2D', marginBottom: 12 }}><Calendar size={32} style={{ margin: '0 auto' }} /></div>
-                <div style={{ fontSize: 12, color: '#666', fontWeight: 800, textTransform: 'uppercase', marginBottom: 4 }}>Retorno</div>
-                <div style={{ fontSize: 18, fontWeight: 800 }}>{pacotes.datas.retorno}</div>
-              </div>
-              <div>
-                <div style={{ color: '#E67A1F', marginBottom: 12 }}><Users size={32} style={{ margin: '0 auto' }} /></div>
-                <div style={{ fontSize: 12, color: '#666', fontWeight: 800, textTransform: 'uppercase', marginBottom: 4 }}>Duração</div>
-                <div style={{ fontSize: 18, fontWeight: 800 }}>{pacotes.datas.duracao}</div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* --- EXPERIÊNCIA --- */}
-      <section id="experiencia" style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#050505' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 32 : 60, alignItems: 'center' }}>
-          <div>
-            <h2 style={{ fontSize: isMobile ? '2.2rem' : 'clamp(2.5rem, 4vw, 3.5rem)', fontWeight: 900, margin: '0 0 24px', lineHeight: 1.1 }}>Uma Experiência <span style={{ color: '#F78A2D' }}>Inesquecível</span></h2>
-            <div style={{ fontSize: isMobile ? 14 : 16, color: '#aaa', lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: pkg.experienciaSection || 'Nossos pacotes garantem que você vivencie cada momento memorável com conforto, segurança e acesso a áreas exclusivas que a maioria dos visitantes nunca experimenta.' }} />
+      {/* --- SOBRE O HOTEL --- */}
+      <section id="comodidades" style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 20, marginTop: '60px', marginBottom: '80px' }}>
+        {pkg.hotelDescription && (
+          <div style={{ padding: '40px', background: '#001a36', borderRadius: 16, border: '1px solid #003366' }}>
+            <h3 style={{ fontSize: 22, fontWeight: 800, color: '#fff', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Star size={24} color="#F78A2D" /> Sobre o Hotel
+            </h3>
+            <p style={{ color: '#aaa', fontSize: 16, lineHeight: 1.8, whiteSpace: 'pre-wrap', margin: 0 }}>{pkg.hotelDescription}</p>
           </div>
-          <div style={{ display: 'grid', gap: 20 }}>
-            {pkg.galleryImages ? (
-              pkg.galleryImages.split(';').filter(Boolean).slice(0, 2).map((img, i) => (
-                <img key={i} src={fixImgPath(img.trim())} alt="Experiência" style={{ width: '100%', borderRadius: 24, border: '1px solid #222' }} />
-              ))
-            ) : (
-              <div style={{ width: '100%', height: 300, background: '#111', borderRadius: 24, border: '1px solid #222' }} />
-            )}
-          </div>
-        </div>
+        )}
       </section>
+
+
+
+      {/* --- COMODIDADES & SERVIÇOS DETALHADOS --- */}
+      <section style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto', marginBottom: '40px' }}>
+        <ComodidadesDetailSection pkg={pkg} opcoes={pacotesData} isMobile={isMobile} />
+      </section>
+
+      {/* --- GALERIA DE FOTOS --- */}
+      {pkg.galleryImages && pkg.galleryImages.trim() !== '' && (
+        <section id="galeria" style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#00152c', overflow: 'hidden' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 10 }}>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 8px' }}>
+              <span style={{ color: '#F78A2D' }}>Estrutura</span>
+            </h2>
+            <p style={{ fontSize: 16, color: '#aaa', margin: '0 0 40px' }}>Conheça os detalhes das acomodações e áreas comuns.</p>
+
+            <GalleryOption2 images={pkg.galleryImages.split(';').filter(Boolean).map(s => s.trim())} isMobile={isMobile} themeColor="#F78A2D" />
+
+          </div>
+        </section>
+      )}
+
+
 
       {/* --- PARCERIA --- */}
-      <section style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#111', borderTop: '1px solid #222', borderBottom: '1px solid #222', textAlign: 'center' }}>
+      <section style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#002042', borderTop: '1px solid #003366', borderBottom: '1px solid #003366', textAlign: 'center' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <p style={{ fontSize: 12, color: '#F78A2D', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>Realizado por:</p>
-          <h2 style={{ fontSize: isMobile ? '2rem' : 'clamp(2.5rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', margin: '0 0 16px' }}>Uma Parceria de Referência</h2>
+          <h2 style={{ fontSize: isMobile ? '2rem' : 'clamp(2.5rem, 4vw, 3.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff', margin: '0 0 16px' }}>Uma Parceria de Referência</h2>
           <p style={{ fontSize: isMobile ? 15 : 18, color: '#aaa', maxWidth: 700, margin: '0 auto 40px', lineHeight: 1.6 }}>
-            Duas empresas líderes unidas para levar você ao espetáculo mais emocionante do automobilismo mundial.
+            Duas instituições unidas para garantir a sua melhor experiência na maior feira de saúde e bem-estar do Brasil.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 30, textAlign: 'left' }}>
 
             {/* Card Mais Corporativo */}
-            <div style={{ background: '#050505', border: '1px solid #222', borderRadius: 24, padding: '40px', display: 'flex', flexDirection: 'column', transition: 'border-color 0.3s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#F78A2D'} onMouseOut={e => e.currentTarget.style.borderColor = '#222'}>
+            <div style={{ background: '#00152c', border: '1px solid #003366', borderRadius: 24, padding: '40px', display: 'flex', flexDirection: 'column', transition: 'border-color 0.3s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#F78A2D'} onMouseOut={e => e.currentTarget.style.borderColor = '#003366'}>
               <img src="/logo_mais.png" alt="Mais Corporativo" style={{ height: 65, objectFit: 'contain', marginBottom: 24, alignSelf: 'flex-start' }} />
               <p style={{ color: '#aaa', fontSize: 16, lineHeight: 1.6, flex: 1, marginBottom: 32 }}>
                 Especialistas em viagens e experiências corporativas de alto padrão. Do planejamento ao retorno, cuidamos de cada detalhe para que você viva momentos inesquecíveis com segurança e conforto.
               </p>
-              <div style={{ alignSelf: 'flex-start', background: 'rgba(228,60,68,0.1)', border: '1px solid rgba(228,60,68,0.2)', color: '#F78A2D', padding: '8px 16px', borderRadius: 100, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Turismo Corporativo
+              <div style={{ alignSelf: 'flex-start', background: 'rgba(247,138,45,0.1)', border: '1px solid rgba(247,138,45,0.2)', color: '#F78A2D', padding: '8px 16px', borderRadius: 100, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Agência Oficial
               </div>
             </div>
 
-            {/* Card E-Mais */}
-            <div style={{ background: '#050505', border: '1px solid #222', borderRadius: 24, padding: '40px', display: 'flex', flexDirection: 'column', transition: 'border-color 0.3s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#F78A2D'} onMouseOut={e => e.currentTarget.style.borderColor = '#222'}>
-              <img src="/logo_emais.png" alt="E-Mais" style={{ height: 40, objectFit: 'contain', marginBottom: 24, alignSelf: 'flex-start' }} />
+            {/* Card Abradilan */}
+            <div style={{ background: '#00152c', border: '1px solid #003366', borderRadius: 24, padding: '40px', display: 'flex', flexDirection: 'column', transition: 'border-color 0.3s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#F78A2D'} onMouseOut={e => e.currentTarget.style.borderColor = '#003366'}>
+              <img src="/abradilan_logo.png" alt="Abradilan" style={{ height: 50, objectFit: 'contain', marginBottom: 24, alignSelf: 'flex-start' }} />
               <p style={{ color: '#aaa', fontSize: 16, lineHeight: 1.6, flex: 1, marginBottom: 32 }}>
-                A plataforma de experiências esportivas que conecta você aos maiores eventos do mundo com tecnologia, agilidade e personalização de ponta a ponta.
+                A Abradilan reúne distribuidoras de medicamentos e produtos para a saúde. Tem como missão fortalecer o mercado, promovendo a melhoria contínua e eficaz de seus serviços.
               </p>
-              <div style={{ alignSelf: 'flex-start', background: 'rgba(228,60,68,0.1)', border: '1px solid rgba(228,60,68,0.2)', color: '#F78A2D', padding: '8px 16px', borderRadius: 100, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Experiências Esportivas
+              <div style={{ alignSelf: 'flex-start', background: 'rgba(247,138,45,0.1)', border: '1px solid rgba(247,138,45,0.2)', color: '#F78A2D', padding: '8px 16px', borderRadius: 100, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Organização
               </div>
             </div>
 
@@ -910,24 +1095,57 @@ export default function PackageLP() {
         </div>
       </section>
 
+      {/* --- MAPA DE LOCALIZAÇÃO --- */}
+      {pkg.mapAddress && pkg.mapAddress.trim() !== '' && (
+        <section id="localizacao" style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#001a36', borderTop: '1px solid #003366' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 8px' }}>
+              <span style={{ color: '#F78A2D' }}>Localização</span>
+            </h2>
+            <p style={{ fontSize: 16, color: '#aaa', margin: '0 auto 40px', maxWidth: 600 }}>Confira no mapa todas as comodidades no entorno do hotel.</p>
+            
+            <div style={{ width: '100%', height: 400, borderRadius: 24, overflow: 'hidden', border: '1px solid #003366', background: '#002042' }}>
+              {pkg.mapAddress.includes('<iframe') ? (
+                <div style={{ width: '100%', height: '100%' }} dangerouslySetInnerHTML={{ __html: pkg.mapAddress }} />
+              ) : (
+                <iframe
+                  title="Localização"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  style={{ border: 0 }}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(pkg.mapAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                  allowFullScreen
+                />
+              )}
+            </div>
+
+            <div style={{ textAlign: 'left', marginTop: 40 }}>
+              <SurroundingsDisplaySection pkg={pkg} isMobile={isMobile} />
+            </div>
+
+          </div>
+        </section>
+      )}
+
       {/* --- CONVERSION / FORM SECTION --- */}
-      <section id="conversion-section" style={{ padding: '120px 20px', background: '#0a0a0b', position: 'relative', overflow: 'hidden' }}>
+      <section id="conversion-section" style={{ padding: '120px 20px', background: '#001a36', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', height: 1, background: 'linear-gradient(to right, transparent, #F78A2D, transparent)' }} />
 
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))', gap: isMobile ? 40 : 80, alignItems: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))', gap: isMobile ? 40 : 80, alignItems: 'flex-start' }}>
           <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
-            <h2 style={{ fontSize: isMobile ? '2.5rem' : 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, lineHeight: 1.1, marginBottom: isMobile ? 16 : 32 }}>Garanta seu lugar na <span style={{ color: '#F78A2D' }}>História.</span></h2>
-            <p style={{ fontSize: isMobile ? 16 : 20, color: '#888', lineHeight: 1.6, marginBottom: isMobile ? 32 : 48 }}>Preencha os dados ao lado e receba um atendimento personalizado de nossos especialistas em eventos esportivos.</p>
+            <h2 style={{ fontSize: isMobile ? '2.5rem' : 'clamp(2.5rem, 5vw, 4rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, lineHeight: 1.1, marginBottom: isMobile ? 16 : 32 }}>Garanta sua <span style={{ color: '#F78A2D' }}>Hospedagem.</span></h2>
+            <p style={{ fontSize: isMobile ? 16 : 20, color: '#888', lineHeight: 1.6, marginBottom: isMobile ? 32 : 48 }}>Preencha os dados ao lado e receba um atendimento personalizado de nossos especialistas em turismo corporativo.</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {[
-                'Atendimento humanizado 24h durante o evento',
-                'Pagamento facilitado em até 10x',
-                'Empresa consolidada há mais de 15 anos'
+                'Atendimento corporativo dedicado e ágil',
+                'Negociação direta com os melhores hotéis',
+                'Agência Oficial com 15 anos de mercado'
               ].map((text, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   <div style={{ width: 24, height: 24, background: '#F78A2D', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <CheckCircle2 size={14} color="#000" />
+                    <CheckCircle2 size={14} color="#001124" />
                   </div>
                   <span style={{ fontSize: 16, fontWeight: 600 }}>{text}</span>
                 </div>
@@ -936,16 +1154,28 @@ export default function PackageLP() {
           </div>
 
           <div style={{ position: 'relative' }}>
-            <div className="glass-form" style={{ background: '#0a0a0a', border: '1px solid #222', borderRadius: 32, padding: isMobile ? '24px' : '40px' }}>
+            <div className="glass-form" style={{ background: '#001a36', border: '1px solid #003366', borderRadius: 32, padding: isMobile ? '24px' : '40px' }}>
               <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                <h3 style={{ fontSize: 24, fontWeight: 900, margin: 0 }}>Cotação de Pacote</h3>
+                <h3 style={{ fontSize: 24, fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: 0 }}>Cotação de Pacote</h3>
                 <p style={{ fontSize: 14, color: '#666', marginTop: 8 }}>Mantenha seus dados atualizados para contato.</p>
               </div>
 
               <div ref={mauticContainerRef} className="mautic-premium-form" />
 
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '24px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>
+                  <Lock size={14} color="#888" /> Compra Segura
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>
+                  <Shield size={14} color="#888" /> Dados Protegidos
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>
+                  <CheckCircle2 size={14} color="#888" /> Agência Oficial
+                </div>
+              </div>
+
               {submitting && !showSuccess && (
-                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.85)', borderRadius: 32, zIndex: 90, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,17,36,0.85)', borderRadius: 32, zIndex: 90, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <div style={{ width: 44, height: 44, border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#F78A2D', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
                   <p style={{ marginTop: 20, fontSize: 12, fontWeight: 800, color: '#F78A2D' }}>Processando...</p>
                 </div>
@@ -955,12 +1185,12 @@ export default function PackageLP() {
         </div>
       </section>
 
-      <footer style={{ padding: isMobile ? '40px 20px' : '80px 40px', textAlign: 'center', borderTop: '1px solid #111' }}>
+      <footer style={{ padding: isMobile ? '40px 20px' : '80px 40px', textAlign: 'center', borderTop: '1px solid #002042' }}>
         <div className="text-2xl font-black uppercase tracking-tighter text-white" style={{ marginBottom: 16, opacity: 0.5, fontSize: isMobile ? 18 : 24 }}>
-          TORCIDA <span className="text-gold">PLACAR</span>
+          CONEXÃO <span style={{ color: '#F78A2D' }}>FARMA</span>
         </div>
         <p style={{ fontSize: isMobile ? 11 : 13, color: '#444', maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
-          © Todos os direitos reservados Mais Corporativo - 2026 - Não somos afiliados à IndyCar ou Penske Corporation. Somos apenas uma empresa de turismo que oferece pacotes para a corrida.
+          © Todos os direitos reservados Mais Corporativo - 2026. Somos uma agência de turismo corporativo especializada em pacotes para eventos e feiras de negócios.
         </p>
       </footer>
 
@@ -987,8 +1217,8 @@ export default function PackageLP() {
         .mautic-premium-form .mauticform-radiogrp-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
         .mautic-premium-form .mauticform-radiogrp-label { font-size: 13px; color: #999; cursor: pointer; }
         .mautic-premium-form input[type="radio"]:checked + .mauticform-radiogrp-label { color: #fff; }
-        .mautic-premium-form .mauticform-button { width: 100% !important; height: 54px !important; background: #F78A2D !important; border: none !important; border-radius: 12px !important; color: #000 !important; font-size: 16px !important; font-weight: 900 !important; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; margin-top: 12px; }
-        .mautic-premium-form .mauticform-button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(228,60,68,0.3); }
+        .mautic-premium-form .mauticform-button { width: 100% !important; height: 54px !important; background: linear-gradient(135deg, rgba(247, 138, 45, 0.9), rgba(228, 60, 68, 0.9)) !important; border: 1px solid rgba(255,255,255,0.2) !important; border-radius: 12px !important; color: #fff !important; font-size: 16px !important; font-weight: 900 !important; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; margin-top: 12px; box-shadow: 0 4px 15px rgba(247, 138, 45, 0.3); }
+        .mautic-premium-form .mauticform-button:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(247, 138, 45, 0.5); border-color: rgba(255,255,255,0.5) !important; }
         .mautic-premium-form .mauticform-description, .mautic-premium-form .mauticform-helpmessage { display: none !important; }
 
         @media (max-width: 768px) {
@@ -1003,13 +1233,15 @@ export default function PackageLP() {
 
 function SuccessSection({ redirectUrl }: { redirectUrl?: string }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#050505', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 40 }}>
+    <div style={{ minHeight: '100vh', background: '#00152c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 40 }}>
       <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'rgba(228,60,68,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
         <CheckCircle2 size={60} color="#F78A2D" />
       </div>
-      <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 900, marginBottom: 16, color: '#fff' }}>SOLICITAÇÃO RECEBIDA</h1>
+      <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, marginBottom: 16, color: '#fff' }}>SOLICITAÇÃO RECEBIDA</h1>
       <p style={{ fontSize: 20, color: '#888', maxWidth: 600, lineHeight: 1.6 }}>Obrigado pelo seu interesse. Um de nossos especialistas entrará em contato via WhatsApp ou E-mail em breve.</p>
       {redirectUrl && <p style={{ fontSize: 14, color: '#F78A2D', marginTop: 32, fontWeight: 700 }}>Redirecionando você...</p>}
     </div>
   );
 }
+
+
