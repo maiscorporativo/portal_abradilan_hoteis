@@ -1,6 +1,7 @@
-﻿import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, X, ChevronDown, ChevronUp, Shield, LogOut, Upload, Plus, Trash2, Pencil, Users, KeyRound, AlertTriangle, Clock, CheckCircle2, XCircle, Plane, BedDouble, Ticket, FileText, Globe2, Type, Award, Flame, Package, ArrowRight, Tag, MapPin, CalendarDays, DollarSign, RotateCcw } from 'lucide-react';
+import { getAdminDisplayPrice } from '../utils/currency';
 import { useContentConfig } from '../hooks/useContentConfig';
 import type { TrendingPackage } from '../types';
 import { useToast } from '../components/ui/ToastProvider';
@@ -225,7 +226,7 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
             <span style={{ fontSize: 14, fontWeight: 700, color: '#e8edf2' }}>{pkg.title || 'Sem título'}</span>
             <span style={{ fontSize: 10, background: statusBg, color: statusColor, padding: '2px 8px', borderRadius: 12, fontWeight: 700 }}>{statusLabel}</span>
           </div>
-          <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>{pkg.date} · {pkg.loc} · {pkg.currency || 'BRL'} {pkg.price}</div>
+          <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>{pkg.date} · {pkg.loc} · {getAdminDisplayPrice(pkg)}</div>
           <AuditTrail pkg={pkg} />
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -264,12 +265,10 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
 
           </div>
 
-          {/* Row 2: preço / moeda */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-            <MField label="V. INDIVIDUAL TOTAL" icon={<DollarSign size={11} />} value={local.price} onChange={v => set({ price: v })} />
-            <MField label="V. DUPLO TOTAL" icon={<DollarSign size={11} />} value={local.priceDouble || ''} onChange={v => set({ priceDouble: v })} />
+          {/* Row 2: Moeda */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}><Globe2 size={11} /> Moeda</label>
+              <label style={{ fontSize: 10, color: '#737373', fontWeight: 600, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}><Globe2 size={11} /> Moeda Base</label>
               <select value={local.currency || 'BRL'} onChange={e => set({ currency: e.target.value })}
                 style={{ ...IS, cursor: 'pointer' }}
                 onFocus={e => e.target.style.borderColor = '#F78A2D'} onBlur={e => e.target.style.borderColor = '#004080'}>
@@ -285,23 +284,44 @@ function PackageReviewCard({ pkg, onApprove, onReject, onUpdate, onRemove, trend
             <MField type="date" label="Válido até" icon={<Calendar size={11} />} value={local.validTo || ''} onChange={v => set({ validTo: v })} />
           </div>
 
-          {/* Row 2.2: Valores Personalizados (Overrides) */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <MField label="Valor Diária (Opcional)" icon={<DollarSign size={11} />} value={local.dailyRateOverride || ''} onChange={v => set({ dailyRateOverride: v })} 
-              placeholder={(() => {
-                if (!local.price || !local.minNights) return 'Auto-calculado';
-                const t = parseFloat(local.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
-                const n = parseInt(local.minNights);
-                if (isNaN(t) || isNaN(n) || n === 0) return 'Auto-calculado';
-                return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(t / n);
-              })()} />
-            <MField label="V. Duplo Por Pessoa (Opcional)" icon={<DollarSign size={11} />} value={local.doublePerPersonOverride || ''} onChange={v => set({ doublePerPersonOverride: v })} 
-              placeholder={(() => {
-                if (!local.priceDouble) return 'Auto-calculado';
-                const t = parseFloat(local.priceDouble.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
-                if (isNaN(t)) return 'Auto-calculado';
-                return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(t / 2);
-              })()} />
+          {/* Categorias e Valores dos Quartos */}
+          <div style={{ padding: 16, background: '#001a36', borderRadius: 8, border: '1px solid #002a5c' }}>
+             <h4 style={{ margin: '0 0 16px', fontSize: 12, color: '#e8edf2', display: 'flex', alignItems: 'center', gap: 6 }}><DollarSign size={14} color="#F78A2D"/> Categorias e Valores de Quartos</h4>
+             {(() => {
+                let cats: any[] = [];
+                try { cats = JSON.parse(local.roomCategories || '[]'); } catch {}
+                if (!Array.isArray(cats)) cats = [];
+
+                if (cats.length === 0 && (local.price || local.priceDouble)) {
+                   if (local.price) cats.push({ name: 'Quarto Individual', price: local.price, overrideLabel: 'Valor Diária', overridePrice: local.dailyRateOverride || '' });
+                   if (local.priceDouble) cats.push({ name: 'Quarto Duplo', price: local.priceDouble, overrideLabel: 'Valor por Pessoa', overridePrice: local.doublePerPersonOverride || '' });
+                }
+
+                const updateCats = (newCats: any[]) => set({ roomCategories: JSON.stringify(newCats) });
+
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {cats.map((c: any, i: number) => (
+                      <div key={i} style={{ background: '#002042', border: '1px solid #003366', borderRadius: 8, padding: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                           <span style={{ fontSize: 11, fontWeight: 700, color: '#e8edf2' }}>Categoria {i + 1}</span>
+                           <button type="button" onClick={() => { const n = [...cats]; n.splice(i, 1); updateCats(n); }} style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={12} /></button>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                           <MField label="Nome (ex: Duplo Solteiro)" icon={<Tag size={11} />} value={c.name || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], name: v}; updateCats(n); }} />
+                           <MField label="Valor Total" icon={<DollarSign size={11} />} value={c.price || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], price: v}; updateCats(n); }} />
+                           <MField label="Rótulo (ex: Valor por pessoa)" icon={<Tag size={11} />} value={c.overrideLabel || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], overrideLabel: v}; updateCats(n); }} />
+                           <MField label="Sub-valor (ex: 150,00)" icon={<DollarSign size={11} />} value={c.overridePrice || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], overridePrice: v}; updateCats(n); }} />
+                           <MField label="Tag (ex: ÚLTIMAS VAGAS)" icon={<Award size={11} />} value={c.tag || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], tag: v}; updateCats(n); }} />
+                        </div>
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => updateCats([...cats, { name: '', price: '', overrideLabel: '', overridePrice: '', tag: '' }])} style={{ background: '#001a36', border: '1px dashed #004080', color: '#4ade80', padding: 10, borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
+                      + Adicionar Categoria
+                    </button>
+                  </div>
+                );
+             })()}
           </div>
 
           {/* Row 3: tag / sigla / categoria / em alta */}

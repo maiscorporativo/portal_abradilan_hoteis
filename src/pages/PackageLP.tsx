@@ -9,6 +9,7 @@ import {
 import { useContentConfig } from '../hooks/useContentConfig';
 import { GLOBAL_MAUTIC_FORM } from '../components/GlobalMauticForm';
 import type { TrendingPackage } from '../types';
+import { getLowestPriceAmount } from '../utils/currency';
 
 // Helper to convert YouTube URL to Embed URL
 const getYoutubeEmbedUrl = (url: string) => {
@@ -363,7 +364,7 @@ function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boo
         }}
         onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 20px rgba(247, 138, 45, 0.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
         onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(247, 138, 45, 0.2)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}>
-          Comprar Pacote
+          Reservar Pacote
         </button>
       </div>
       <style>{`
@@ -461,8 +462,23 @@ function ComodidadesDetailSection({ pkg, opcoes, isMobile }: { pkg: any, opcoes:
     return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
   };
 
-  const individual = formatPriceVal(pkg.price);
-  const duplo = formatPriceVal(pkg.priceDouble);
+  let cats: any[] = [];
+  try { cats = JSON.parse(pkg.roomCategories || '[]'); } catch {}
+  if (!Array.isArray(cats)) cats = [];
+
+  if (cats.length === 0 && (pkg.price || pkg.priceDouble)) {
+     if (pkg.price) {
+        const nights = parseInt(pkg.minNights || '0');
+        const fallback = nights > 0 ? (parseFloat(pkg.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')) / nights) : null;
+        const finalDaily = pkg.dailyRateOverride || (fallback ? new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(fallback) : null);
+        cats.push({ name: 'Valor Individual (Pacote)', price: pkg.price, overrideLabel: finalDaily ? 'equivale a' : '', overridePrice: finalDaily ? `${moeda} ${finalDaily} / diária` : '', tag: 'Alta Demanda' });
+     }
+     if (pkg.priceDouble) {
+        const fallback = parseFloat(pkg.priceDouble.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')) / 2;
+        const finalPP = pkg.doublePerPersonOverride || (fallback ? new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(fallback) : null);
+        cats.push({ name: 'Valor Duplo (Pacote)', price: pkg.priceDouble, overrideLabel: finalPP ? 'equivale a' : '', overridePrice: finalPP ? `${moeda} ${finalPP} / pessoa` : '', tag: 'Últimas Vagas' });
+     }
+  }
 
   const renderOpcao = (op: any, index: number) => {
     const nome = op.nome || "COMODIDADES & SERVIÇOS";
@@ -473,8 +489,6 @@ function ComodidadesDetailSection({ pkg, opcoes, isMobile }: { pkg: any, opcoes:
         <h3 style={{ textAlign: 'center', fontSize: 'clamp(1.8rem, 3vw, 2.2rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 32px', color: '#fff', borderBottom: '1px solid #003366', paddingBottom: 24 }}>
           <span style={{ color: '#F78A2D' }}>{nome}</span>
         </h3>
-
-
 
         <div>
           {inclusos.length > 0 && (
@@ -498,50 +512,34 @@ function ComodidadesDetailSection({ pkg, opcoes, isMobile }: { pkg: any, opcoes:
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24, marginTop: 40, marginBottom: 40, alignItems: 'stretch' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24, marginTop: 16, marginBottom: 16, alignItems: 'stretch' }}>
       
       <div style={{ flex: 1, background: '#001a36', padding: isMobile ? '40px 20px' : '60px 40px', borderRadius: 32, border: '1px solid #003366', display: 'flex', flexDirection: 'column' }}>
         {opcoes.map(renderOpcao)}
       </div>
 
-      {(individual || duplo) && (
+      {cats.length > 0 && (
         <div style={{ width: isMobile ? '100%' : '360px', flexShrink: 0, background: '#00152c', borderRadius: 32, padding: isMobile ? '40px 20px' : '40px', border: '1px solid #003366', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h4 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', margin: '0 0 32px', textAlign: 'center' }}>A partir de:</h4>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-            {individual && (
-              <div style={{ paddingBottom: duplo ? 32 : 0, borderBottom: duplo ? '1px solid #002a5c' : 'none', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ fontSize: 13, color: '#aaa', marginBottom: 8, width: '100%', textAlign: 'center' }}>Valor Individual <span style={{fontSize: 10, opacity: 0.7}}>(Pacote)</span>:</div>
+            {cats.map((cat, idx) => (
+              <div key={idx} style={{ paddingBottom: idx < cats.length - 1 ? 32 : 0, borderBottom: idx < cats.length - 1 ? '1px solid #002a5c' : 'none', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: 13, color: '#aaa', marginBottom: 8, width: '100%', textAlign: 'center', fontWeight: 600 }}>{cat.name}</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
                   <span style={{ fontSize: 16, fontWeight: 600, color: '#F78A2D' }}>{moeda}</span>
-                  <span style={{ fontSize: 32, fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff' }}>{individual}</span>
+                  <span style={{ fontSize: 32, fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff' }}>{formatPriceVal(cat.price)}</span>
                 </div>
-                {(() => {
-                  const nights = parseInt(pkg.minNights || '0');
-                  const fallback = nights > 0 ? (parseFloat(pkg.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')) / nights) : null;
-                  const finalDaily = pkg.dailyRateOverride || (fallback ? new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(fallback) : null);
-                  if (!finalDaily) return null;
-                  return <div style={{ fontSize: 12, color: '#888', marginBottom: 12 }}>equivale a <strong>{moeda} {finalDaily}</strong> / diária</div>;
-                })()}
-                <div style={{ display: 'inline-block', background: 'rgba(247, 138, 45, 0.1)', color: '#F78A2D', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>🔥 Alta Demanda</div>
+                {cat.overridePrice && (
+                  <div style={{ fontSize: 12, color: '#888', marginBottom: 12 }}>{cat.overrideLabel} <strong>{cat.overridePrice}</strong></div>
+                )}
+                {cat.tag && (
+                  <div style={{ display: 'inline-block', background: 'rgba(247, 138, 45, 0.1)', color: '#F78A2D', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    {cat.tag.toLowerCase().includes('vaga') ? '⏰' : '🔥'} {cat.tag}
+                  </div>
+                )}
               </div>
-            )}
-            {duplo && (
-              <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ fontSize: 13, color: '#aaa', marginBottom: 8, width: '100%', textAlign: 'center' }}>Valor Duplo <span style={{fontSize: 10, opacity: 0.7}}>(Pacote)</span>:</div>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
-                  <span style={{ fontSize: 16, fontWeight: 600, color: '#F78A2D' }}>{moeda}</span>
-                  <span style={{ fontSize: 32, fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff' }}>{duplo}</span>
-                </div>
-                {(() => {
-                  const fallback = parseFloat(pkg.priceDouble.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')) / 2;
-                  const finalPP = pkg.doublePerPersonOverride || (fallback ? new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(fallback) : null);
-                  if (!finalPP) return null;
-                  return <div style={{ fontSize: 12, color: '#888', marginBottom: 12 }}><strong>{moeda} {finalPP}</strong> / pessoa</div>;
-                })()}
-                <div style={{ display: 'inline-block', background: 'rgba(228, 60, 68, 0.1)', color: '#e43c44', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>⏰ Últimas Vagas</div>
-              </div>
-            )}
+            ))}
 
             {(pkg.minNights || pkg.validFrom || pkg.validTo) && (
               <div style={{ marginTop: 8, padding: 20, background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -846,6 +844,12 @@ export default function PackageLP() {
         const pForm = mauticContainerRef.current?.querySelector('form');
         const pageWrapper = mauticContainerRef.current?.querySelector('.mauticform-page-wrapper') || mauticContainerRef.current?.querySelector('.mauticform-innerform');
         if (pForm && pageWrapper) {
+          const tipoQuartoField = pForm.querySelector('div[data-validate="tipo_quarto"]');
+          const qtdPessoasField = pForm.querySelector('div[data-validate="qtd_pessoas"]');
+          if (tipoQuartoField && qtdPessoasField) {
+             qtdPessoasField.parentNode?.insertBefore(tipoQuartoField, qtdPessoasField);
+          }
+
           const rows = Array.from(pageWrapper.querySelectorAll('.mauticform-row:not(.mauticform-button-wrapper):not(.mauticform-radiogrp)'));
           for (let i = 0; i < rows.length; i += 2) {
             if (rows[i] && rows[i + 1]) {
@@ -861,6 +865,43 @@ export default function PackageLP() {
             const options = group.querySelector('.mauticform-radiogrp-options') || group;
             options.classList.add('horizontal');
           });
+
+          // --- Dynamic Room Categories Injection ---
+          const roomRadioGrp = pForm.querySelector('div[data-validate="tipo_quarto"]');
+          if (roomRadioGrp) {
+            let cats: any[] = [];
+            try { cats = JSON.parse(pkg.roomCategories || '[]'); } catch {}
+            if (!Array.isArray(cats)) cats = [];
+
+            if (cats.length === 0 && (pkg.price || pkg.priceDouble)) {
+               if (pkg.price) cats.push({ name: 'Quarto Individual' });
+               if (pkg.priceDouble) cats.push({ name: 'Quarto Duplo' });
+            }
+
+            if (cats.length > 0) {
+              const existingRows = roomRadioGrp.querySelectorAll('.mauticform-radiogrp-row');
+              existingRows.forEach(row => row.remove());
+              
+              const errorMsg = roomRadioGrp.querySelector('.mauticform-errormsg');
+              const wrapperToAppend = roomRadioGrp.querySelector('.mauticform-radiogrp-options') || roomRadioGrp;
+
+              cats.forEach((cat, index) => {
+                 const safeName = cat.name.replace(/[^a-zA-Z0-9]/g, '');
+                 const inputId = `mauticform_radiogrp_radio_tipo_quarto_dyn_${safeName}${index}`;
+                 
+                 const row = document.createElement('div');
+                 row.className = 'mauticform-radiogrp-row';
+                 row.innerHTML = `<input name="mauticform[tipo_quarto]" class="mauticform-radiogrp-radio" id="${inputId}" type="radio" value="${cat.name}">
+                                  <label id="mauticform_radiogrp_label_tipo_quarto_dyn_${safeName}${index}" for="${inputId}" class="mauticform-radiogrp-label">${cat.name}</label>`;
+                 
+                 if (errorMsg && wrapperToAppend === roomRadioGrp) {
+                    wrapperToAppend.insertBefore(row, errorMsg);
+                 } else {
+                    wrapperToAppend.appendChild(row);
+                 }
+              });
+            }
+          }
         }
       }, 500);
     }
@@ -976,7 +1017,7 @@ export default function PackageLP() {
         <div style={{ width: '100%', padding: '0 20px', zIndex: 10, marginTop: 50 }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '24px 20px' }}>
             {[
-              { titulo: 'Diárias', valor: pkg.price ? `A partir de R$ ${pkg.price}` : null, icone: <Ticket size={24} color="#F78A2D" /> },
+              { titulo: 'PACOTES DE HOSPEDAGEM', valor: `A partir de ${getLowestPriceAmount(pkg)}`, icone: <Ticket size={24} color="#F78A2D" /> },
               { titulo: 'Café da Manhã', valor: pkg.breakfast, icone: <Coffee size={24} color="#F78A2D" /> },
               { titulo: 'Deslocamento', valor: pkg.distanceCenterNorte, icone: <MapPin size={24} color="#F78A2D" /> },
               { titulo: 'Salas', valor: pkg.trainingRooms, icone: <Briefcase size={24} color="#F78A2D" /> },
@@ -1023,7 +1064,7 @@ export default function PackageLP() {
       </section>
 
       {/* --- SOBRE O HOTEL --- */}
-      <section id="comodidades" style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 20, marginTop: '60px', marginBottom: '80px' }}>
+      <section id="comodidades" style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 20, marginTop: '30px', marginBottom: '30px' }}>
         {pkg.hotelDescription && (
           <div style={{ padding: '40px', background: '#001a36', borderRadius: 16, border: '1px solid #003366' }}>
             <h3 style={{ fontSize: 22, fontWeight: 800, color: '#fff', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -1037,13 +1078,13 @@ export default function PackageLP() {
 
 
       {/* --- COMODIDADES & SERVIÇOS DETALHADOS --- */}
-      <section style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto', marginBottom: '40px' }}>
+      <section style={{ padding: '0 20px', maxWidth: 1200, margin: '0 auto', marginBottom: '16px' }}>
         <ComodidadesDetailSection pkg={pkg} opcoes={pacotesData} isMobile={isMobile} />
       </section>
 
       {/* --- GALERIA DE FOTOS --- */}
       {pkg.galleryImages && pkg.galleryImages.trim() !== '' && (
-        <section id="galeria" style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#00152c', overflow: 'hidden' }}>
+        <section id="galeria" style={{ padding: isMobile ? '30px 20px' : '40px 20px', background: '#00152c', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 10 }}>
             <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 8px' }}>
               <span style={{ color: '#F78A2D' }}>Estrutura</span>
@@ -1059,7 +1100,7 @@ export default function PackageLP() {
 
 
       {/* --- PARCERIA --- */}
-      <section style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#002042', borderTop: '1px solid #003366', borderBottom: '1px solid #003366', textAlign: 'center' }}>
+      <section style={{ padding: isMobile ? '30px 20px' : '40px 20px', background: '#002042', borderTop: '1px solid #003366', borderBottom: '1px solid #003366', textAlign: 'center' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <p style={{ fontSize: 12, color: '#F78A2D', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>Realizado por:</p>
           <h2 style={{ fontSize: isMobile ? '2rem' : 'clamp(2.5rem, 4vw, 3.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, color: '#fff', margin: '0 0 16px' }}>Uma Parceria de Referência</h2>
@@ -1097,7 +1138,7 @@ export default function PackageLP() {
 
       {/* --- MAPA DE LOCALIZAÇÃO --- */}
       {pkg.mapAddress && pkg.mapAddress.trim() !== '' && (
-        <section id="localizacao" style={{ padding: isMobile ? '60px 20px' : '100px 20px', background: '#001a36', borderTop: '1px solid #003366' }}>
+        <section id="localizacao" style={{ padding: isMobile ? '30px 20px' : '40px 20px', background: '#001a36', borderTop: '1px solid #003366' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: '0 0 8px' }}>
               <span style={{ color: '#F78A2D' }}>Localização</span>
@@ -1129,7 +1170,7 @@ export default function PackageLP() {
       )}
 
       {/* --- CONVERSION / FORM SECTION --- */}
-      <section id="conversion-section" style={{ padding: '120px 20px', background: '#001a36', position: 'relative', overflow: 'hidden' }}>
+      <section id="conversion-section" style={{ padding: '60px 20px', background: '#001a36', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', height: 1, background: 'linear-gradient(to right, transparent, #F78A2D, transparent)' }} />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))', gap: isMobile ? 40 : 80, alignItems: 'flex-start' }}>
@@ -1141,7 +1182,7 @@ export default function PackageLP() {
               {[
                 'Atendimento corporativo dedicado e ágil',
                 'Negociação direta com os melhores hotéis',
-                'Agência Oficial com 15 anos de mercado'
+                'Agência Oficial com 20 anos de mercado'
               ].map((text, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   <div style={{ width: 24, height: 24, background: '#F78A2D', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1156,7 +1197,7 @@ export default function PackageLP() {
           <div style={{ position: 'relative' }}>
             <div className="glass-form" style={{ background: '#001a36', border: '1px solid #003366', borderRadius: 32, padding: isMobile ? '24px' : '40px' }}>
               <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                <h3 style={{ fontSize: 24, fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: 0 }}>Cotação de Pacote</h3>
+                <h3 style={{ fontSize: 24, fontFamily: '"Outfit", sans-serif', fontWeight: 600, margin: 0 }}>Reserva de Pacote</h3>
                 <p style={{ fontSize: 14, color: '#666', marginTop: 8 }}>Mantenha seus dados atualizados para contato.</p>
               </div>
 
@@ -1202,10 +1243,10 @@ export default function PackageLP() {
         @keyframes spin { to { transform: rotate(360deg); } }
         
         .mautic-premium-form .mauticform_wrapper { width: 100% !important; }
-        .mautic-premium-form .mauticform-innerform { display: flex; flex-direction: column; gap: 16px; }
-        .mauticform-grid-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 16px !important; width: 100% !important; }
-        .mautic-premium-form .mauticform-row { margin-bottom: 0; width: 100% !important; }
-        .mautic-premium-form label { display: block; font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+        .mautic-premium-form .mauticform-innerform { display: flex; flex-direction: column; gap: 8px; }
+        .mauticform-grid-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px 16px !important; width: 100% !important; }
+        .mautic-premium-form .mauticform-row { margin-bottom: 0 !important; width: 100% !important; margin-top: 0 !important; }
+        .mautic-premium-form label { display: block; font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 24px !important; margin-bottom: 4px !important; }
         .mautic-premium-form label span.mauticform-required { color: #F78A2D; }
         .mautic-premium-form input:not([type="radio"]), .mautic-premium-form select, .mautic-premium-form textarea { width: 100% !important; height: 45px !important; background: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-radius: 10px !important; padding: 0 16px !important; color: #fff !important; font-size: 14px !important; outline: none; transition: all 0.2s; }
         .mautic-premium-form input:focus { border-color: #F78A2D; background: rgba(228, 60, 68, 0.04); }
@@ -1215,7 +1256,7 @@ export default function PackageLP() {
         .mautic-premium-form input[type="radio"]:checked { border-color: #F78A2D; }
         .mautic-premium-form input[type="radio"]:checked::after { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: #F78A2D; border-radius: 50%; }
         .mautic-premium-form .mauticform-radiogrp-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
-        .mautic-premium-form .mauticform-radiogrp-label { font-size: 13px; color: #999; cursor: pointer; }
+        .mautic-premium-form label.mauticform-radiogrp-label { font-size: 13px; color: #999; cursor: pointer; margin: 0 !important; text-transform: none !important; letter-spacing: normal !important; font-weight: 500 !important; }
         .mautic-premium-form input[type="radio"]:checked + .mauticform-radiogrp-label { color: #fff; }
         .mautic-premium-form .mauticform-button { width: 100% !important; height: 54px !important; background: linear-gradient(135deg, rgba(247, 138, 45, 0.9), rgba(228, 60, 68, 0.9)) !important; border: 1px solid rgba(255,255,255,0.2) !important; border-radius: 12px !important; color: #fff !important; font-size: 16px !important; font-weight: 900 !important; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; margin-top: 12px; box-shadow: 0 4px 15px rgba(247, 138, 45, 0.3); }
         .mautic-premium-form .mauticform-button:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(247, 138, 45, 0.5); border-color: rgba(255,255,255,0.5) !important; }

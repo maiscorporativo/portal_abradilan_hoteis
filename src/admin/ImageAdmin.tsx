@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ImageIcon, LayoutDashboard, LogOut, RotateCcw,
@@ -7,6 +7,7 @@ import {
   DollarSign, FileText, Plane, BedDouble, Ticket, Save,
   Flame, AlertTriangle, Award, Type, Package, ImageIcon as ImgIcon, CheckCircle2, XCircle, Globe2, Clock, GripVertical, Star
 } from 'lucide-react';
+import { getAdminDisplayPrice } from '../utils/currency';
 import {
   DndContext,
   closestCenter,
@@ -580,7 +581,7 @@ function TrendingTab() {
                   : <span style={{ fontSize: 10, background: '#2a1a00', color: '#E67A1F', padding: '2px 8px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 4 }}>⚠ Sem categoria</span>
                 }
               </div>
-              <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>{pkg.date} · {pkg.loc} · {pkg.currency || 'BRL'} {pkg.price}</div>
+              <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>{pkg.date} · {pkg.loc} · {getAdminDisplayPrice(pkg)}</div>
             </div>
             <button
               type="button"
@@ -820,7 +821,7 @@ function PackageCard({ pkg, index, total, trendingCount, categories, onUpdate, o
             <span style={{ fontSize: 14, fontWeight: 700, color: '#e8edf2' }}>{pkg.title || 'Sem título'}</span>
             <span style={{ fontSize: 10, background: '#004080', color: '#F78A2D', padding: '2px 8px', borderRadius: 12, fontWeight: 700 }}>{pkg.tag}</span>
           </div>
-          <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>{pkg.date} · {pkg.loc} · {pkg.currency || 'BRL'} {pkg.price}</div>
+          <div style={{ fontSize: 12, color: '#737373', marginTop: 2 }}>{pkg.date} · {pkg.loc} · {getAdminDisplayPrice(pkg)}</div>
         </div>
           <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
             {dragHandleProps && (
@@ -878,36 +879,59 @@ function PackageCard({ pkg, index, total, trendingCount, categories, onUpdate, o
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
                 <Field label="Título do Pacote" icon={<Tag size={11} />} value={pkg.title} onChange={v => onUpdate({ title: v })} />
                 <Field label="Local / Destino" icon={<MapPin size={11} />} value={pkg.loc} onChange={v => onUpdate({ loc: v })} />
-
-                <PriceMaskInput price={pkg.price} currency={pkg.currency || 'BRL'} onPriceChange={v => onUpdate({ price: v })} label="V. INDIVIDUAL TOTAL" />
-                <PriceMaskInput price={pkg.priceDouble || ''} currency={pkg.currency || 'BRL'} onPriceChange={v => onUpdate({ priceDouble: v })} label="V. DUPLO TOTAL" />
                 <CurrencySelect value={pkg.currency || 'BRL'} onChange={v => onUpdate({ currency: v })} />
               </div>
 
-              {/* Novas Regras de Estadia e Preços */}
+              {/* Novas Regras de Estadia */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginTop: 16 }}>
                 <Field type="number" label="Noites Mínimas" icon={<Calendar size={11} />} value={pkg.minNights || ''} onChange={v => onUpdate({ minNights: v })} placeholder="Ex: 4" />
                 <Field type="date" label="Válido a partir de" icon={<Calendar size={11} />} value={pkg.validFrom || ''} onChange={v => onUpdate({ validFrom: v })} />
                 <Field type="date" label="Válido até" icon={<Calendar size={11} />} value={pkg.validTo || ''} onChange={v => onUpdate({ validTo: v })} />
-
-                <Field label="Valor Diária (Opcional)" icon={<DollarSign size={11} />} value={pkg.dailyRateOverride || ''} onChange={v => onUpdate({ dailyRateOverride: v })} 
-                  placeholder={(() => {
-                    if (!pkg.price || !pkg.minNights) return 'Auto-calculado';
-                    const t = parseFloat(pkg.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
-                    const n = parseInt(pkg.minNights);
-                    if (isNaN(t) || isNaN(n) || n === 0) return 'Auto-calculado';
-                    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(t / n);
-                  })()} />
-                <Field label="V. Duplo Por P. (Opcional)" icon={<DollarSign size={11} />} value={pkg.doublePerPersonOverride || ''} onChange={v => onUpdate({ doublePerPersonOverride: v })} 
-                  placeholder={(() => {
-                    if (!pkg.priceDouble) return 'Auto-calculado';
-                    const t = parseFloat(pkg.priceDouble.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
-                    if (isNaN(t)) return 'Auto-calculado';
-                    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(t / 2);
-                  })()} />
               </div>
+            </AdminSection>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginTop: 16 }}>
+            <AdminSection title="Categorias e Valores dos Quartos" icon={DollarSign}>
+              {(() => {
+                let cats: any[] = [];
+                try { cats = JSON.parse(pkg.roomCategories || '[]'); } catch {}
+                if (!Array.isArray(cats)) cats = [];
+
+                // Backwards compatibility for legacy fields
+                if (cats.length === 0 && (pkg.price || pkg.priceDouble)) {
+                   if (pkg.price) cats.push({ name: 'Quarto Individual', price: pkg.price, overrideLabel: 'Valor Diária', overridePrice: pkg.dailyRateOverride || '' });
+                   if (pkg.priceDouble) cats.push({ name: 'Quarto Duplo', price: pkg.priceDouble, overrideLabel: 'Valor por Pessoa', overridePrice: pkg.doublePerPersonOverride || '' });
+                   // We don't auto-save it to not mutate state unexpectedly, but we render it
+                }
+
+                const updateCats = (newCats: any[]) => onUpdate({ roomCategories: JSON.stringify(newCats) });
+
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {cats.map((c: any, i: number) => (
+                      <div key={i} style={{ background: '#001a36', border: '1px solid #002a5c', borderRadius: 8, padding: 16 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                           <span style={{ fontSize: 12, fontWeight: 700, color: '#e8edf2' }}>Categoria {i + 1}</span>
+                           <button type="button" onClick={() => { const n = [...cats]; n.splice(i, 1); updateCats(n); }} style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={14} /></button>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                           <Field label="Nome (ex: Duplo Solteiro)" icon={<BedDouble size={11} />} value={c.name || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], name: v}; updateCats(n); }} />
+                           <PriceMaskInput label="Valor Total" price={c.price || ''} currency={pkg.currency || 'BRL'} onPriceChange={v => { const n=[...cats]; n[i]={...n[i], price: v}; updateCats(n); }} />
+                           <Field label="Rótulo (ex: Valor por pessoa)" icon={<Tag size={11} />} value={c.overrideLabel || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], overrideLabel: v}; updateCats(n); }} />
+                           <Field label="Sub-valor (ex: 150,00)" icon={<DollarSign size={11} />} value={c.overridePrice || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], overridePrice: v}; updateCats(n); }} />
+                           <Field label="Tag (ex: ÚLTIMAS VAGAS)" icon={<Award size={11} />} value={c.tag || ''} onChange={v => { const n=[...cats]; n[i]={...n[i], tag: v}; updateCats(n); }} />
+                        </div>
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => updateCats([...cats, { name: '', price: '', overrideLabel: '', overridePrice: '', tag: '' }])} style={{ background: '#002042', border: '1px dashed #004080', color: '#4ade80', padding: 12, borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                      + Adicionar Categoria de Quarto
+                    </button>
+                  </div>
+                );
+              })()}
+            </AdminSection>
+
+            <AdminSection title="Classificação e Tags" icon={Award}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: 11, color: '#737373', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: 4 }}><Award size={11} /> Tag do Card</label>
                   <select

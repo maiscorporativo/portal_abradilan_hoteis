@@ -34,3 +34,38 @@ export function formatDisplayPrice(rawPrice: string, currencyCode: string): stri
   const locale = CURRENCY_LOCALES[currencyCode] || 'pt-BR';
   return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(num);
 }
+
+export function getAdminDisplayPrice(pkg: any): string {
+  let cats: any[] = [];
+  try { cats = JSON.parse(pkg.roomCategories || '[]'); } catch {}
+  if (Array.isArray(cats) && cats.length > 0) {
+    let minPrice = Infinity;
+    cats.forEach(c => {
+      if (!c.price) return;
+      const val = parseFloat(c.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
+      if (!isNaN(val) && val < minPrice) minPrice = val;
+    });
+    if (minPrice !== Infinity) {
+      return `A partir de: ${getCurrencySymbol(pkg.currency || 'BRL')} ${new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(minPrice)}`;
+    }
+  }
+  return `${pkg.currency || 'BRL'} ${pkg.price || ''}`;
+}
+
+export function getLowestPriceAmount(pkg: any): string {
+  let cats: any[] = [];
+  try { cats = JSON.parse(pkg.roomCategories || '[]'); } catch {}
+  if (Array.isArray(cats) && cats.length > 0) {
+    let minPrice = Infinity;
+    cats.forEach(c => {
+      if (!c.price) return;
+      const val = parseFloat(c.price.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
+      if (!isNaN(val) && val < minPrice) minPrice = val;
+    });
+    if (minPrice !== Infinity) {
+      return `${getCurrencySymbol(pkg.currency || 'BRL')} ${new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(minPrice)}`;
+    }
+  }
+  const curr = pkg.currency || 'BRL';
+  return `${getCurrencySymbol(curr)} ${formatDisplayPrice(pkg.price || '0', curr)}`;
+}

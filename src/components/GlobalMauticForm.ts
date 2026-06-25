@@ -1,4 +1,4 @@
-﻿export const GLOBAL_MAUTIC_FORM = `
+export const GLOBAL_MAUTIC_FORM = `
 <script type="text/javascript">
     /** This section is only needed once per page if manually copying **/
     if (typeof MauticSDKLoaded == 'undefined') {
@@ -19,21 +19,30 @@
         MauticSDK.onLoad();
     }
 </script>
-
 <style type="text/css" scoped>
     .mauticform_wrapper { max-width: 600px; margin: 10px auto; }
+    .mauticform-innerform {}
+    .mauticform-post-success {}
     .mauticform-name { font-weight: bold; font-size: 1.5em; margin-bottom: 3px; }
+    .mauticform-description { margin-top: 2px; margin-bottom: 10px; }
     .mauticform-error { margin-bottom: 10px; color: red; }
     .mauticform-message { margin-bottom: 10px;color: green; }
     .mauticform-row { display: block; margin-bottom: 20px; }
-    .mauticform-label { font-size: 1.1em; display: block; font-weight: bold; margin-bottom: 5px; color: #fff; }
+    .mauticform-label { font-size: 1.1em; display: block; font-weight: bold; margin-bottom: 5px; }
     .mauticform-row.mauticform-required .mauticform-label:after { color: #e32; content: " *"; display: inline; }
-    .mauticform-helpmessage { display: block; font-size: 0.9em; margin-bottom: 3px; color: #999; }
+    .mauticform-helpmessage { display: block; font-size: 0.9em; margin-bottom: 3px; }
     .mauticform-errormsg { display: block; color: red; margin-top: 2px; }
-    .mauticform-selectbox, .mauticform-input, .mauticform-textarea { width: 100%; padding: 0.8em 1em; border: 1px solid #004080; background: #002042; color: #fff; border-radius: 8px; box-sizing: border-box; }
-    .mauticform-radiogrp-row { margin-bottom: 8px; color: #ccc; }
-    .mauticform-button-wrapper .mauticform-button { display: inline-block; width: 100%; font-weight: 700; text-align: center; cursor: pointer; background: linear-gradient(135deg, #F78A2D, #d66f1c); color: #fff; border: none; padding: 14px 24px; font-size: 16px; border-radius: 12px; transition: transform 0.2s; }
-    .mauticform-button-wrapper .mauticform-button:hover { transform: translateY(-2px); }
+    .mauticform-selectbox, .mauticform-input, .mauticform-textarea { width: 100%; padding: 0.5em 0.5em; border: 1px solid #CCC; background: #fff; box-shadow: 0px 0px 0px #fff inset; border-radius: 4px; box-sizing: border-box; }
+    .mauticform-checkboxgrp-row {}
+    .mauticform-checkboxgrp-label { font-weight: normal; }
+    .mauticform-checkboxgrp-checkbox {}
+    .mauticform-radiogrp-row {}
+    .mauticform-radiogrp-label { font-weight: normal; }
+    .mauticform-radiogrp-radio {}
+    .mauticform-button-wrapper .mauticform-button.btn-default, .mauticform-pagebreak-wrapper .mauticform-pagebreak.btn-default { color: #5d6c7c;background-color: #ffffff;border-color: #dddddd;}
+    .mauticform-button-wrapper .mauticform-button, .mauticform-pagebreak-wrapper .mauticform-pagebreak { display: inline-block;margin-bottom: 0;font-weight: 600;text-align: center;vertical-align: middle;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 13px;line-height: 1.3856;border-radius: 3px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
+    .mauticform-button-wrapper .mauticform-button.btn-default[disabled], .mauticform-pagebreak-wrapper .mauticform-pagebreak.btn-default[disabled] { background-color: #ffffff; border-color: #dddddd; opacity: 0.75; cursor: not-allowed; }
+    .mauticform-pagebreak-wrapper .mauticform-button-wrapper {  display: inline; }
 </style><style type="text/css" scoped>
     .mauticform-field-hidden { display:none }
 </style>
@@ -43,16 +52,19 @@
         <div class="mauticform-error" id="mauticform_portalpctshospedagemabradilanab2027lp1_error"></div>
         <div class="mauticform-message" id="mauticform_portalpctshospedagemabradilanab2027lp1_message"></div>
         <div class="mauticform-innerform">
+            
           <div class="mauticform-page-wrapper mauticform-page-1" data-mautic-form-page="1">
 
             <div id="mauticform_portalpctshospedagemabradilanab2027lp1_nome" data-validate="nome" data-validation-type="text" class="mauticform-row mauticform-text mauticform-field-1 mauticform-required">
                 <label id="mauticform_label_portalpctshospedagemabradilanab2027lp1_nome" for="mauticform_input_portalpctshospedagemabradilanab2027lp1_nome" class="mauticform-label">Primeiro Nome</label>
+                <span class="mauticform-helpmessage">Primeiro Nome</span>
                 <input id="mauticform_input_portalpctshospedagemabradilanab2027lp1_nome" name="mauticform[nome]" value="" class="mauticform-input" type="text">
                 <span class="mauticform-errormsg" style="display: none;">* Campo obrigatório</span>
             </div>
 
             <div id="mauticform_portalpctshospedagemabradilanab2027lp1_ultimo_nome" data-validate="ultimo_nome" data-validation-type="text" class="mauticform-row mauticform-text mauticform-field-2 mauticform-required">
                 <label id="mauticform_label_portalpctshospedagemabradilanab2027lp1_ultimo_nome" for="mauticform_input_portalpctshospedagemabradilanab2027lp1_ultimo_nome" class="mauticform-label">Sobrenome</label>
+                <span class="mauticform-helpmessage">Sobrenome</span>
                 <input id="mauticform_input_portalpctshospedagemabradilanab2027lp1_ultimo_nome" name="mauticform[ultimo_nome]" value="" class="mauticform-input" type="text">
                 <span class="mauticform-errormsg" style="display: none;">* Campo obrigatório</span>
             </div>
@@ -71,6 +83,7 @@
 
             <div id="mauticform_portalpctshospedagemabradilanab2027lp1_email" data-validate="email" data-validation-type="email" class="mauticform-row mauticform-email mauticform-field-5 mauticform-required">
                 <label id="mauticform_label_portalpctshospedagemabradilanab2027lp1_email" for="mauticform_input_portalpctshospedagemabradilanab2027lp1_email" class="mauticform-label">E-mail</label>
+                <span class="mauticform-helpmessage">E-mail</span>
                 <input id="mauticform_input_portalpctshospedagemabradilanab2027lp1_email" name="mauticform[email]" value="" class="mauticform-input" type="email">
                 <span class="mauticform-errormsg" style="display: none;">* Campo obrigatório</span>
             </div>
@@ -105,7 +118,7 @@
                 <span class="mauticform-errormsg" style="display: none;">* Campo obrigatório</span>
             </div>
 
-            <div id="mauticform_portalpctshospedagemabradilanab2027lp1_outros" data-mautic-form-show-on="pacote:Outros" data-mautic-form-expr="in" data-validate="outros" data-validation-type="text" class="mauticform-row mauticform-text mauticform-field-5  mauticform-field-hidden mauticform-required">
+            <div id="mauticform_portalpctshospedagemabradilanab2027lp1_outros" data-mautic-form-show-on="pacote:Outros" data-mautic-form-expr="in" data-validate="outros" data-validation-type="text" class="mauticform-row mauticform-text mauticform-field-7  mauticform-field-hidden mauticform-required">
                 <label id="mauticform_label_portalpctshospedagemabradilanab2027lp1_outros" for="mauticform_input_portalpctshospedagemabradilanab2027lp1_outros" class="mauticform-label">Outros</label>
                 <input id="mauticform_input_portalpctshospedagemabradilanab2027lp1_outros" name="mauticform[outros]" value="" class="mauticform-input" type="text">
                 <span class="mauticform-errormsg" style="display: none;">*Campo obrigatório</span>
@@ -168,7 +181,15 @@
                 <span class="mauticform-errormsg" style="display: none;">* Campo obrigatório</span>
             </div>
 
-            <div id="mauticform_portalpctshospedagemabradilanab2027lp1_submit" class="mauticform-row mauticform-button-wrapper mauticform-field-15">
+            <div id="mauticform_portalpctshospedagemabradilanab2027lp1_tipo_quarto" data-validate="tipo_quarto" data-validation-type="radiogrp" class="mauticform-row mauticform-radiogrp mauticform-field-15 mauticform-required">
+                <label class="mauticform-label" for="mauticform_radiogrp_radio_tipo_quarto_Opcao11">Acomodação Desejada</label>
+                <div class="mauticform-radiogrp-row">                    <input name="mauticform[tipo_quarto]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tipo_quarto_Opcao10" type="radio" value="Opção 1">
+                    <label id="mauticform_radiogrp_label_tipo_quarto_Opcao10" for="mauticform_radiogrp_radio_tipo_quarto_Opcao10" class="mauticform-radiogrp-label">Opção 1</label>
+                </div>
+                <span class="mauticform-errormsg" style="display: none;">*Campo obrigatório</span>
+            </div>
+
+            <div id="mauticform_portalpctshospedagemabradilanab2027lp1_submit" class="mauticform-row mauticform-button-wrapper mauticform-field-16">
                 <button type="submit" name="mauticform[submit]" id="mauticform_input_portalpctshospedagemabradilanab2027lp1_submit" value="" class="mauticform-button btn btn-default">Enviar</button>
             </div>
             </div>
@@ -181,4 +202,3 @@
         </form>
 </div>
 `;
-

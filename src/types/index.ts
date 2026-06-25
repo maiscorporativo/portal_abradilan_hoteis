@@ -60,6 +60,7 @@ export interface TrendingPackage {
   sectionBackground?: string;
   sportType?: string; // Ex: 'automobilismo', 'futebol', 'tenis', etc.
   /* ── New Pricing & Stays Sections ── */
+  roomCategories?: string; // JSON array of RoomCategory objects
   minNights?: string;
   validFrom?: string;
   validTo?: string;

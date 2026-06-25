@@ -1,8 +1,8 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Plane, BedDouble, Ticket, X } from 'lucide-react';
 import type { TrendingPackage } from '../types';
-import { getCurrencySymbol, formatDisplayPrice } from '../utils/currency';
+import { getCurrencySymbol, formatDisplayPrice, getLowestPriceAmount } from '../utils/currency';
 
 /* ── Helper: detail row ─────────────────────────────────────── */
 function DetailRow({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
@@ -193,7 +193,7 @@ export default function PackageModal({ isOpen, onClose, pkg }: PackageModalProps
                 Valor Estimado
               </p>
               <div style={{ fontSize: 30, fontWeight: 800, color: '#002042', margin: '0 0 4px', lineHeight: 1.1 }}>
-                {getCurrencySymbol(pkg.currency || 'BRL')} {formatDisplayPrice(pkg.price, pkg.currency || 'BRL')}
+                {getLowestPriceAmount(pkg)}
               </div>
               <span style={{ fontSize: 12, color: '#9ca3af' }}>por pessoa</span>
 
