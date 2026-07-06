@@ -607,39 +607,97 @@ function SurroundingsDisplaySection({ pkg, isMobile }: { pkg: any, isMobile: boo
 }
 
 
+/* Repertório de notificações. Mensagens com returningOnly só aparecem
+   para visitantes identificados que retornam em uma nova sessão. */
+const SCARCITY_MESSAGES: { id: number; text: string; icon: 'bell' | 'trending'; returningOnly?: boolean }[] = [
+  { id: 1, text: 'Um pacote Duplo Premium acabou de ser reservado.', icon: 'bell' },
+  { id: 2, text: 'Alta demanda: restam poucas vagas neste hotel.', icon: 'trending' },
+  { id: 3, text: '4 pacotes vendidos nas últimas 2 horas.', icon: 'trending' },
+  { id: 4, text: 'Um novo hóspede corporativo garantiu seu pacote.', icon: 'bell' },
+  { id: 5, text: 'Uma empresa de São Paulo reservou 2 quartos agora há pouco.', icon: 'bell' },
+  { id: 6, text: '12 pessoas estão vendo este pacote neste momento.', icon: 'trending' },
+  { id: 7, text: 'Reserva confirmada: Quarto Individual para o Conexão Farma 2027.', icon: 'bell' },
+  { id: 8, text: 'As reservas deste hotel aumentaram 30% esta semana.', icon: 'trending' },
+  { id: 9, text: 'Um visitante acabou de solicitar cotação para este hotel.', icon: 'bell' },
+  { id: 10, text: 'Quartos Duplos são os mais procurados neste momento.', icon: 'trending' },
+  { id: 11, text: 'Nova reserva recebida há poucos minutos.', icon: 'bell' },
+  { id: 12, text: 'Este hotel está entre os mais reservados do evento.', icon: 'trending' },
+  { id: 13, text: 'Um grupo corporativo consultou disponibilidade agora mesmo.', icon: 'bell' },
+  { id: 14, text: 'Últimas unidades na categoria mais econômica.', icon: 'trending' },
+  { id: 15, text: 'Desde sua última visita, novas reservas foram confirmadas neste hotel.', icon: 'bell', returningOnly: true },
+  { id: 16, text: 'Você voltou em boa hora: ainda há disponibilidade neste hotel.', icon: 'bell', returningOnly: true },
+  { id: 17, text: 'A disponibilidade diminuiu desde seu último acesso.', icon: 'trending', returningOnly: true },
+  { id: 18, text: 'Este hotel segue entre os mais procurados desde sua última visita.', icon: 'trending', returningOnly: true },
+];
+
+const VISITOR_KEY = 'emais_visitor';
+
 function ScarcityToast() {
   const [isVisible, setIsVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [iconType, setIconType] = useState<'bell' | 'trending'>('bell');
 
-  const messages = [
-    { text: "Um pacote Duplo Premium acabou de ser reservado.", icon: 'bell' },
-    { text: "Alta demanda: Restam apenas 3 vagas neste hotel.", icon: 'trending' },
-    { text: "4 pacotes vendidos nas últimas 2 horas.", icon: 'trending' },
-    { text: "Um novo hóspede corporativo garantiu seu pacote.", icon: 'bell' },
-  ];
-
   useEffect(() => {
-    const initialTimer = setTimeout(() => showRandomToast(), 5000);
-    const interval = setInterval(() => {
-      showRandomToast();
-    }, Math.floor(Math.random() * 15000) + 20000);
+    // ── Identificação do visitante entre sessões (localStorage) ──
+    let profile: { id: string; visits: number; shown: number[] };
+    try {
+      profile = JSON.parse(localStorage.getItem(VISITOR_KEY) || 'null');
+    } catch { profile = null as any; }
+    if (!profile || !Array.isArray(profile.shown)) {
+      profile = {
+        id: (crypto as any).randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+        visits: 0,
+        shown: [],
+      };
+    }
+    // Cada nova sessão do navegador conta como uma nova visita
+    if (!sessionStorage.getItem('emais_visit_counted')) {
+      profile.visits += 1;
+      sessionStorage.setItem('emais_visit_counted', '1');
+    }
+    localStorage.setItem(VISITOR_KEY, JSON.stringify(profile));
+
+    const isReturning = profile.visits > 1;
+    const pool = SCARCITY_MESSAGES.filter(m => !m.returningOnly || isReturning);
+
+    let cancelled = false;
+    let hideTimer: number | undefined;
+    let nextTimer: number | undefined;
+
+    // Sorteia sempre uma mensagem ainda não vista por esse visitante
+    // (histórico persiste entre sessões; zera quando o repertório esgota)
+    const pickMessage = () => {
+      let unseen = pool.filter(m => !profile.shown.includes(m.id));
+      if (unseen.length === 0) {
+        profile.shown = profile.shown.filter(id => !pool.some(m => m.id === id));
+        unseen = pool;
+      }
+      const msg = unseen[Math.floor(Math.random() * unseen.length)];
+      profile.shown.push(msg.id);
+      localStorage.setItem(VISITOR_KEY, JSON.stringify(profile));
+      return msg;
+    };
+
+    const showToast = () => {
+      if (cancelled) return;
+      const msg = pickMessage();
+      setMessage(msg.text);
+      setIconType(msg.icon);
+      setIsVisible(true);
+      hideTimer = window.setTimeout(() => setIsVisible(false), 7000);
+      // Intervalo randômico entre notificações: 50s a 100s
+      nextTimer = window.setTimeout(showToast, 50000 + Math.random() * 50000);
+    };
+
+    // Primeira notificação: entre 8s e 15s após carregar
+    nextTimer = window.setTimeout(showToast, 8000 + Math.random() * 7000);
 
     return () => {
-      clearTimeout(initialTimer);
-      clearInterval(interval);
+      cancelled = true;
+      clearTimeout(hideTimer);
+      clearTimeout(nextTimer);
     };
   }, []);
-
-  const showRandomToast = () => {
-    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-    setMessage(randomMsg.text);
-    setIconType(randomMsg.icon as 'bell' | 'trending');
-    setIsVisible(true);
-    setTimeout(() => {
-      setIsVisible(false);
-    }, 6000);
-  };
 
   return (
     <div style={{

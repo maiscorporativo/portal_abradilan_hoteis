@@ -774,7 +774,7 @@ export default function ContactForm() {
                 textDecoration: 'none'
               }}
             >
-              Falar com consultor
+              Indicar hotel de preferência
             </button>
           </div>
         </div>

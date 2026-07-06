@@ -1,4 +1,4 @@
-import { Instagram, ArrowRight } from 'lucide-react';
+import { Instagram } from 'lucide-react';
 import Reveal from './Reveal';
 
 export default function Footer() {
@@ -17,15 +17,6 @@ export default function Footer() {
                         Viva a sua<br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-secondary">melhor estadia.</span>
                     </h2>
-                    <a
-                        href="https://api.whatsapp.com/send/?phone=5518997624457&text=Ol%C3%A1,%20tudo%20bem?%20Gostaria%20de%20falar%20com%20um%20consultor.&type=phone_number&app_absent=0"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 bg-gold text-black font-bold text-sm px-8 py-4 rounded-full hover:bg-white transition-all duration-300 group shadow-lg shadow-gold/20"
-                    >
-                        Fale com um Consultor
-                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                    </a>
                 </Reveal>
             </div>
 
