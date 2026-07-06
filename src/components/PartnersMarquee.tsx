@@ -1,6 +1,6 @@
 export default function PartnersMarquee() {
   return (
-    <section className="-mt-12 relative z-20 py-20 border-b border-white/5 overflow-hidden flex flex-col items-center" style={{ background: 'linear-gradient(to bottom, transparent 0%, #09090b 60%)' }}>
+    <section className="-mt-[58px] relative z-20 py-20 border-b border-white/5 overflow-hidden flex flex-col items-center" style={{ background: 'linear-gradient(to bottom, transparent 0%, #09090b 60%)' }}>
       <p className="text-[11px] text-white uppercase tracking-[0.2em] mb-10 font-bold z-10 px-6 text-center">
         Realização e Agência Oficial
       </p>

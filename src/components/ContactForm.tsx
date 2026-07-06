@@ -1,7 +1,10 @@
-﻿import { useState, useId, useEffect, useRef } from 'react';
+import { useState, useId, useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useSelectedPackage } from '../hooks/useSelectedPackage';
 import { useContentConfig } from '../hooks/useContentConfig';
+import { GLOBAL_MAUTIC_FORM } from '../components/GlobalMauticForm';
+
+const CRM_WEBHOOK = 'https://crm.maiscorporativo.tur.br/api/v1/webhook/464288c3-343a-442c-9541-0189a8bcdfe4';
 
 /* ── floating label input ────────────────────────────────────── */
 function FloatInput({
@@ -423,12 +426,42 @@ function PackageSelect({ id, value, onChange }: { id: string; value: string; onC
 /* ── main component ───────────────────────────────────────────── */
 export default function ContactForm() {
   const uid = useId();
+  const [hotelDesejado, setHotelDesejado] = useState('');
   const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [empresa, setEmpresa] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [participanteComo, setParticipanteComo] = useState('');
+  const [cidadeOrigem, setCidadeOrigem] = useState('');
+  const [hotelChegada, setHotelChegada] = useState('');
+  const [hotelSaida, setHotelSaida] = useState('');
+  const [acomodacao, setAcomodacao] = useState('');
+  const [receberWpp, setReceberWpp] = useState('1');
+  const [outros, setOutros] = useState('');
+  const [qtdPessoas, setQtdPessoas] = useState('');
+  const [transfer, setTransfer] = useState('');
+  const [aereo, setAereo] = useState('');
+
   const [pacote, setPacote] = useState('');
+  void pacote;
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
-  const { packages } = useContentConfig();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const mauticContainerRef = useRef<HTMLDivElement>(null);
+  const pendingCrmRef = useRef<URLSearchParams | null>(null);
+
+  // We can lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      setStatus('idle');
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isModalOpen]);
 
   // Sincroniza com o contexto (clique em "Reservar Pacote" no modal)
   const { selectedTitle, setSelectedTitle } = useSelectedPackage();
@@ -440,43 +473,166 @@ export default function ContactForm() {
     }
   }, [selectedTitle, setSelectedTitle]);
 
+  // --- Mautic Off-Screen Form Initialization ---
+  useEffect(() => {
+    if (mauticContainerRef.current) {
+      mauticContainerRef.current.innerHTML = GLOBAL_MAUTIC_FORM;
+
+      const pForm = mauticContainerRef.current.querySelector('form');
+      if (pForm) {
+        // O <script> dentro do HTML injetado via innerHTML não executa,
+        // então as globais que o SDK exige precisam ser definidas aqui (igual ao PackageLP)
+        (window as any).MauticDomain = 'https://mkt.maiscorporativo.tur.br';
+        if (typeof (window as any).MauticLang === 'undefined') {
+          (window as any).MauticLang = { submittingMessage: 'Por favor, aguarde...' };
+        }
+
+        // Dispara o webhook do CRM com o payload montado no submit (guardado por ref,
+        // então mesmo se chamado 2x — callback + observer — envia apenas uma vez)
+        const handleMauticSuccess = () => {
+          if (pendingCrmRef.current) {
+            fetch(CRM_WEBHOOK, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: pendingCrmRef.current.toString(),
+            }).catch(err => console.error('Erro CRM:', err));
+            pendingCrmRef.current = null;
+          }
+          setStatus('success');
+        };
+
+        // Intercepta Mautic Success
+        (window as any).MauticFormCallback = (window as any).MauticFormCallback || {};
+        (window as any).MauticFormCallback['portalpctshospedagemabradilanab2027lp1'] = {
+          onResponse: function (response: any) {
+            if (response.success) {
+              handleMauticSuccess();
+            } else {
+              setStatus('error');
+            }
+          }
+        };
+
+        // Fallback: observa as mensagens que o SDK escreve no form oculto (igual ao PackageLP)
+        const observer = new MutationObserver(() => {
+          const errorMsg = mauticContainerRef.current?.querySelector('.mauticform-error');
+          const successMsg = mauticContainerRef.current?.querySelector('.mauticform-message');
+          if (errorMsg && errorMsg.innerHTML.trim().length > 0) setStatus('error');
+          if (successMsg && successMsg.innerHTML.trim().length > 0) handleMauticSuccess();
+        });
+        observer.observe(mauticContainerRef.current, { childList: true, subtree: true, characterData: true });
+
+        // Substitui as opções padrão de tipo_quarto ("Opção 1") pelas acomodações reais
+        const roomRadioGrp = pForm.querySelector('div[data-validate="tipo_quarto"]');
+        if (roomRadioGrp) {
+          roomRadioGrp.querySelectorAll('.mauticform-radiogrp-row').forEach(row => row.remove());
+          const errorMsg = roomRadioGrp.querySelector('.mauticform-errormsg');
+          ['Quarto Individual', 'Quarto Duplo'].forEach((name, index) => {
+            const safeName = name.replace(/[^a-zA-Z0-9]/g, '');
+            const inputId = `mauticform_radiogrp_radio_tipo_quarto_cf_${safeName}${index}`;
+            const row = document.createElement('div');
+            row.className = 'mauticform-radiogrp-row';
+            row.innerHTML = `<input name="mauticform[tipo_quarto]" class="mauticform-radiogrp-radio" id="${inputId}" type="radio" value="${name}">
+                             <label id="mauticform_radiogrp_label_tipo_quarto_cf_${safeName}${index}" for="${inputId}" class="mauticform-radiogrp-label">${name}</label>`;
+            if (errorMsg) roomRadioGrp.insertBefore(row, errorMsg);
+            else roomRadioGrp.appendChild(row);
+          });
+        }
+
+        let iframe = document.getElementById('mautic_hidden_iframe_cf') as HTMLIFrameElement;
+        if (!iframe) {
+          iframe = document.createElement('iframe');
+          iframe.id = 'mautic_hidden_iframe_cf';
+          iframe.name = 'mautic_hidden_iframe_cf';
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+        }
+        pForm.setAttribute('target', 'mautic_hidden_iframe_cf');
+      }
+
+      if (!document.getElementById('mautic-sdk-script')) {
+        const sc = document.createElement('script');
+        sc.id = 'mautic-sdk-script';
+        sc.src = 'https://mkt.maiscorporativo.tur.br/media/js/mautic-form.js';
+        sc.onload = () => { if ((window as any).MauticSDK) (window as any).MauticSDK.onLoad(); };
+        document.head.appendChild(sc);
+      } else {
+        if ((window as any).MauticSDK) (window as any).MauticSDK.onLoad();
+      }
+    }
+  }, []);
+  // ---------------------------------------------
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
     try {
-      // data_lead: formatado em pt-BR, fuso Brasília
-      const data_lead = new Date().toLocaleString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit',
-      }).replace(',', ' às');
-
-      // pacote: nome completo | valor | local
-      const pkgObj = packages.find(p => p.title === pacote && !p.deletedAt);
-      const pacoteEnvio = pkgObj
-        ? [pkgObj.title, pkgObj.price ? `${pkgObj.currency || 'BRL'} ${pkgObj.price}` : '', pkgObj.loc || '']
-          .filter(Boolean).join(' | ')
-        : pacote;
-
       const utms = JSON.parse(sessionStorage.getItem('emais_utms') || '{}');
       const utmString = Object.entries(utms).map(([k, v]) => `${k}=${v}`).join(' | ');
       const origemBase = window.location.hostname;
       const origemFinal = utmString ? `${origemBase} | UTMs: ${utmString}` : origemBase;
 
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nome,
-          email,
-          telefone,
-          pacote: pacoteEnvio,
-          origem_lead: origemFinal,
-          data_lead,
-        }),
+      // Sincroniza dados com o form Mautic Off-Screen e Clica
+      const mForm = mauticContainerRef.current?.querySelector('form');
+      if (!mForm) {
+        setStatus('error');
+        return;
+      }
+
+      const setInput = (name: string, value: string) => {
+        const input = mForm.querySelector(`input[name="mauticform[${name}]"]:not([type="radio"]):not([type="checkbox"]), select[name="mauticform[${name}]"], textarea[name="mauticform[${name}]"]`) as HTMLInputElement;
+        if (input) input.value = value;
+      };
+      const setRadio = (name: string, value: string) => {
+        mForm.querySelectorAll(`input[type="radio"][name="mauticform[${name}]"]`).forEach(r => {
+          (r as HTMLInputElement).checked = (r as HTMLInputElement).value === value;
+        });
+      };
+
+      setInput('nome', nome);
+      setInput('ultimo_nome', sobrenome);
+      setInput('cargo', cargo);
+      setInput('empresa', empresa);
+      setInput('email', email);
+      // O +55 do PhoneInput é apenas visual; o Mautic valida exigindo o formato internacional
+      setInput('whatsapp', telefone ? `+55 ${telefone}` : '');
+      setRadio('pacote', participanteComo);
+      setInput('outros', participanteComo === 'Outros' ? outros : '');
+      setInput('cidade_origem', cidadeOrigem);
+      setInput('hotel_chegada', hotelChegada);
+      setInput('hotel_saida1', hotelSaida);
+      setInput('qtd_pessoas', qtdPessoas);
+      setRadio('precisara_de_transfer', transfer);
+      setRadio('precisa_de_aereo_ate_sao', aereo);
+      setRadio('deseja_receber_mensagens', receberWpp);
+      setRadio('tipo_quarto', acomodacao);
+
+      // Monta o payload do CRM espelhando o form Mautic (igual às LPs de pacote) + hotel_desejado.
+      // O envio acontece no MauticFormCallback, após o Mautic confirmar sucesso.
+      const crmData = new URLSearchParams();
+      mForm.querySelectorAll('input, select, textarea').forEach(el => {
+        const input = el as HTMLInputElement;
+        const nameMatch = input.name ? input.name.match(/mauticform\[(.*?)\]/) : null;
+        if (!nameMatch) return;
+        const fieldName = nameMatch[1];
+        if (['formId', 'return', 'formName'].includes(fieldName)) return;
+        if (input.type === 'radio' || input.type === 'checkbox') {
+          if (input.checked) crmData.append(fieldName, input.value);
+        } else {
+          crmData.append(fieldName, input.value || '');
+        }
       });
-      setStatus(res.ok ? 'success' : 'error');
-    } catch {
+      crmData.append('hotel_desejado', hotelDesejado);
+      crmData.append('origem_lead', origemFinal);
+      crmData.append('url_conversao', window.location.href);
+      pendingCrmRef.current = crmData;
+
+      // Dispara o clique nativo do Mautic
+      const btn = mForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+      if (btn) btn.click();
+      else setStatus('error');
+    } catch (err) {
+      console.error('Falha ao acionar Mautic:', err);
       setStatus('error');
     }
   };
@@ -497,6 +653,10 @@ export default function ContactForm() {
           .cf-row { grid-template-columns: 1fr !important; }
         }
       `}</style>
+      {/* Hidden Mautic Form */}
+      <div style={{ position: 'absolute', top: -9999, left: -9999, opacity: 0, pointerEvents: 'none' }}>
+        <div ref={mauticContainerRef} className="mautic-premium-form" />
+      </div>
       {/* decorative glow orbs */}
       <div style={{
         position: 'absolute', top: -120, left: -120, width: 400, height: 400,
@@ -578,7 +738,7 @@ export default function ContactForm() {
             </div>
           </div>
 
-          {/* ── Right column: card ── */}
+          {/* ── Right column: button ── */}
           <div
             className="cf-card"
             style={{
@@ -588,8 +748,76 @@ export default function ContactForm() {
               padding: '40px 36px',
               backdropFilter: 'blur(12px)',
               boxShadow: '0 32px 64px rgba(0,17,36,0.35)',
+              display: 'flex', flexDirection: 'column', gap: 20
             }}
           >
+            <h3 style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: 0, textAlign: 'center' }}>
+              Não encontrou o hotel de sua <span style={{ color: '#F78A2D' }}>preferência?</span>
+            </h3>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', margin: 0, textAlign: 'center', lineHeight: 1.6 }}>
+              Clique no botão abaixo, nos conte mais detalhes e nossa equipe entrará em contato para montar o pacote perfeito para você.
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                width: '100%', padding: '16px 32px', marginTop: 10,
+                background: 'linear-gradient(135deg, #F78A2D 0%, #E67A1F 100%)',
+                color: '#001124',
+                fontWeight: 800, fontSize: 14,
+                letterSpacing: '0.08em', textTransform: 'uppercase',
+                border: 'none', borderRadius: 100,
+                cursor: 'pointer',
+                transition: 'transform 0.15s',
+                boxShadow: '0 8px 32px rgba(223,254,0,0.35)',
+                textDecoration: 'none'
+              }}
+            >
+              Falar com consultor
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Popup Modal Glassmorphism ── */}
+      {isModalOpen && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(0, 17, 36, 0.7)', backdropFilter: 'blur(16px)',
+          padding: '24px'
+        }}>
+          <div style={{
+            position: 'relative', width: '100%', maxWidth: '600px',
+            background: 'rgba(0, 21, 44, 0.95)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: 24, padding: '40px 36px',
+            boxShadow: '0 32px 64px rgba(0,0,0,0.5)',
+            overflowY: 'auto', maxHeight: '90vh'
+          }}>
+            {/* Close button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                position: 'absolute', top: 20, right: 20,
+                background: 'rgba(255,255,255,0.1)', border: 'none',
+                width: 32, height: 32, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', cursor: 'pointer', transition: 'background 0.2s', zIndex: 20
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.2)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.1)'; }}
+            >
+              ✕
+            </button>
+
+            <h3 style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: '0 0 10px', textAlign: 'center' }}>
+              Nos conte sua <span style={{ color: '#F78A2D' }}>preferência</span>
+            </h3>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', margin: '0 0 20px', textAlign: 'center' }}>
+              Preencha os dados abaixo e entraremos em contato com a melhor opção para você.
+            </p>
             {status === 'success' ? (
               /* ── success state ── */
               <div style={{ textAlign: 'center', padding: '32px 0' }}>
@@ -608,30 +836,134 @@ export default function ContactForm() {
                   Nossa equipe entrará em contato em breve para montar o pacote ideal para você.
                 </p>
                 <button
-                  onClick={() => { setNome(''); setEmail(''); setTelefone(''); setPacote(''); setStatus('idle'); }}
+                  onClick={() => setIsModalOpen(false)}
                   style={{
-                    background: 'none', border: 'none', color: '#F78A2D',
-                    fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                    letterSpacing: '0.06em', textTransform: 'uppercase',
-                    textDecoration: 'underline', textDecorationColor: 'rgba(223,254,0,0.4)',
+                    display: 'inline-flex', padding: '12px 24px',
+                    background: 'rgba(255,255,255,0.1)', color: '#fff',
+                    borderRadius: 100, border: 'none', cursor: 'pointer',
+                    fontWeight: 700, fontSize: 13, textTransform: 'uppercase'
                   }}
                 >
-                  Enviar outro formulário?
+                  Fechar janela
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 
-                {/* row: nome + email */}
-                <div className="cf-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: 14 }}>
-                  <FloatInput id={`${uid}-nome`} label="Nome completo" autoComplete="name" value={nome} onChange={setNome} required />
-                  <FloatInput id={`${uid}-email`} label="E-mail" type="email" autoComplete="email" value={email} onChange={setEmail} required />
+                <div className="cf-row">
+                  <FloatInput id={`${uid}-hotelDesejado`} label="Nome do hotel desejado" value={hotelDesejado} onChange={setHotelDesejado} required />
                 </div>
 
-                {/* row: telefone + evento */}
+                {/* row: nome + sobrenome */}
+                <div className="cf-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: 14 }}>
+                  <FloatInput id={`${uid}-nome`} label="Primeiro Nome" autoComplete="given-name" value={nome} onChange={setNome} required />
+                  <FloatInput id={`${uid}-sobrenome`} label="Sobrenome" autoComplete="family-name" value={sobrenome} onChange={setSobrenome} required />
+                </div>
+
+                {/* row: cargo + empresa */}
+                <div className="cf-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: 14 }}>
+                  <FloatInput id={`${uid}-cargo`} label="Cargo" value={cargo} onChange={setCargo} required />
+                  <FloatInput id={`${uid}-empresa`} label="Empresa" value={empresa} onChange={setEmpresa} required />
+                </div>
+
+                {/* row: email + telefone */}
                 <div className="cf-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: 14, alignItems: 'start' }}>
+                  <FloatInput id={`${uid}-email`} label="E-mail" type="email" autoComplete="email" value={email} onChange={setEmail} required />
                   <PhoneInput value={telefone} onChange={setTelefone} />
-                  <PackageSelect id={`${uid}-pacote`} value={pacote} onChange={setPacote} />
+                </div>
+                
+                {/* Participante Como */}
+                <div className="cf-row">
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, display: 'block', marginBottom: 8 }}>Participará no evento como *</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    {['Distribuidor Associado', 'Distribuidor Não Associado', 'Indústrias', 'Farmacistas', 'Visitantes', 'Outros'].map(opt => (
+                      <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#eee', cursor: 'pointer' }}>
+                        <input type="radio" name="participanteComo" value={opt} checked={participanteComo === opt} onChange={(e) => setParticipanteComo(e.target.value)} required style={{ accentColor: '#F78A2D' }} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Outros (condicional) */}
+                {participanteComo === 'Outros' && (
+                  <div className="cf-row">
+                    <FloatInput id={`${uid}-outros`} label="Outros (especifique)" value={outros} onChange={setOutros} required />
+                  </div>
+                )}
+
+                {/* Cidade de Origem */}
+                <div className="cf-row">
+                  <FloatInput id={`${uid}-cidade`} label="Cidade de origem" value={cidadeOrigem} onChange={setCidadeOrigem} required />
+                </div>
+
+                {/* row: Datas */}
+                <div className="cf-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: 14 }}>
+                  <div style={{ position: 'relative' }}>
+                    <label style={{ position: 'absolute', top: -8, left: 12, background: 'rgba(0, 21, 44, 1)', padding: '0 4px', fontSize: 10, color: '#F78A2D', zIndex: 1 }}>Hotel Chegada *</label>
+                    <input type="date" value={hotelChegada} onChange={(e) => setHotelChegada(e.target.value)} required style={{ width: '100%', padding: '16px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 14, fontFamily: 'inherit' }} />
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    <label style={{ position: 'absolute', top: -8, left: 12, background: 'rgba(0, 21, 44, 1)', padding: '0 4px', fontSize: 10, color: '#F78A2D', zIndex: 1 }}>Hotel Saída *</label>
+                    <input type="date" value={hotelSaida} onChange={(e) => setHotelSaida(e.target.value)} required style={{ width: '100%', padding: '16px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 14, fontFamily: 'inherit' }} />
+                  </div>
+                </div>
+
+                {/* Acomodação Desejada */}
+                <div className="cf-row">
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, display: 'block', marginBottom: 8 }}>Acomodação Desejada *</span>
+                  <div style={{ display: 'flex', gap: 20 }}>
+                    {['Quarto Individual', 'Quarto Duplo'].map(opt => (
+                      <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#eee', cursor: 'pointer' }}>
+                        <input type="radio" name="acomodacao" value={opt} checked={acomodacao === opt} onChange={(e) => setAcomodacao(e.target.value)} required style={{ accentColor: '#F78A2D' }} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quantidade de Pessoas */}
+                <div className="cf-row">
+                  <FloatInput id={`${uid}-qtdPessoas`} label="Quantidade de Pessoas" type="number" value={qtdPessoas} onChange={setQtdPessoas} required />
+                </div>
+
+                {/* Precisará de Transfer */}
+                <div className="cf-row">
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, display: 'block', marginBottom: 8 }}>Precisará de Transfer? *</span>
+                  <div style={{ display: 'flex', gap: 20 }}>
+                    {['Sim', 'Não'].map(opt => (
+                      <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#eee', cursor: 'pointer' }}>
+                        <input type="radio" name="transfer" value={opt} checked={transfer === opt} onChange={(e) => setTransfer(e.target.value)} required style={{ accentColor: '#F78A2D' }} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Interesse em passagem aérea */}
+                <div className="cf-row">
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, display: 'block', marginBottom: 8 }}>Tem interesse em passagem aérea? *</span>
+                  <div style={{ display: 'flex', gap: 20 }}>
+                    {['Sim', 'Não'].map(opt => (
+                      <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#eee', cursor: 'pointer' }}>
+                        <input type="radio" name="aereo" value={opt} checked={aereo === opt} onChange={(e) => setAereo(e.target.value)} required style={{ accentColor: '#F78A2D' }} />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Receber Wpp */}
+                <div className="cf-row">
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, display: 'block', marginBottom: 8 }}>Deseja receber mensagens pelo WhatsApp? *</span>
+                  <div style={{ display: 'flex', gap: 20 }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#eee', cursor: 'pointer' }}>
+                      <input type="radio" name="receberWpp" value="1" checked={receberWpp === '1'} onChange={(e) => setReceberWpp(e.target.value)} required style={{ accentColor: '#F78A2D' }} /> Sim
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#eee', cursor: 'pointer' }}>
+                      <input type="radio" name="receberWpp" value="0" checked={receberWpp === '0'} onChange={(e) => setReceberWpp(e.target.value)} required style={{ accentColor: '#F78A2D' }} /> Não
+                    </label>
+                  </div>
                 </div>
 
                 {/* divider */}
@@ -682,9 +1014,8 @@ export default function ContactForm() {
               </form>
             )}
           </div>
-
         </div>
-      </div>
+      )}
     </section>
   );
 }

@@ -81,10 +81,10 @@ export default function TrendingPackages() {
                   <img src={pkg.img?.split(';')[0]?.trim()} alt={`Pacote ${pkg.title} em ${pkg.loc}`} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 {/* Badge logo */}
-                <div className="absolute bottom-auto top-[calc(12rem-1.25rem)] left-4 w-12 h-12 bg-white rounded-md shadow-md flex items-center justify-center p-1.5 z-20">
+                <div className={`absolute bottom-auto top-[calc(12rem-1.75rem)] right-4 flex items-center justify-center z-20 ${pkg.badgeImg ? 'w-[100px]' : 'h-14 max-w-[70%] bg-white rounded-md shadow-md p-1'}`}>
                   {pkg.badgeImg
-                    ? <img src={pkg.badgeImg} alt={pkg.badge} className="w-full h-full object-contain" />
-                    : <span className="text-[10px] font-bold uppercase">{pkg.badge}</span>
+                    ? <img src={pkg.badgeImg} alt={pkg.badge} className="w-full h-auto object-contain rounded-[4px] drop-shadow-md" />
+                    : <span className="text-[10px] font-bold uppercase px-1.5">{pkg.badge}</span>
                   }
                 </div>
                 <div className="p-6 pt-8 flex-1 flex flex-col">

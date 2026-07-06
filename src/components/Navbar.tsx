@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
@@ -17,15 +17,12 @@ export default function Navbar() {
 
 
 
-      <nav className="w-full sticky top-8 z-50 px-4 transition-all mb-6">
-        <div className="mx-auto w-full max-w-[1400px] flex items-center justify-between h-[86px] bg-[#09090b]/60 backdrop-blur-lg rounded-lg px-6 shadow-xl border border-white/10 font-sans">
+      <nav className="w-full sticky top-0 z-50 px-4 transition-all mb-6">
+        <div className="mx-auto w-full max-w-[1400px] flex items-center justify-between h-[95px] md:h-[120px] bg-[#09090b]/60 backdrop-blur-lg rounded-lg px-6 shadow-xl border border-white/10 font-sans">
 
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center cursor-pointer py-1" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="text-2xl font-black uppercase tracking-tighter text-white leading-tight">
-              HOSPEDAGEM<br />
-              <span className="text-gold">CONEXÃO FARMA 2027</span>
-            </div>
+            <img src="/conexao_2027_color.png" alt="Conexão Farma 2027" className="h-[75px] md:h-[100px] w-auto object-contain" />
           </div>
 
           {/* Desktop Menu */}

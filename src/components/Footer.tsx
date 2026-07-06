@@ -32,9 +32,7 @@ export default function Footer() {
             {/* Brand Center */}
             <div className="relative max-w-[1400px] mx-auto px-6 py-16">
                 <Reveal className="flex flex-col items-center text-center gap-5">
-                    <div className="text-3xl font-black uppercase tracking-tighter text-white">
-                        HOSPEDAGEM <span className="text-gold">CONEXÃO FARMA 2027</span>
-                    </div>
+                    <img src="/conexao_2027_color.png" alt="Conexão Farma 2027" className="h-[75px] md:h-[100px] w-auto object-contain" />
                     <p className="text-sm text-neutral-400 leading-relaxed max-w-md font-medium">
                         Hospitalidade premium e a melhor estadia garantida para o Conexão Farma 2027 - ABRADILAN.
                     </p>

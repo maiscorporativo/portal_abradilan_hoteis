@@ -96,12 +96,12 @@ export const GLOBAL_MAUTIC_FORM = `
             </div>
 
             <div id="mauticform_portalpctshospedagemabradilanab2027lp1_pacote" data-validate="pacote" data-validation-type="radiogrp" class="mauticform-row mauticform-radiogrp mauticform-field-7 mauticform-required">
-                <label class="mauticform-label" for="mauticform_radiogrp_radio_pacote_DistribuidorAutorizado1">Participará no evento como</label>
-                <div class="mauticform-radiogrp-row">                    <input name="mauticform[pacote]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_pacote_DistribuidorAutorizado0" type="radio" value="Distribuidor Autorizado">
-                    <label id="mauticform_radiogrp_label_pacote_DistribuidorAutorizado0" for="mauticform_radiogrp_radio_pacote_DistribuidorAutorizado0" class="mauticform-radiogrp-label">Distribuidor Autorizado</label>
+                <label class="mauticform-label" for="mauticform_radiogrp_radio_pacote_DistribuidorAssociado1">Participará no evento como</label>
+                <div class="mauticform-radiogrp-row">                    <input name="mauticform[pacote]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_pacote_DistribuidorAssociado0" type="radio" value="Distribuidor Associado">
+                    <label id="mauticform_radiogrp_label_pacote_DistribuidorAssociado0" for="mauticform_radiogrp_radio_pacote_DistribuidorAssociado0" class="mauticform-radiogrp-label">Distribuidor Associado</label>
                 </div>
-                <div class="mauticform-radiogrp-row">                    <input name="mauticform[pacote]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_pacote_DistribuidorNaoAutorizado1" type="radio" value="Distribuidor Não Autorizado">
-                    <label id="mauticform_radiogrp_label_pacote_DistribuidorNaoAutorizado1" for="mauticform_radiogrp_radio_pacote_DistribuidorNaoAutorizado1" class="mauticform-radiogrp-label">Distribuidor Não Autorizado</label>
+                <div class="mauticform-radiogrp-row">                    <input name="mauticform[pacote]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_pacote_DistribuidorNaoAssociado1" type="radio" value="Distribuidor Não Associado">
+                    <label id="mauticform_radiogrp_label_pacote_DistribuidorNaoAssociado1" for="mauticform_radiogrp_radio_pacote_DistribuidorNaoAssociado1" class="mauticform-radiogrp-label">Distribuidor Não Associado</label>
                 </div>
                 <div class="mauticform-radiogrp-row">                    <input name="mauticform[pacote]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_pacote_Industrias2" type="radio" value="Indústrias">
                     <label id="mauticform_radiogrp_label_pacote_Industrias2" for="mauticform_radiogrp_radio_pacote_Industrias2" class="mauticform-radiogrp-label">Indústrias</label>

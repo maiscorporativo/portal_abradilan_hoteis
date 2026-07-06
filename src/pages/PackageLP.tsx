@@ -346,9 +346,7 @@ function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boo
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Logos */}
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 24, cursor: 'pointer' }} onClick={() => navigate('/')}>
-          <div style={{ fontSize: isMobile ? 18 : 24 }} className="font-black uppercase tracking-tighter text-white">
-            HOSPEDAGEM <span className="text-gold">CONEXÃO FARMA 2027</span>
-          </div>
+          <img src="/conexao_2027_color.png" alt="Conexão Farma 2027" style={{ height: isMobile ? '75px' : '100px', width: 'auto', objectFit: 'contain' }} />
         </div>
 
         {/* Links */}
@@ -723,7 +721,10 @@ export default function PackageLP() {
 
   // --- MAUTIC LOGIC (Preserved) ---
   useEffect(() => {
-    const formCode = pkg?.mauticFormCode || GLOBAL_MAUTIC_FORM;
+    // Pacotes podem ter mauticFormCode salvo com a nomenclatura antiga — normaliza em runtime
+    const formCode = (pkg?.mauticFormCode || GLOBAL_MAUTIC_FORM)
+      .replaceAll('Distribuidor Não Autorizado', 'Distribuidor Não Associado')
+      .replaceAll('Distribuidor Autorizado', 'Distribuidor Associado');
     if (formCode && mauticContainerRef.current) {
       mauticContainerRef.current.innerHTML = formCode;
       const form = mauticContainerRef.current.querySelector('form');
@@ -778,8 +779,14 @@ export default function PackageLP() {
           try {
             const segs = JSON.parse(pkg.webhookClintSegments || '{}');
             const selectedSegment = clintData.get('pacote'); // Extract the 'pacote' form field value
-            if (selectedSegment && typeof selectedSegment === 'string' && segs[selectedSegment]) {
-              targetWebhook = segs[selectedSegment];
+            // Configurações antigas podem ter as chaves com a nomenclatura anterior
+            const legacyKeys: Record<string, string> = {
+              'Distribuidor Associado': 'Distribuidor Autorizado',
+              'Distribuidor Não Associado': 'Distribuidor Não Autorizado',
+            };
+            if (selectedSegment && typeof selectedSegment === 'string') {
+              const segUrl = segs[selectedSegment] || segs[legacyKeys[selectedSegment] || ''];
+              if (segUrl) targetWebhook = segUrl;
             }
           } catch (e) {
             console.error('Erro webhook segments', e);
@@ -1017,7 +1024,7 @@ export default function PackageLP() {
         <div style={{ width: '100%', padding: '0 20px', zIndex: 10, marginTop: 50 }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '24px 20px' }}>
             {[
-              { titulo: 'PACOTES DE HOSPEDAGEM', valor: `A partir de ${getLowestPriceAmount(pkg)}`, icone: <Ticket size={24} color="#F78A2D" /> },
+              { titulo: 'PACOTES DE HOSPEDAGEM', valor: `A partir de ${getLowestPriceAmount(pkg)}`, icone: <Ticket size={24} color="#F78A2D" />, badgeImg: pkg.badgeImg },
               { titulo: 'Café da Manhã', valor: pkg.breakfast, icone: <Coffee size={24} color="#F78A2D" /> },
               { titulo: 'Deslocamento', valor: pkg.distanceCenterNorte, icone: <MapPin size={24} color="#F78A2D" /> },
               { titulo: 'Salas', valor: pkg.trainingRooms, icone: <Briefcase size={24} color="#F78A2D" /> },
@@ -1033,6 +1040,13 @@ export default function PackageLP() {
                 <div style={{ textAlign: 'left', flex: 1 }}>
                   <h3 style={{ fontSize: 13, fontWeight: 800, margin: 0, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>{c.titulo}</h3>
                   <p style={{ color: '#eee', margin: '4px 0 0 0', fontSize: 12, fontWeight: 500, lineHeight: 1.4 }}>{c.valor}</p>
+                  {c.badgeImg && (
+                    <img
+                      src={c.badgeImg}
+                      alt={pkg.badge || 'Selo do pacote'}
+                      style={{ width: 100, height: 'auto', marginTop: 8, borderRadius: 4, filter: 'drop-shadow(0 2px 6px rgba(0,17,36,0.6))' }}
+                    />
+                  )}
                 </div>
               </div>
             ))}

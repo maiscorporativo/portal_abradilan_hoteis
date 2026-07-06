@@ -632,12 +632,12 @@ function MarketingEditor({ pkg, onUpdate, onCancel }: {
                   return (
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                       <div style={fieldStyle}>
-                        <label style={labelStyle}>Distribuidor Autorizado</label>
-                        <input value={segs['Distribuidor Autorizado'] || ''} onChange={e => updateSeg('Distribuidor Autorizado', e.target.value)} placeholder="https://..." style={IS} className="admin-input" />
+                        <label style={labelStyle}>Distribuidor Associado</label>
+                        <input value={segs['Distribuidor Associado'] || segs['Distribuidor Autorizado'] || ''} onChange={e => updateSeg('Distribuidor Associado', e.target.value)} placeholder="https://..." style={IS} className="admin-input" />
                       </div>
                       <div style={fieldStyle}>
-                        <label style={labelStyle}>Distribuidor Não Autorizado</label>
-                        <input value={segs['Distribuidor Não Autorizado'] || ''} onChange={e => updateSeg('Distribuidor Não Autorizado', e.target.value)} placeholder="https://..." style={IS} className="admin-input" />
+                        <label style={labelStyle}>Distribuidor Não Associado</label>
+                        <input value={segs['Distribuidor Não Associado'] || segs['Distribuidor Não Autorizado'] || ''} onChange={e => updateSeg('Distribuidor Não Associado', e.target.value)} placeholder="https://..." style={IS} className="admin-input" />
                       </div>
                       <div style={fieldStyle}>
                         <label style={labelStyle}>Indústrias</label>

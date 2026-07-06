@@ -55,10 +55,10 @@ function SitePage() {
   usePageTitle();
   return (
     <div className="min-h-screen bg-primary-main text-white selection:bg-gold selection:text-white pb-0">
-      <div className="fixed top-6 left-0 right-0 z-50">
+      <div className="fixed top-0 left-0 right-0 z-50">
         <Navbar />
       </div>
-      <div className="h-[110px]" />
+      <div className="h-[120px] md:h-[150px]" />
       <HeroSection />
       <PartnersMarquee />
       <TrendingPackages />
