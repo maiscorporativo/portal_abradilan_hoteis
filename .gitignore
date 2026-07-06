@@ -27,7 +27,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Uploads — imagens enviadas pelo admin existem SÓ no servidor de produção
-# NUNCA devem ser sobrescritas pelo git deploy
-public/uploads/*
-!public/uploads/.gitkeep
+# Uploads — precisam ser versionados: o deploy da Hostinger reconstrói a dist/
+# a partir da public/, então uploads fora do git são apagados a cada deploy.
+# Fluxo: subir a imagem pelo admin local, commitar public/uploads/ e fazer push.
