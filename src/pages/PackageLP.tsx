@@ -1195,7 +1195,7 @@ export default function PackageLP() {
 
             {/* Card Abradilan */}
             <div style={{ background: '#00152c', border: '1px solid #003366', borderRadius: 24, padding: '40px', display: 'flex', flexDirection: 'column', transition: 'border-color 0.3s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#F78A2D'} onMouseOut={e => e.currentTarget.style.borderColor = '#003366'}>
-              <img src="/abradilan_logo.png" alt="Abradilan" style={{ height: 50, objectFit: 'contain', marginBottom: 24, alignSelf: 'flex-start' }} />
+              <img src="/abradilan_logo_color.png" alt="Abradilan" style={{ height: 50, objectFit: 'contain', marginBottom: 24, alignSelf: 'flex-start' }} />
               <p style={{ color: '#aaa', fontSize: 16, lineHeight: 1.6, flex: 1, marginBottom: 32 }}>
                 A Abradilan reúne distribuidoras de medicamentos e produtos para a saúde. Tem como missão fortalecer o mercado, promovendo a melhoria contínua e eficaz de seus serviços.
               </p>
