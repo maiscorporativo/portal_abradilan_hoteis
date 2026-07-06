@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useContentConfig } from '../hooks/useContentConfig';
 import { GLOBAL_MAUTIC_FORM } from '../components/GlobalMauticForm';
+import HotelPreferenceCTA from '../components/HotelPreferenceCTA';
 import type { TrendingPackage } from '../types';
 import { getLowestPriceAmount } from '../utils/currency';
 
@@ -1263,6 +1264,11 @@ export default function PackageLP() {
                   <span style={{ fontSize: 16, fontWeight: 600 }}>{text}</span>
                 </div>
               ))}
+            </div>
+
+            {/* Card: não encontrou o hotel de sua preferência */}
+            <div style={{ marginTop: 48, textAlign: 'left' }}>
+              <HotelPreferenceCTA />
             </div>
           </div>
 
