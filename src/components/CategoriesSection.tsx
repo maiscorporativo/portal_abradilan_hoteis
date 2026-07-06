@@ -151,12 +151,12 @@ export default function CategoriesSection() {
     <section id="events" className="px-6 py-16 max-w-[1400px] mx-auto">
       <Reveal>
         <div className="mb-10">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gold mb-3">Explore por Esporte</p>
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gold mb-3">Explore por Categoria</p>
           <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-            Escolha sua <span className="text-gold">modalidade</span>
+            Escolha sua <span className="text-gold">hospedagem</span>
           </h2>
           <p className="text-neutral-400 mt-3 text-lg max-w-xl">
-            Encontre o pacote perfeito no esporte que você mais ama.
+            Encontre o pacote perfeito para a sua estadia no Conexão Farma 2027.
           </p>
         </div>
       </Reveal>

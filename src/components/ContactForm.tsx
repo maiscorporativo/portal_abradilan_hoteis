@@ -72,7 +72,7 @@ export default function ContactForm() {
               color: 'rgba(255,255,255,0.5)',
               margin: '0 0 40px', maxWidth: 380,
             }}>
-              Nossa equipe especializada cria itinerários sob medida para o seu evento esportivo — ingressos, hospedagem, transfers e muito mais.
+              Nossa equipe especializada cria pacotes sob medida para a sua estadia no Conexão Farma 2027 — hospedagem, transfers, passagens aéreas e muito mais.
             </p>
 
             {/* feature chips */}
