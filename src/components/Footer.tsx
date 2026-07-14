@@ -29,7 +29,7 @@ export default function Footer() {
                     </p>
 
                     <div className="flex gap-3 pt-1">
-                        <a href="https://www.instagram.com/emais.viagensesportivas/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-400 hover:text-[#E1306C] hover:border-[#E1306C]/40 hover:bg-[#E1306C]/5 transition-all">
+                        <a href="https://www.instagram.com/abradilan/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-400 hover:text-[#E1306C] hover:border-[#E1306C]/40 hover:bg-[#E1306C]/5 transition-all">
                             <Instagram size={16} />
                         </a>
                     </div>
