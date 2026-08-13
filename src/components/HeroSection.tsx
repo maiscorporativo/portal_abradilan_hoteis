@@ -61,13 +61,13 @@ export default function HeroSection() {
       {/* Left Content */}
       <Reveal className="w-full lg:w-5/12 z-10 flex flex-col justify-between py-2">
         <div>
-          <h1 className="text-[2.2rem] sm:text-[3.2rem] lg:text-[4.2rem] font-black uppercase leading-[1.05] mb-6 tracking-tight">
+          <h1 className="text-[1.9rem] sm:text-[3rem] font-black uppercase leading-[1.05] mb-6 tracking-tight">
             Garanta sua<br />
-            Hospedagem<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F78A2D] to-white">Para o Evento</span>
+            hospedagem para a<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F78A2D] to-white">Conexão Farma 2027</span>
           </h1>
           <p className="text-neutral-400 font-medium text-lg mb-10 max-w-md leading-relaxed pr-4">
-            Viaje com a agência oficial da ABRADILAN. Preparamos as melhores opções para você focar no que importa: seus negócios.
+            Viaje com a Mais Corporativo, agência de viagens oficial da ABRADILAN. Preparamos as melhores opções para você focar no que importa: seus negócios.
           </p>
           <a
             href="/"
