@@ -347,7 +347,7 @@ function PackageNavbar({ onBook, isMobile }: { onBook: () => void, isMobile: boo
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Logos */}
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 24, cursor: 'pointer' }} onClick={() => navigate('/')}>
-          <img src="/conexao_2027_color.png" alt="Conexão Farma 2027" style={{ height: isMobile ? '75px' : '100px', width: 'auto', objectFit: 'contain' }} />
+          <img src="/logo_mais_branco.png" alt="Mais Corporativo" style={{ height: isMobile ? '45px' : '60px', width: 'auto', objectFit: 'contain' }} />
         </div>
 
         {/* Links */}
