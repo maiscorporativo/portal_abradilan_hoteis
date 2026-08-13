@@ -25,7 +25,7 @@ export default function Footer() {
                 <Reveal className="flex flex-col items-center text-center gap-5">
                     <img src="/logo_mais.png" alt="Mais Corporativo" className="h-[50px] md:h-[65px] w-auto object-contain" />
                     <p className="text-sm text-neutral-400 leading-relaxed max-w-md font-medium">
-                        Hospitalidade premium e a melhor estadia garantida para o Conexão Farma 2027 - ABRADILAN.
+                        Hospitalidade premium e a melhor estadia garantida para o Conexão Farma 2027.
                     </p>
 
                     <div className="flex gap-3 pt-1">
@@ -38,7 +38,7 @@ export default function Footer() {
 
             <div className="border-t border-white/8 px-6 py-6 max-w-[1400px] mx-auto flex flex-col items-center gap-3 text-[12px] text-neutral-600">
                 <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-                    <span className="text-neutral-500 font-bold">© {new Date().getFullYear()} HOSPEDAGEM CONEXÃO FARMA 2027.</span>
+                    <span className="text-neutral-500 font-bold">© {new Date().getFullYear()} MAIS CORPORATIVO.</span>
                     <a href="https://maiscorporativo.tur.br/politica-de-privacidade/" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">Privacidade</a>
                     <a href="https://emais.tur.br/admin" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">Administrador</a>
                     <a href="https://emais.tur.br/admin-master" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">Administrador Master</a>
