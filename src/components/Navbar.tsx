@@ -28,7 +28,7 @@ export default function Navbar() {
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-7 text-[13px] text-neutral-300 font-medium">
             <a href="/" onClick={scrollTo('trending')} className="hover:text-gold transition-colors duration-200">Mais Vendidos</a>
-            <a href="/" onClick={scrollTo('events')} className="hover:text-gold transition-colors duration-200">Pacotes</a>
+            <a href="/" onClick={scrollTo('contato-form')} className="hover:text-gold transition-colors duration-200">Fale com a gente</a>
           </div>
 
 
@@ -50,7 +50,7 @@ export default function Navbar() {
         <div className="fixed inset-0 z-40 bg-[#001124]/95 backdrop-blur-xl lg:hidden pt-24 px-6 flex flex-col">
           <div className="flex flex-col gap-6 text-xl font-medium text-center text-white">
             <a href="/" className="hover:text-gold" onClick={scrollTo('trending')}>Mais Vendidos</a>
-            <a href="/" className="hover:text-gold" onClick={scrollTo('events')}>Pacotes</a>
+            <a href="/" className="hover:text-gold" onClick={scrollTo('contato-form')}>Fale com a gente</a>
           </div>
         </div>
       )}

@@ -62,7 +62,7 @@ function SitePage() {
       <HeroSection />
       <PartnersMarquee />
       <TrendingPackages />
-      <CategoriesSection />
+      {/* <CategoriesSection /> */}
       <ContactForm />
       {/* <PlatinumAccess /> */}
 
