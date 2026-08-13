@@ -23,7 +23,7 @@ export default function Footer() {
             {/* Brand Center */}
             <div className="relative max-w-[1400px] mx-auto px-6 py-16">
                 <Reveal className="flex flex-col items-center text-center gap-5">
-                    <img src="/logo_mais_branco.png" alt="Mais Corporativo" className="h-[50px] md:h-[65px] w-auto object-contain" />
+                    <img src="/logo_mais.png" alt="Mais Corporativo" className="h-[50px] md:h-[65px] w-auto object-contain" />
                     <p className="text-sm text-neutral-400 leading-relaxed max-w-md font-medium">
                         Hospitalidade premium e a melhor estadia garantida para o Conexão Farma 2027 - ABRADILAN.
                     </p>

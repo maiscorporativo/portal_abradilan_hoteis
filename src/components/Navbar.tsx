@@ -22,7 +22,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center cursor-pointer py-1" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <img src="/logo_mais_branco.png" alt="Mais Corporativo" className="h-[45px] md:h-[60px] w-auto object-contain" />
+            <img src="/logo_mais.png" alt="Mais Corporativo" className="h-[45px] md:h-[60px] w-auto object-contain" />
           </div>
 
           {/* Desktop Menu */}
