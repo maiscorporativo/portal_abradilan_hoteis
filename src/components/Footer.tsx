@@ -40,8 +40,6 @@ export default function Footer() {
                 <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
                     <span className="text-neutral-500 font-bold">© {new Date().getFullYear()} MAIS CORPORATIVO.</span>
                     <a href="https://maiscorporativo.tur.br/politica-de-privacidade/" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">Privacidade</a>
-                    <a href="https://emais.tur.br/admin" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">Administrador</a>
-                    <a href="https://emais.tur.br/admin-master" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">Administrador Master</a>
                 </div>
                 <p className="text-neutral-700">Produto Mais Corporativo</p>
             </div>
