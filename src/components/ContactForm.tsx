@@ -72,7 +72,7 @@ export default function ContactForm() {
               color: 'rgba(255,255,255,0.5)',
               margin: '0 0 40px', maxWidth: 380,
             }}>
-              Nossa equipe especializada cria pacotes sob medida para a sua estadia no Conexão Farma 2027 — hospedagem, transfers, passagens aéreas e muito mais.
+              A Mais Corporativo tem equipe especializada para criar pacotes sob medida para a sua estadia no Conexão Farma 2027, contando com: hospedagem, transfers, passagens aéreas e muito mais.
             </p>
 
             {/* feature chips */}
