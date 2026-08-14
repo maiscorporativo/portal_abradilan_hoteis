@@ -62,7 +62,7 @@ export default function HeroSection() {
       <Reveal className="w-full lg:w-5/12 z-10 flex flex-col justify-between py-2">
         <div>
           <h1 className="text-[1.8rem] sm:text-[2.4rem] lg:text-[2.7rem] font-black uppercase leading-[1.1] mb-6 tracking-tight text-balance">
-            Garanta sua hospedagem para a{' '}
+            Garanta sua hospedagem para o{' '}
             <span className="text-[#F78A2D]">Conexão Farma 2027</span>
           </h1>
           <p className="text-neutral-400 font-medium text-lg mb-10 max-w-md leading-relaxed pr-4">
