@@ -1305,8 +1305,8 @@ export default function PackageLP() {
       </section>
 
       <footer style={{ padding: isMobile ? '40px 20px' : '80px 40px', textAlign: 'center', borderTop: '1px solid #002042' }}>
-        <div className="text-2xl font-black uppercase tracking-tighter text-white" style={{ marginBottom: 16, opacity: 0.5, fontSize: isMobile ? 18 : 24 }}>
-          CONEXÃO <span style={{ color: '#F78A2D' }}>FARMA</span>
+        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+          <img src="/logo_mais.png" alt="Mais Corporativo" style={{ height: isMobile ? '45px' : '60px', width: 'auto', objectFit: 'contain' }} />
         </div>
         <p style={{ fontSize: isMobile ? 11 : 13, color: '#444', maxWidth: 800, margin: '0 auto', lineHeight: 1.6 }}>
           © Todos os direitos reservados Mais Corporativo - 2026. Somos uma agência de turismo corporativo especializada em pacotes para eventos e feiras de negócios.
