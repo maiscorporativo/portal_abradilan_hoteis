@@ -2,12 +2,8 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import pool from '../db.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { ensureUploadsDir, REPO_UPLOADS_DIR } from '../uploadsDir.js';
 
 const router = express.Router();
 
@@ -31,10 +27,7 @@ async function requireAuth(req, res, next) {
 
 
 /* ── Garante que a pasta uploads/ existe ── */
-const uploadsDir = path.join(__dirname, '..', '..', 'public', 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+const uploadsDir = ensureUploadsDir();
 
 /* ── Multer: salva em disco com nome único ── */
 const storage = multer.diskStorage({
@@ -79,10 +72,13 @@ router.delete('/', requireAuth, async (req, res) => {
 
   // Prevenir path traversal
   const safeName = path.basename(filename);
-  const filePath = path.join(uploadsDir, safeName);
 
-  // Verificar se o arquivo existe
-  if (!fs.existsSync(filePath)) {
+  // Procura na pasta persistente e, se não achar, na versionada no repositório
+  const filePath = [uploadsDir, REPO_UPLOADS_DIR]
+    .map(dir => path.join(dir, safeName))
+    .find(p => fs.existsSync(p));
+
+  if (!filePath) {
     return res.status(404).json({ error: 'Arquivo não encontrado.' });
   }
 

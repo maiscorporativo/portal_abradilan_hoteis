@@ -8,6 +8,7 @@ import uploadRouter from './routes/upload.js';
 import authRouter from './routes/auth.js';
 import contactRouter from './routes/contact.js';
 import pool from './db.js';
+import { UPLOADS_DIR, REPO_UPLOADS_DIR } from './uploadsDir.js';
 
 dotenv.config();
 
@@ -23,6 +24,12 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true })); // parse form POST do ContactForm
 
 /* ── Servir uploads estáticos (imagens salvas no disco) ─────────── */
+/* A pasta persistente vem primeiro: em produção ela fica fora do diretório
+   do deploy e guarda o que foi enviado pelo admin. Se o arquivo não estiver
+   lá, os static abaixo ainda servem os uploads versionados no repositório. */
+if (UPLOADS_DIR !== REPO_UPLOADS_DIR) {
+  app.use('/uploads', express.static(UPLOADS_DIR));
+}
 const publicPath = join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
@@ -113,6 +120,7 @@ app.listen(PORT, async () => {
   await autoMigrate();
   console.log(`\n🚀 E-Mais API rodando em http://localhost:${PORT}`);
   console.log(`   Ambiente: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`   Banco:    ${process.env.DB_NAME || 'conexao_farma_cms'} @ ${process.env.DB_HOST || 'localhost'}\n`);
+  console.log(`   Banco:    ${process.env.DB_NAME || 'conexao_farma_cms'} @ ${process.env.DB_HOST || 'localhost'}`);
+  console.log(`   Uploads:  ${UPLOADS_DIR}${UPLOADS_DIR === REPO_UPLOADS_DIR ? '  ⚠️  defina UPLOADS_DIR fora da pasta do deploy' : '  (persistente)'}\n`);
 });
 
