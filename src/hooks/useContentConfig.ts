@@ -213,15 +213,24 @@ export function useContentConfig() {
     isSaving.current = true;
     hasLocalUnsaved.current = true;
     setSaving(true);
-    setSaveError(false);
+    setSaveError(null);
     setContent(merged);
     saveCache(merged);
     lastUpdated.current = JSON.stringify(merged).slice(0, 40);
     window.dispatchEvent(new Event(UPDATE_EVENT));
     try {
-      const heroRaw = localStorage.getItem('emais_image_config');
-      const heroImages = heroRaw ? JSON.parse(heroRaw) : {};
-      await putContent({ ...merged, heroImages });
+      // Só envia heroImages quando existe configuração local com conteúdo.
+      // Enviar {} faria o servidor gravar {} e apagar as imagens do hero de
+      // todo mundo — acontecia ao salvar um pacote de um navegador que ainda
+      // não tinha o cache das imagens (aba anônima, outro admin, cache limpo).
+      let heroImages: Record<string, string> | undefined;
+      try {
+        const parsed = JSON.parse(localStorage.getItem('emais_image_config') || 'null');
+        if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+          heroImages = parsed;
+        }
+      } catch { /* cache inválido: preserva o que está no servidor */ }
+      await putContent(heroImages ? { ...merged, heroImages } : merged);
       hasLocalUnsaved.current = false;
       setSaveError(null);
       bc?.postMessage('update');

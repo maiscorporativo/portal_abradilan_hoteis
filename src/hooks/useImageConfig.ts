@@ -20,16 +20,17 @@ function loadOverrides(): ImageOverrides {
 
 async function pushHeroToApi(overrides: ImageOverrides) {
   try {
-    // Read current content from cache and attach updated hero images
-    const contentRaw = localStorage.getItem('emais_content_cache');
-    const content = contentRaw ? JSON.parse(contentRaw) : {};
+    // Envia SOMENTE heroImages. Antes ia junto o cache local de conteúdo,
+    // que podia estar desatualizado e sobrescrevia no banco pacotes editados
+    // depois (imagens de capa voltavam ao estado antigo). Os demais campos
+    // vão como undefined e o servidor preserva o que já está gravado.
     await fetch('/api/content', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${getSessionToken()}`,
       },
-      body: JSON.stringify({ ...content, heroImages: overrides }),
+      body: JSON.stringify({ heroImages: overrides }),
     });
   } catch { /* silent — localStorage already updated */ }
 }
